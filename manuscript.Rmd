@@ -1,0 +1,7 @@
+---
+title: Improving the communication and transparency of stock assessment using interactive
+  visualization tools
+author: "Paul M Regular, Gregory J Robertson, etc.?"
+output: word_document
+---
+
