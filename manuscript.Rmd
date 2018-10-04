@@ -2,6 +2,15 @@
 title: Improving the communication and transparency of stock assessment using interactive
   visualization tools
 author: "Paul M Regular, Gregory J Robertson, etc.?"
-output: word_document
+date: "Fisheries and Oceans Canada, Northwest Atlantic Fisheries Center, 80 East White Hills, St. John's, Newfoundland and Labrador, A1C 5X1, Canada"
+output: 
+  bookdown::word_document2:
+    reference_docx: template.docx
+bibliography: references.bib
 ---
 
+# Introduction
+
+A pimary role of stock assessment is to provide fisheries managers with the information needed to adequatly manage a fishery. Stock assessment involves the use of various sources of data and statistical methods to determine the status of one or more fish stocks and to make quantative predictions of the consequences of different management choices [@hilborn1992].
+
+# References
