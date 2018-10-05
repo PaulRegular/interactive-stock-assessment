@@ -11,6 +11,8 @@ bibliography: references.bib
 
 # Introduction
 
-A pimary role of stock assessment is to provide fisheries managers with the information needed to adequatly manage a fishery. Stock assessment involves the use of various sources of data and statistical methods to determine the status of one or more fish stocks and to make quantative predictions of the consequences of different management choices [@hilborn1992].
+A primary role of stock assessment is to provide fisheries managers with the information needed to adequately manage a fishery. Stock assessment involves the use of various sources of data and statistical methods to determine the status of one or more fish stocks and to make quantitative predictions of the consequences of different management choices [@hilborn1992]. A wide array data may be collected for an assessment and, formally, an assessment often boils down to algorithms that convert these data to advice for policy decisions. In some cases, particularly for commercially valuable species, this means that hundreds or thousands of historical data points from the monitoring program of a stock gets reduced into a single policy value, such as a recommended catch quota [@maunder2009].
+
+Data from monitoring programs...
 
 # References
