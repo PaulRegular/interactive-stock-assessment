@@ -11,12 +11,30 @@ bibliography: references.bib
 
 # Introduction
 
+In the age of data-intensive science and big data, scientists across many fields are faced with the challenge of synthesizing and communicating information from large and complex data sets. Scientific data are often presented as tabular summaries and static plots, however, seeing patterns in tables can be difficult and static plots are divorced from the underlying data. This limits our ability to explore the underlying data in more detail by, for instance, zooming into areas of interest. New open source tools are bridging this gap by making it easier to build interactive figures [@perkel2018]. In particular, browser-based data visualizations have been playing an increasing prominent role in communicating information on a wide range of topics. Interactive graphics are frequently utilized by media outlets, such as the New York Times, and scientists from a wide range of disciplines are starting to apply interactive visualization tools to explore and communicate their results [@yeatman2018; @tushar2017; @wick2015]. 
+
+JavaScript libraries, such as D^3^ [@bostock2011], for visualizing data on modern web-browsers now match or exceed the abilities of most platform-specific software and the development of high-level libraries ... plotly ... python ... R
+
+
+
 A primary role of stock assessment is to provide fisheries managers with the information needed to adequately manage a fishery. Stock assessment involves the use of various sources of data and statistical methods to determine the status of one or more fish stocks and to make quantitative predictions of the consequences of different management choices [@hilborn1992]. A wide array data may be collected for an assessment and, formally, an assessment often reduces to algorithms that convert these data to advice for fisheries managers. In some cases, particularly for commercially valuable species, this means that hundreds or thousands of historical data points from the monitoring program of a stock gets reduced into a single policy value, such as a recommended catch quota [@maunder2009].
 
 The data sets used in stock assessments are constantly growing. This growth in data either stems from the continuation of long-term monitoring efforts or from the addition of new monitoring programs. As such, stock assessment biologists often have to manage large volumes of data from a variety of sources. For instance, time series of reported landings and catch-at-age are "fishery-dependent" data that are frequently used in stock assessments. These data are often analyzed in conjunction with data from "fishery-independent" surveys that track changes in abundance and, in many cases, also monitor trends in biological factors such as age composition, growth rates, sex ratios and maturation stages. For some data-rich stocks, mark and recapture studies are also carried out to estimate movement, migration, growth rate, natural mortality, and discard mortality. All of the above-mentioned data sets are multidimensional and as the volume and variety of these data increases, it becomes more difficult to be aware of the details of each data set and to synthesize the results.
 
 Synthesizing data from multiple sources presents a key challenge to stock assessment. Analyses of different data sources were traditionally carried out independently and the summaries or parameters from these analyses were used in the assessment model. This approach, however, is less than ideal because information may be lost and uncertainty may be unaccounted for when we "do statistics on the statistics" [@link1999; @maunder2013]. Such issues have largely been curtailed in contemporary stock assessments thanks to advances in software that have facilitated the analysis of all available data, in as raw a form as appropriate, in a single integrated analysis [@maunder2013]. Specifically, the application of statistical modeling tools such as JAGS [@plummer2003], AD Model Builder [@fournier2012] and Template Model Builder [@kristensen2015] allow the construction of a joint likelihood for an array of observations to, in theory, extract as much information as possible about the biological and fishery processes. However, integrated analyses are not a panacea because model misspecifications and data conflicts are an inevitable consequence of simplifying reality to a small series of equations [@maunder2017]. A potential solution to this quandary to use a superensemble model, whereby multiple models with different structures are run and their predictions are supplied as covariates to an additional superensemble model [@anderson2017]. Ensemble approaches reduce the risk of picking the "wrong" model and also expands the range of hypotheses explored [@dietterich2000]. These advances greatly improve our ability to assess the status and trends of fish populations, however, modern stock assessment biologists are now faced with the overwhelming task of understanding an ever expanding array of data inputs and model outputs.
 
-"We are in an age of data-intensive science and big data, and ecologists must develop the capabilities to deal with their data." [@hampton2013]
+In this data-intensive era of stock assessment, one of the difficulties becomes visualizing the inputs and outputs to integrated stock assessment models. The standard approach has been to create a series of tables and static plots to help assess the inputs and model fits. Data presented in tables is incredibly valuable, but as human beings, seeing patterns can be challenging. Static figures, in contrast, help reveal patterns but they are divorced from the underlying data and, as such, limit detailed explorations. New tools are bridging this gap by making it easier to build interactive figures [@perkel2018].
+
+Interactive visuals...visual representation of the data and model that help us interpret complex data at a glance https://campus.sagepub.com/blog/3-benefits-of-interactive-visualization
+
+https://centricdigital.com/blog/digital-trends/the-value-of-interactive-data-visualization-and-why-it-matters-to-business/
+
+Good example from Keith: https://www.nature.com/articles/s41467-018-03297-7
+
+
+https://esajournals.onlinelibrary.wiley.com/doi/full/10.1890/120103
+
+https://www.nature.com/articles/d41586-018-01322-9
+
 
 # References
