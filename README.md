@@ -1,0 +1,2 @@
+
+This is a research compendium for a paper titled "Improving the communication and transparency of stock assessment using interactive visualization tools". The file structure of this repository follows guidelines presented here: https://github.com/ropensci/rrrpkg
