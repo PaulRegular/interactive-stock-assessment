@@ -29,10 +29,17 @@ Synthesizing data from multiple sources presents a key challenge to stock assess
 
 The Northern cod stock off southern Labrador and eastern Newfoundland is one of the most well studied stocks in eastern Canada, perhaps by virtue of its history. As such, there are multiple monitoring programs that help inform the status of the stock and data from most of these programs have been integrated into a state-space stock assessment model, called NCAM [@cadigan2016]. The "base case" model includes information from research vessel autumn trawl surveys (1983-present), Sentinel fishery surveys (1995-present), inshore acoustic surveys (1995-2009), fishery catch-at-age compositions and partial fishery landings (1983-present), and tagging (1983-present). Using a series of observation equations, this TMB based model reduces thousands of historical data points from these monitoring programs into quantities such as recruitment, spawning stock biomass, fishing mortality and natural mortality. Once the model is fit to the data, the next step is to produce visual representations of the data and model. An interactive and self-contained "dashboard" was developed for this purpose for the last assessment of Northern cod [@dwyer2019]. The concept of using a dashboard was burrowed from the business community where dashboards are frequently used to group a series of interactive visuals and tables to provide at-a-glance views of key performance indicators. Many tools have been developed to facilitate the development of data dashboards and we leveraged R-based tools to construct a tool for exploring the input and output of NCAM. Specifically we utilized the flexdashboard [@allaire2017] package to group interactive plotly-based [@plotly] visuals into a dynamic document. We also used the crosstalk [@cheng2016] package to link the data displayed across multiple plots in the "Tagging" tab.
 
-TODO:
-- Take screenshots of the dashboard for static figures for the paper (use webshot?)
-- Remember to add reference to the supplement that will ultimately include the NCAM_dashboard.html
+The NCAM dashboard contains a series of tabs, the first of which provides a series of tarse point-form background on the model (Figure \@ref(fig:background)).
 
+TODO: Aggregate screenshots into one a, b, c, etc. image.
+
+```{r background, echo = FALSE, fig.cap = "- Screenshots of NCAM dashboard."}
+knitr::include_graphics("figures/NCAM_dashboard_background_tab.png")
+```
+
+
+
+...useful format for meetings because a self-contained html can be produced for participants to independently scrutinize. This html has been included as a supplement (Supplement 2)...
 
 
 # Notes
