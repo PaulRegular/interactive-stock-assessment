@@ -4,7 +4,7 @@ library(magick)
 
 ## helper function for exporting dashboard tabs using webshot
 dashboard_webshot <- function(in_file = NULL, out_file = NULL, 
-                              vwidth = 1200, vheight = 800, zoom = 10, delay = 10,
+                              vwidth = 1200, vheight = 800, zoom = 3, delay = 10,
                               ...) {
     
     webshot(url = file.path("file://", getwd(), in_file),
@@ -16,11 +16,17 @@ dashboard_webshot <- function(in_file = NULL, out_file = NULL,
 dashboard_webshot(in_file = "analysis/dashboards/NCAM_dashboard.html#background",
                   out_file = "analysis/paper/figures/NCAM_dashboard_background_tab.png")
 
+dashboard_webshot(in_file = "analysis/dashboards/NCAM_dashboard.html#catch",
+                  out_file = "analysis/paper/figures/NCAM_dashboard_catch_tab.png")
+
 dashboard_webshot(in_file = "analysis/dashboards/NCAM_dashboard.html#rv-survey",
                   out_file = "analysis/paper/figures/NCAM_dashboard_rv-survey_tab.png")
 
 dashboard_webshot(in_file = "analysis/dashboards/NCAM_dashboard.html#tagging",
                   out_file = "analysis/paper/figures/NCAM_dashboard_tagging_tab.png")
+
+dashboard_webshot(in_file = "analysis/dashboards/NCAM_dashboard.html#trends",
+                  out_file = "analysis/paper/figures/NCAM_dashboard_trends_tab.png")
 
 dashboard_webshot(in_file = "analysis/dashboards/NCAM_dashboard.html#output",
                   out_file = "analysis/paper/figures/NCAM_dashboard_tables_tab.png")
