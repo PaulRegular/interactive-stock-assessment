@@ -1,15 +1,23 @@
 ---
-title: Improving the communication and accessibility of stock assessment using interactive
-  visualization tools
-author: "Paul M. Regular, Gregory J. Robertson, Keith P. Lewis, etc?"
-date: "Fisheries and Oceans Canada, Northwest Atlantic Fisheries Center, 80 East White Hills, St. John's, Newfoundland and Labrador, A1C 5X1, Canada"
+title: |
+  Improving the communication and accessibility of stock assessment using interactive visualization tools
+author: "Paul M. Regular, Gregory J. Robertson, Keith P. Lewis"
+date: |
+  Fisheries and Oceans Canada, Northwest Atlantic Fisheries Center, 80 East White Hills, St. John's, Newfoundland and Labrador, A1C 5X1, Canada
 output: 
   bookdown::word_document2:
     reference_docx: template.docx
 bibliography: references.bib
 csl: apa.csl
 abstract: |
+  **Running title**: Interactive stock assessment
+  
+  **Conflict of Interest Statement**: The authors have no conflicts of interest to declare. 
+  
   **Abstract**: In the age of big data, scientists across many fields are faced with the challenge of synthesizing and communicating information from large and complex data sets. The field of stock assessment is no exception as the volume and variety of the data has grown alongside the computational methods used to integrate them. While this growth in data and model complexity has improved the assessments of many stocks, the process of communicating the results to stakeholders and fisheries managers in a meaningful way has become more daunting. The traditional approach of presenting information across a series of static slides often fails to convey the richness of information available and, as such, important patterns and details are easily overlooked. Here we contend that this problem can be mediated through the effective use of new open source tools for building interactive visualizations. These tools allow a broader audience to conduct detailed explorations of the results, leading to a deeper and collective understanding of both the data and models used to inform stock assessments. As a consequence, the peer review process is more open and accessible and the resulting science advice is improved and widely supported.
+  
+  **Keywords**: dashboard, data exploration, dynamic documents, integrated analysis, model validation, open stock assessment
+  
 ---
 
 Quantitative stock assessment plays a central role in modern fisheries management. Over time, and as new methods are developed, there is an increasing amount of data available to inform stock assessments. These data might be richer information on stock structure using an increasing array of markers and biomarkers, and/or the continued lengthening of population status and catch time series. Concurrently, analytical methods are now able to integrate many data sources into one stock assessment model. For well-monitored stocks, the challenge has shifted from having sufficient data and information for providing sound advice on stock status, to presenting large quantities of data and output from increasingly complex statistical models in a meaningful way. Traditional formats (e.g. slides) of presenting information at stakeholder meetings, and to fisheries managers, are simply insufficient to convey the richness of the information available. More importantly, these static and linear formats tend to stifle meaningful discussion as important details and patterns tend to get lost under the sheer volume of output. A solution to this problem is the effective use of interactive visualization tools. These are common tools we use every day on a range of web sites, but their use is no longer restricted to web site developers as these tools are being integrated into software commonly used by the research community.
@@ -62,5 +70,9 @@ We  believe that the dashboard tool is a step forward in terms of open science a
 # Conclusions
 
 We must acknowledge there are costs to adopting the use of interactive tools. The first and obvious one being that staff are required to have both the time and training to effectively develop these tools. In our two examples, the developers (first and second authors) were relatively proficient with R and have natural aptitudes for programming, but had their formal training in field-based population ecology. While some learning time was needed (a few weeks), the learning curve was relatively minor because there was no need to learn a new programming language (e.g. JavaScript, CSS, etc.). Moreover, a growing user base means that most programming issues were readily addressed through simple internet searches. We expect the accessibility and quality of these tools to continue to improve as more people in the fisheries community develop and use interactive documents. It is our experience that the upfront investment in time has already paid dividends in terms of efficiencies of delivering products for subsequent stock assessments, and in the quality of the data exploration and understanding. Scientific exploration is rarely a linear process, and the ability to navigate around a dashboard fits the natural way people pursue ideas.
+
+# Acknowledgements
+
+We thank the numerous colleagues and participants of various stakeholder and stock assessment meetings who encouraged us to further develop these interactive visualization tools, and especially those who took the time to make suggestions on how to make them more accessible and useful.
 
 # References
