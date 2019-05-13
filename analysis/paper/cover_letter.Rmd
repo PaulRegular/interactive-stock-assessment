@@ -1,0 +1,32 @@
+---
+output: word_document
+---
+
+`r format(Sys.time(), '%Y-%m-%d')`
+
+Professor Paul J B Hart  
+Fish and Fisheries  
+Department of Biology  
+University of Leicester  
+University Road  
+Leicester  
+LE1 7RH, UK  
+
+
+Dr. Hart,
+
+We thank you for taking the time to examine our initial idea for our paper "Improving the communication and accessibility of stock assessment using interactive visualization tools". Based on your feedback, we have assembled a paper we feel fits the theme of Ghoti papers, and points towards ways of improving the stock assessment process. We re-iterate that this paper is not technical in nature, but mostly to encourage readers to pursue investigating these interactive visualization tools, and to convince readers that these tools are very much accessible to practicing biologists.
+
+I look forward to your decision.
+
+Sincerely,
+
+Paul Regular  
+Fisheries and Oceans Canada  
+Northwest Atlantic Fisheries Center  
+80 East White Hills, St. John’s, NL  
+A1C 5X1, Canada  
+E-mail: Paul.Regular@dfo-mpo.gc.ca  
+Phone: (709) 772-2067  
+
+
