@@ -184,12 +184,98 @@ plot_retro <- function(data, col = '#1f77b4', ...) {
   data[data$terminal_year != max_year, c("lwr", "upr")] <- NA
   p <- plot_trend(data, group = "terminal_year", col = col, ...)
   data$grp <- data$terminal_year
-  marker_data <- data %>% group_by(terminal_year) %>% filter(row_number() == n())
+  marker_data <- data %>% group_by(terminal_year) %>% filter(dplyr::row_number() == n())
   p %>% add_markers(data = marker_data, x = ~year, y = ~est)
 
 }
 
 
+#' Plot relative differences from retrospective fits
+#'
+#' @description Plot of the relative differences of the estimates from the
+#' model with all years included against estimates from a series of retrospective
+#' "peals" or "folds" of the data.
+#'
+#' @param data       Data produced by \code{\link{tidy_retro}}
+#' @param ylab       Label for the y axis
+#' @param col        Plot color
+#'
+#' @export
+#'
+
+plot_mohns <- function(data = NULL, ylab = "Relative difference", col = '#1f77b4') {
+
+  d <- data
+  d$terminal_year <- as.numeric(as.character(d$terminal_year))
+  if (max(d$year) > max(d$terminal_year)) {
+    d$terminal_year <- d$terminal_year + 1 # plus one if the estimates are steped forward by one year
+  }
+  td <- d[d$terminal_year == max(d$terminal_year), c("year", "est")]   # terminal data
+  rd <- d[d$terminal_year != max(d$terminal_year) &
+            d$year == d$terminal_year,
+          c("year", "est", "terminal_year")]                           # retrospective data
+  cd <- merge(rd, td, by = "year", suffixes = c("_r", "_t"))           # combined data (r = retro, t = terminal)
+  cd$pdiff <- (cd$est_r - cd$est_t) / cd$est_t
+
+  mohns <- mean(cd$pdiff)
+
+  plot_ly(data = cd, x = ~year, y = ~pdiff,
+          hoverinfo = "x+y", showlegend = FALSE,
+          color = I(col)) %>%
+    add_markers() %>%
+    add_segments(x = ~year, xend = ~year, y = 0, yend = ~pdiff) %>%
+    layout(xaxis = list(title = "Year"),
+           yaxis = list(title = ylab),
+           annotations = top_label(paste("Mohn's rho =", round(mohns, 3))))
+
+}
+
+#' Plot differences from retrospective fits
+#'
+#' @description Plot of the differences of the estimates from the
+#' model with all years included against estimates from a series of retrospective
+#' "peals" or "folds" of the data. Confidence intervals around the differences
+#' are included. Normal distribution is assumed (mean difference = terminal mean - retro mean,
+#' sd difference = terminal sd + retro sd).
+#'
+#' @param data       Data produced by \code{\link{tidy_retro}}
+#' @param ylab       Label for the y axis
+#' @param in_col     Color of intervals that include 0
+#' @param out_col    Color of intervals that bound 0
+#'
+#' @export
+#'
+
+plot_retro_deltas <- function(data = NULL, ylab = "Difference",
+                              in_col = '#1f77b4', out_col = '#d62728') {
+
+  d <- data
+  d$terminal_year <- as.numeric(as.character(d$terminal_year))
+  if (max(d$year) > max(d$terminal_year)) {
+    d$terminal_year <- d$terminal_year + 1 # plus one if the estimates are steped forward by one year
+  }
+  td <- d[d$terminal_year == max(d$terminal_year), c("year", "est", "sd")]   # terminal data
+  rd <- d[d$terminal_year != max(d$terminal_year) &
+            d$year == d$terminal_year,
+          c("year", "est", "sd", "terminal_year")]                     # retrospective data
+  cd <- merge(rd, td, by = "year", suffixes = c("_r", "_t"))           # combined data (r = retro, t = terminal)
+
+  cd$mean <- cd$est_r - cd$est_t
+  cd$sd <- cd$sd_r + cd$sd_t
+  cd$lwr <- cd$mean - (qnorm(0.975) * cd$sd)
+  cd$upr <- cd$mean + (qnorm(0.975) * cd$sd)
+  cd$out <- factor(cd$lwr < 0 & cd$upr < 0 | cd$lwr > 0 & cd$upr > 0, levels = c("FALSE", "TRUE"))
+
+  plot_ly(data = cd, x = ~year, y = ~mean,
+          showlegend = FALSE,
+          color = ~out, colors = c(in_col, out_col)) %>%
+    add_markers(name = "Difference") %>%
+    add_segments(x = ~year, xend = ~year, y = ~lwr, yend = ~upr,
+                 name = "95% CI") %>%
+    layout(xaxis = list(title = "Year"),
+           yaxis = list(title = ylab))
+
+}
 
 
 #' Plot projection results
@@ -204,13 +290,19 @@ plot_retro <- function(data, col = '#1f77b4', ...) {
 #' @param ticksuffix   suffix for y axis labels
 #' @param vline        vertical line placement
 #' @param hline        horizontal line placement
+#' @param col          colors to use in the plot
 #' @param showlegend   show legend (only controls ribbon)
+#' @param markers      add markers to the plot?
+#' @param darnen_proj  darken ribbion in through the projection years? Expects
+#'                     a 'type' column in the data with projection years identified
+#'                     by 'Projected'
 #'
 #' @export
 #'
 
 plot_proj <- function(data = NULL, group = NULL, xlim = NULL, ylim = NULL, ylab = NULL, ticksuffix = "",
-                      vline = NULL, hline = NULL, col = NULL, showlegend = FALSE) {
+                      vline = NULL, hline = NULL, col = NULL, showlegend = FALSE, markers = TRUE,
+                      darken_proj = FALSE) {
 
   d <- data
   col_rgb <- paste0("rgb(", paste(col2rgb(col), collapse = ","), ")")
@@ -234,15 +326,28 @@ plot_proj <- function(data = NULL, group = NULL, xlim = NULL, ylim = NULL, ylab 
     d$grp <- factor(ylab)
   }
 
-  plot_ly(data = d, x = ~year, y = ~est, ymin = ~lwr, ymax = ~upr,
-          frame = ~scenario, color = ~grp, colors = col[seq(nlevels(d$grp))]) %>%
+  p <- plot_ly(data = d, x = ~year, y = ~est, ymin = ~lwr, ymax = ~upr,
+               frame = ~scenario, color = ~grp, legendgroup = ~grp,
+               colors = col[seq(nlevels(d$grp))]) %>%
     add_ribbons(line = list(width = 0), showlegend = showlegend,
                 opacity = 0.4) %>%
-    add_lines(name = "Estimate", showlegend = FALSE) %>%
-    add_markers(name = "Estimate", showlegend = FALSE,
-                marker = list(size = 10, color = "white",
-                              line = list(color = col_rgb,
-                                          width = 2))) %>%
+    add_lines(showlegend = FALSE)
+
+  if (darken_proj) {
+    p <- p %>%
+      add_ribbons(data = d[d$type == "Projected", ],
+                  line = list(width = 0), showlegend = FALSE,
+                  opacity = 0.4)
+  }
+
+  if (markers) {
+    p <- p %>% add_markers(data = d, showlegend = FALSE,
+                           marker = list(size = 10, color = "white",
+                                         line = list(color = col_rgb,
+                                                     width = 2)))
+  }
+
+  p %>%
     animation_opts(transition = 0) %>%
     animation_slider(currentvalue = list(prefix = "Catch multiplier: ",
                                          font = list(color = "black", size = 13))) %>%
@@ -258,29 +363,60 @@ plot_proj <- function(data = NULL, group = NULL, xlim = NULL, ylim = NULL, ylab 
 #'
 #' @param data        data.frame with 'obs' and 'pred' columns
 #' @param ylab        yaxis label
-#' @param obs_col     color for observations
-#' @param pred_col    color for predictions
+#' @param obs_col     color for observations (ignored if a group is supplied)
+#' @param pred_col    color for predictions (ignored if a group is supplied)
 #' @param showlegend  show legend?
 #' @param title       plot title
 #' @param type        type of yaxis (e.g. "log")
 #' @param rangemode   rangemode for yaxis
+#' @param group       column to group observed and fitted values by
+#' @param group_cols  colors for the groups (must equal number of groups)
+#' @param stack_group stack values across groups (add y values)?
 #'
 #' @export
 #'
 
 plot_obs_pred <- function(data, ylab = "", obs_col = '#1f77b4', pred_col = '#ff7f0e',
-                          showlegend = FALSE, title = "", type = "-", rangemode = "normal") {
+                          showlegend = FALSE, title = "", type = "-", rangemode = "normal",
+                          group = NULL, group_cols = NULL, stack_group = NULL) {
 
-  plot_ly(data = data, x = ~year, showlegend = showlegend) %>%
-    add_markers(y = ~obs, name = "Observed", legendgroup = "Observed",
-                color = I(obs_col)) %>%
-    add_lines(y = ~pred, name = "Predicted", legendgroup = "Predicted",
-              color = I(pred_col)) %>%
+  if (is.null(group)) {
+    data <- data
+  } else {
+    data$group <- data[, group]
+    data <- crosstalk::SharedData$new(data, ~group)
+  }
+
+  p <- plot_ly(data = data, x = ~year, showlegend = showlegend, fill = "none")
+
+  if (is.null(group)) {
+    p <- p %>%
+      add_markers(y = ~obs, name = "Observed", legendgroup = "Observed",
+                  color = I(obs_col)) %>%
+      add_lines(y = ~pred, name = "Predicted", legendgroup = "Predicted",
+                color = I(pred_col))
+  } else {
+    p <- p %>%
+      add_markers(y = ~obs, color = ~group, legendgroup = ~group,
+                  colors = group_cols,
+                  stackgroup = ifelse(stack_group, "obs", NULL)) %>%
+      add_lines(y = ~pred, color = ~group, legendgroup = ~group,
+                colors = group_cols, showlegend = FALSE,
+                stackgroup = ifelse(stack_group, "pred", NULL))
+  }
+
+  p <- p %>%
     layout(
       xaxis = list(title = "Year"),
       yaxis = list(title = ylab, type = type, rangemode = rangemode),
       annotations = top_label(title)
     )
+
+  if (!is.null(group)) {
+    p <- p %>% highlight(on = "plotly_click", off = "plotly_relayout")
+  }
+
+  p
 
 }
 
@@ -343,8 +479,8 @@ bubble_plot <- function(data) {
   ## add a small amount of noise, otherwise plotly does not plot values with the same number
   d$abs_res <- jitter(abs(d$res), factor = 0.000000000001)
   plot_ly(data = d, x = ~year, y = ~age, size = ~abs_res, text = ~round(res, 2),
-            color = ~sign, colors = cols, sizes = c(5, 500), symbol = ~zero,
-            symbols = c("16", "1")) %>%
+          color = ~sign, colors = cols, sizes = c(5, 500), symbol = ~zero,
+          symbols = c("16", "1")) %>%
     add_markers() %>%
     layout(xaxis = list(title = "Year"),
            yaxis = list(title = "Age"))
@@ -353,28 +489,42 @@ bubble_plot <- function(data) {
 
 #' Make residual plot by year, cohort, age and expected value
 #'
-#' @param data  data.frame with 'year', 'age', 'res', 'fit', 'cohort' and 'rec' columns
+#' @param data      data.frame with 'year', 'age', 'res', 'fit', 'cohort' and 'rec' columns
+#' @param col       color of the points
+#' @param line_col  color of the loess smoother line added to the plots
 #'
 #' @export
 #'
 
-plot_resid <- function(data, col = '#1f77b4') {
+plot_resid <- function(data, col = '#1f77b4', line_col = '#d62728') {
 
   d <- crosstalk::SharedData$new(data, ~rec)
   year_plot <- plot_ly(data = d, x = ~year, y = ~res) %>%
     add_markers(color = I(col), alpha = 0.8, name = "Year") %>%
+    add_lines(y = ~fitted(loess(res ~ year)),
+              line = list(color = line_col),
+              name = "Loess Smoother", showlegend = FALSE) %>%
     layout(annotations = bottom_label("Year", offset = 15),
            xaxis = list(title = ""))
   cohort_plot <- plot_ly(data = d, x = ~cohort, y = ~res) %>%
     add_markers(color = I(col), alpha = 0.8, name = "Cohort") %>%
+    add_lines(y = ~fitted(loess(res ~ cohort)),
+              line = list(color = line_col),
+              name = "Loess Smoother", showlegend = FALSE) %>%
     layout(annotations = bottom_label("Cohort", offset = 15),
            xaxis = list(title = ""))
   age_plot <- plot_ly(data = d, x = ~age, y = ~res) %>%
     add_markers(color = I(col), alpha = 0.8, name = "Age") %>%
+    add_lines(y = ~fitted(loess(res ~ age)),
+              line = list(color = line_col),
+              name = "Loess Smoother", showlegend = FALSE) %>%
     layout(annotations = bottom_label("Age", offset = 15),
            xaxis = list(title = ""))
   fit_plot <- plot_ly(data = d, x = ~fit, y = ~res) %>%
     add_markers(color = I(col), alpha = 0.8, name = "Expected") %>%
+    add_lines(y = ~fitted(loess(res ~ fit)),
+              line = list(color = line_col),
+              name = "Loess Smoother", showlegend = FALSE) %>%
     layout(annotations = bottom_label("Expected", offset = 15),
            xaxis = list(title = ""))
   subplot(year_plot, cohort_plot, age_plot, fit_plot, nrows = 2,
@@ -383,7 +533,7 @@ plot_resid <- function(data, col = '#1f77b4') {
     layout(showlegend = FALSE,
            annotations = left_label("Standardized log residuals",
                                     offset = 35)) %>%
-    highlight(off = "plotly_doubleclick")
+    highlight(off = "plotly_relayout")
 
 }
 
@@ -517,10 +667,10 @@ plot_zmf_surface <- function(z = NULL, m = NULL, f = NULL,
 
 ## helper function for adding grouped line/ribbon legends
 .add_lines_ribbons <- function(p, x = NULL, y = NULL, ymin = NULL, ymax = NULL,
-                              ..., data = NULL, inherit = TRUE) {
+                               ..., data = NULL, inherit = TRUE) {
   add_lines(p, x = x, y = y, ..., data = data, inherit = TRUE) %>%
-  add_ribbons(p, x = x, ymin = ymin, ymax = ymax, ..., data = data, inherit = TRUE,
-              line = list(width = 0), opacity = 0.4, showlegend = FALSE)
+    add_ribbons(p, x = x, ymin = ymin, ymax = ymax, ..., data = data, inherit = TRUE,
+                line = list(width = 0), opacity = 0.4, showlegend = FALSE)
 }
 
 
@@ -618,7 +768,8 @@ plot_landings <- function(data = NULL, cols = c("#31688EFF", "#35B779FF")) {
 #' @param xlab     x axis label
 #' @param ylab     y axis label
 #' @param text     hover text
-#' @param col      point / line colour
+#' @param col      variable for color coding points (e.g. year)
+#' @param clab     label for the colorbar
 #'
 #' @export
 #'
@@ -627,19 +778,39 @@ plot_xy_errorbar <- function(data, x = NULL, y = NULL,
                              x_lwr = NULL, x_upr = NULL,
                              y_lwr = NULL, y_upr = NULL,
                              xlab = NULL, ylab = NULL,
-                             text = NULL, col = "#31688EFF") {
+                             text = NULL, col = NULL, clab = NULL) {
 
-  data %>%
-    plot_ly(x = x, y = y, text = text, color = I(col)) %>%
-    add_markers(name = "Estimate") %>%
-    add_segments(x = x_lwr, y = y, xend = x_upr, yend = y,
-                 color = I(col), name = "95% CI", legendgroup = "95% CI",
-                 alpha = 0.5) %>%
-    add_segments(x = x, y = y_lwr, xend = x, yend = y_upr,
-                 color = I(col), name = "95% CI", legendgroup = "95% CI",
-                 alpha = 0.5, showlegend = FALSE) %>%
+
+  col_vec <- data[, labels(terms(col))]
+  line_cols <- toRGB(viridis::viridis(length(col_vec))[cut(col_vec, length(col_vec))], alpha = 0.5)
+
+  p <- plot_ly()
+  for (i in seq(nrow(data))) {
+    p <- p %>%
+      add_segments(data = data[i, ], text = text,
+                   x = x_lwr, y = y, xend = x_upr, yend = y,
+                   name = "95% CI", legendgroup = "95% CI",
+                   showlegend = i == 1,
+                   line = list(color = line_cols[i])) %>%
+      add_segments(data = data[i, ], text = text,
+                   x = x, y = y_lwr, xend = x, yend = y_upr,
+                   name = "95% CI", legendgroup = "95% CI",
+                   showlegend = FALSE,
+                   line = list(color = line_cols[i]))
+  }
+
+  p %>%
+    add_markers(name = "Estimate", data = data, x = x, y = y, color = col,
+                text = text) %>%
+    colorbar(title = clab) %>%
     layout(xaxis = list(title = xlab),
            yaxis = list(title = ylab))
+
 }
+
+
+
+
+
 
 

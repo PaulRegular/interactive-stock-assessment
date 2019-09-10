@@ -176,16 +176,17 @@ tidy_mats <- function(mats, ages = NULL, years = NULL) {
     tidy_mat(mats[[m]], ages = ages, years = years, value = m)
   })
 
-  d <- merge(d_list[[1]], d_list[[2]], by = c("age", "year"))
-  if (length(d_list) > 2) {
-    d <- lapply(d_list[3:length(d_list)], function(x, y) merge(x, y, by = c("age", "year")), d)
-    d <- d[[1]]
+  for (i in seq_along(d_list)[-1]) {
+    if (i == 2) {
+      d <- merge(d_list[[1]], d_list[[2]], by = c("age", "year"))
+    } else {
+      d <- merge(d, d_list[[i]], by = c("age", "year"))
+    }
   }
 
   d
 
 }
-
 
 
 
@@ -220,8 +221,8 @@ tidy_pars <- function(model) {
                "log_std_D" = "1 - exp - D variance parameter - $\\sigma_{D}$",
                "logit_ar_D_age" = "1 - plogis - Age correlation in D - $\\varphi_{D,age}$",
                "logit_ar_D_year" = "1 - plogis - Year correlation in D - $\\varphi_{D,year}$",
-               "log_R1" = "1000000 - exp - Mean log-recruitment (pre 1992; million) - $r_1$",
-               "log_R2" = "1000000 - exp - Mean log-recruitment (post 1992; million) - $r_2$",
+               "log_R1" = "1000000 - exp - Mean recruitment (pre 1992; billion) - $r_1$",
+               "log_R2" = "1000000 - exp - Mean recruitment (post 1992; billion) - $r_2$",
                "log_sd_log_R" = "1 - exp - Variance of log-recruitment - $\\sigma_{r}$",
                "log_std_old_Udev" = "1 - exp - Variance of tagging F deviation from stock F (pre 1997) - $\\sigma_{f_{x,1}}$",
                "log_std_Udev" = "1 - exp - Variance of tagging F deviation from stock F (post 1997) - $\\sigma_{f_{x,2}}$",
