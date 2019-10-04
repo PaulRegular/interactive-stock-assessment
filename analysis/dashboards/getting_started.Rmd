@@ -1,0 +1,49 @@
+---
+title: "Dashboards for stock assessments: Getting started"
+output: 
+  flexdashboard::flex_dashboard:
+    source_code: embed
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+```
+
+
+Background
+===================================== 
+
+Column {.tabset}
+-------------------------------------
+
+### Concept
+
+- Browser-based dashboards and interactive visualizations are becoming increasingly common and accessible  
+- With a relatively shallow learning-curve, an [**R**](https://www.r-project.org/) user can use the [**flexdashboard**](https://rmarkdown.rstudio.com/flexdashboard/), [**plotly**](https://plotly-r.com) and [**crosstalk**](https://rstudio.github.io/crosstalk/) packages to generate interactive dashboards for exploring data and models
+- The concept is demonstrated here using a simple data-set and linear regression; this can be extended to more complex cases
+
+### flexdashboard
+
+- Uses [**rmarkdown**](https://rmarkdown.rstudio.com/) to render a group of related figures, tables and text into a dashboard  
+- Layout is flexible and the components automatically resize to fill the browser and adapt to mobile displays
+- Supports a wide range of components, including base plot, ggplots, gauges, tables and [htmlwidgets](http://www.htmlwidgets.org/index.html) such as [**plotly**](https://plotly-r.com)
+- Optionally use [**shiny**](http://shiny.rstudio.com/) or [**crosstalk**](https://rstudio.github.io/crosstalk/) to bolster interactivity
+
+> Source: https://rmarkdown.rstudio.com/flexdashboard/
+
+### plotly
+
+- A graphing package that works like other R plots expect it produces interactive visualizations
+- The package allows the user to create interactive web graphics from [**ggplot2**](https://ggplot2.tidyverse.org/) graphs
+- Also provides a more 'direct' link to the core [plotly.js](https://plot.ly/javascript/) JavaScript library using syntax inspired by the grammar of graphics
+
+> Source: https://plotly-r.com
+
+### crosstalk
+
+- Enables cross-widget interactions by linking brushing and/or filtering across multiple views
+- i.e. Interactions with one plot can affect change in another plot
+
+> Source: https://rstudio.github.io/crosstalk/
+
+
