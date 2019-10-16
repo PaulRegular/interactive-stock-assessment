@@ -1,0 +1,30 @@
+---
+title: "flexdashboard + plotly + crosstalk"
+output: flexdashboard::flex_dashboard
+---
+
+```{r setup, include=FALSE}
+library(plotly)
+library(crosstalk)
+lw <- read.csv("length-weight_data.csv")
+shared_lw <- SharedData$new(lw, ~record)
+```
+
+Column {.tabset}
+-------------------------------------
+
+### Length-Weight relationship
+
+```{r}
+plot_ly(data = shared_lw) %>% 
+    add_markers(x = ~length, y = ~weight, name = "Observed") %>% 
+    add_lines(x = ~length, y = ~exp(fit), name = "Predicted")
+```
+
+### Residuals vs. fitted values
+
+```{r}
+plot_ly(data = shared_lw) %>% 
+    add_markers(x = ~fit, y = ~res)
+```
+
