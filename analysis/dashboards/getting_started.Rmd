@@ -6,6 +6,11 @@ output:
     source_code: embed
 ---
 
+<style>
+h5 {display: inline;}
+</style>
+
+
 ```{r setup, include=FALSE}
 library(plotly)
 library(crosstalk)
@@ -42,7 +47,7 @@ Row {data-height=500}
 
 ### plotly
 
-- A graphing package that works like other R plots expect it produces interactive visualizations
+- A graphing package that works like other R plots except it produces interactive visualizations
 - The package allows the user to create interactive web graphics from [**ggplot2**](https://ggplot2.tidyverse.org/) graphs
 - Also provides a more 'direct' link to the core [plotly.js](https://plot.ly/javascript/) JavaScript library using syntax inspired by the grammar of graphics
 
@@ -77,8 +82,8 @@ cat(htmltools::includeText("skeleton.Rmd"))
 This skeleton is a verbatim copy of an R markdown file (extension `.Rmd`) set-up to produce a simple `flexdashboard` with interactive `plotly` visuals connected by `crosstalk`. Like most R markdown files, it includes three types of content:
 
 1. A YAML header surrounded by `----`
-2. R code chunks surrounded by `` ``` ``
-3. Text following `markdown` formatting
+2. Text following `markdown` formatting
+3. R code chunks surrounded by `` ``` ``
 
 The YAML header includes the metadata for the file, such as the document title and output format: 
 
@@ -161,6 +166,79 @@ plot_ly(data = shared_lw) %>%
 plot_ly(data = shared_lw) %>% 
     add_markers(x = ~fit, y = ~res)
 ```
+
+
+rmarkdown {data-navmenu="Basics"}
+=======================================================================
+
+Row {data-height=250}
+-------------------------------------
+
+### R markdown
+
+The package `rmarkdown` enables the writing of `markdown` text and `R` code in the same document (extension `.Rmd`). Most R markdown files includes three types of content:
+
+1. A YAML header surrounded by `----`
+2. Text following `markdown` formatting
+3. R code chunks surrounded by `` ``` ``
+
+
+
+
+Row {data-height=600}
+-------------------------------------
+
+### YAML
+
+The first step in setting up an R markdown file is to define a YAML header. In the [skeleton](#skeleton), it looks like this:  
+
+````
+---
+title: "flexdashboard + plotly + crosstalk"
+output: flexdashboard::flex_dashboard
+---
+````
+
+This is where the output type is defined along with other items such as title, author, date, etc. A `flex_dashboard` is requested here. There are are growing number of output types supported by R markdown (e.g. html_document, pdf_document, word_document). 
+
+
+### Markdown
+
+Next, write plain text using markdown syntax to describe how to format the text in the final document. 
+
+- `Plain text` simply translates to Plain text in the default font of the output document.
+- Italics and bold are specified using asterisk and/or underscores:
+    - `*italic*` or `_italic_` $\rightarrow$ *italic*
+    - `**bold**` or `__bold__` $\rightarrow$ **bold**
+    - `**_bold-italic_** ` $\rightarrow$ **_bold-italic_** 
+- Equations can be specified using LaTeX syntax:
+    - `$W = \alpha L ^{\beta}$` $\rightarrow$ $W = \alpha L ^{\beta}$
+- Ordered and unordered lists are generated using numbers and dashes or asterisk, respectively:
+    - `1. ordered item 1` $\rightarrow$ 1. &nbsp; ordered item 1
+    - `- unordered item` $\rightarrow$ • &nbsp; unordered item
+- Headers are define using hashtags:
+   - `##### Header 5` $\rightarrow$ <h5> Header 5 </h5>
+   - Note that markdown headers with three hashtags or less have specific formatting functions in `flexdashboard`
+
+
+### R
+
+Finally, mix in `R` code by surrounding chunks of code using one backtick for inline code (e.g.`` `r knitr::inline_expr("1+1")` `` will print 2 in the output) or three backticks to run several lines of code and/or display a table or plot. The below chunk will print the top three rows of the `cars` data-set:
+
+````
+```{r} `r ''`
+head_cars <- head(cars, 3)
+head_cars
+```
+````
+Resulting in the following output:
+
+```{r}
+head_cars <- head(cars, 3)
+head_cars
+```
+
+
 
 
 
