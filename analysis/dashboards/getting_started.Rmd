@@ -131,9 +131,9 @@ plot_ly(data = shared_lw) %>%
 
 ````
 
-The native syntax of `plotly` was inspired by the Grammar of Graphics and, as such, its general structure will be familiar to those who have used `ggplot2`. The package has also been structured to be pipe (`%>%`) and `dplyr` friendly, making the code more intuitive and efficient. 
+The native syntax of `plotly` was inspired by the grammar of graphics and, as such, its general structure will be familiar to those who have used `ggplot2`. The package has also been structured to be pipe (`%>%`) and `dplyr` friendly, making the code more intuitive and efficient. Though the script ends with the residual vs. fitted plot, the dashboard can easily be extended to include other diagnostic plots, such as a histogram of the residuals.
 
-Once this script is "Knit" (`Ctrl+Shift+K` in Rstudio), these plots are rendered into independent tabs (shown to the right) and clicking a specific point in one plot will highlight the corresponding point in the other plot. In short, `flexdashboard` sets up the structure of the document, `plotly` produces the interactive figures and `crosstalk` connects the plots held in independent tabs.
+Once this script is "Knit" (`Ctrl+Shift+K` in Rstudio), a stand-alone html document will be produced with the plots rendered into independent tabs (shown to the right). Clicking a specific point in one plot will highlight the corresponding point in the other plot. In short, `flexdashboard` sets up the structure of the document, `plotly` produces the interactive figures and `crosstalk` connects the plots held in independent tabs. 
 
 Of course, this is only a rudimentary overview of what is possible with `flexdashboard`, `plotly` and `crosstalk`. A wide range of layout options are possible using `flexdashboard`, `plotly` can produce more than just scatter and line plots and `crosstalk` can connect various widgets. See the links provided on the [Background](#background) page for more details on each package. The hope here is that this skeleton serves as a starting point from which to build more elaborate dashboards tailored to specific needs.
 
