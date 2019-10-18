@@ -63,6 +63,294 @@ Row {data-height=500}
 > Source: https://rstudio.github.io/crosstalk/
 
 
+
+rmarkdown {data-navmenu="Basics"}
+=======================================================================
+
+Row {data-height=250}
+-------------------------------------
+
+### R markdown
+
+The package `rmarkdown` enables the writing of `markdown` text and `R` code in the same document (extension `.Rmd`). Most R markdown files includes three types of content:
+
+1. A YAML header surrounded by `----`
+2. Text following `markdown` formatting
+3. R code chunks surrounded by `` ``` ``
+
+
+
+
+Row {data-height=600}
+-------------------------------------
+
+### YAML
+
+The first step in setting up an R markdown file is to define a YAML header. In the [skeleton](#skeleton), it looks like this:  
+
+````
+---
+title: "flexdashboard + plotly + crosstalk"
+output: flexdashboard::flex_dashboard
+---
+````
+
+This is where the output type is defined along with other items such as title, author, date, etc. A `flex_dashboard` is requested here. There are are growing number of output types supported by R markdown (e.g. html_document, pdf_document, word_document). 
+
+
+### Markdown
+
+Next, write plain text using markdown syntax to describe how to format the text in the final document. 
+
+- `Plain text` simply translates to Plain text in the default font of the output document.
+- Italics and bold are specified using asterisk and/or underscores:
+    - `*italic*` or `_italic_` $\rightarrow$ *italic*
+    - `**bold**` or `__bold__` $\rightarrow$ **bold**
+    - `**_bold-italic_** ` $\rightarrow$ **_bold-italic_** 
+- Equations can be specified using LaTeX syntax:
+    - `$W = \alpha L ^{\beta}$` $\rightarrow$ $W = \alpha L ^{\beta}$
+- Ordered and unordered lists are generated using numbers and dashes or asterisk, respectively:
+    - `1. ordered item 1` $\rightarrow$ 1. &nbsp; ordered item 1
+    - `- unordered item` $\rightarrow$ • &nbsp; unordered item
+- Headers are define using hashtags:
+   - `##### Header 5` $\rightarrow$ <h5> Header 5 </h5>
+   - Note that markdown headers with three hashtags or less have specific formatting functions in `flexdashboard`
+
+
+### R
+
+Finally, mix in `R` code by surrounding chunks of code using one backtick for inline code (e.g.`` `r knitr::inline_expr("1+1")` `` will print 2 in the output) or three backticks to run several lines of code and/or display a table or plot. The chunk below will print the top three rows of the `cars` data-set:
+
+````
+```{r} `r ''`
+head_cars <- head(cars, 3)
+head_cars
+```
+````
+Resulting in the following output:
+
+```{r}
+head_cars <- head(cars, 3)
+head_cars
+```
+
+
+
+flexdashboard {data-navmenu="Basics"}
+=======================================================================
+
+Row {data-height=200}
+-------------------------------------
+
+### flexdashboard
+
+The `flexdashboard` package can be used to render groups of related text, figures and tables into a dashboard. Using a combination of `markdown` syntax and `R` code (i.e. R markdown), this package facilitates a wide range of layout options and each component can include output from packages such as `plotly`, `leaflet`, `ggplot2`, and so on. The package also integrates nicely with `shiny` and `crosstalk`, providing options for increasing the interactivity of the dashboard. Some layout and component options are highlighted below.
+
+Row {data-height=600}
+-------------------------------------
+
+### Layout
+
+Individual charts are defined using markdown's level 3 header (`### Chart title`) and they are, by default, stacked vertically within columns defined using markdown's level 2 header (`---------`). The code below will create a `flexdashboard` with two stacked columns and three charts:
+
+````
+---
+title: "Layout example 1"
+output: flexdashboard::flex_dashboard
+---
+
+Column
+-------------------------------------
+
+### Chart 1
+
+
+Column
+-------------------------------------
+
+### Chart 2
+
+
+### Chart 3
+
+
+````
+
+The output from this example has been duplicated [here](#layout-example-1).
+
+Alternatively, charts can be organized by row by modifying the YAML header:
+
+````
+---
+title: "Layout example 2"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+---
+
+Row
+-------------------------------------
+
+### Chart 1
+
+
+Row
+-------------------------------------
+
+### Chart 2
+
+
+### Chart 3
+
+
+````
+The output from this example has been duplicated [here](#layout-example-2).
+
+
+### Components
+
+The components of a dashboard can hold a wide range of outputs. The code below generates a mixture of tabular and graphical output. The table is generated following `markdown` syntax with inline `R` code and the interactive plot is generated using `plotly`.
+
+````
+---
+title: "Components example"
+output: flexdashboard::flex_dashboard
+---
+
+Column {data-width=300}
+-------------------------------------
+
+### Table  
+
+Summary statistics of the `volcano` data-set
+
+| Statistic     | Elevation                   |
+|:------------- |:--------------------------- |
+| Min           | `r knitr::inline_expr('min(volcano)')`            | 
+| Median        | `r knitr::inline_expr('median(volcano)')`         |
+| Mean          | `r knitr::inline_expr('round(mean(volcano))')`    |
+| Max           | `r knitr::inline_expr('max(volcano)')`            |
+
+
+Column {data-width=700}
+-------------------------------------
+
+### Plot
+
+```{r} `r ''`
+plotly::plot_ly(z = volcano, type = "surface")
+```
+
+````
+
+The output from this example has been duplicated [here](#components-example). Note the use of the `data-width` attribute to make the table chart relatively narrow.
+
+
+plotly {data-navmenu="Basics" data-orientation=columns}
+=======================================================================
+
+Column {data-width=250}
+-------------------------------------
+
+### plotly
+
+There are two ways to produce interactive graphics using `plotly`:
+
+1. Using the function `ggplotly` to convert plots from `ggplot` to `plotly` objects
+2. Using the native syntax of the `plotly` package
+
+Both options follow the layered grammar of graphics, which is a generic tool for concisely describing the components of a graphic, such as the:
+
+- Data and mappings (aesthetics)
+- Geometric objects (points, lines, polygons)
+- Scales (color, size, shape, axes)
+
+
+Column {data-width=400 .tabset}
+-------------------------------------
+
+### ggplotly
+
+Using the `ggplotly` function, a user can construct a plot using `ggplot2` and supply the plot object to `ggplotly` to convert it to an interactive `plotly` graphic:
+
+```{r, echo = TRUE, eval = FALSE}
+p <- ggplot(data = iris, 
+            mapping = aes(x = Sepal.Length, 
+                          y = Petal.Length, 
+                          color = Species)) +
+  geom_point() +
+  scale_color_manual(values = viridis::viridis(3))
+ggplotly(p)
+```
+
+#### Data and mapping
+
+Here, the `ggplot` function is used to set-up the base layer of the plot as well as the aesthetics. That is, `iris` data are supplied to the function and specific columns in the `iris` data-set are mapped to `x`, `y` and `color` aesthetics.
+
+#### Geometric objects
+
+Next points are added using the `geom_point` function. Many other geometries can be used to visually represent the data, such as lines (`geom_line`), bars (`geom_bar`), text (`geom_text`).
+
+#### Scales
+
+Finally, colors were modified using `scale_color_manual`. While the colors are manually defined here, `ggplot2` includes built in color scales such as `scale_color_grey`. Scales used for the `x` and `y` aesthetics can also be modified using functions such as `scale_x_log10`.
+
+
+### Output
+
+```{r}
+p <- ggplot(data = iris, 
+            mapping = aes(x = Sepal.Length, 
+                          y = Petal.Length, 
+                          color = Species)) +
+  geom_point() +
+  scale_color_manual(values = viridis::viridis(3))
+ggplotly(p)
+```
+
+
+Column {data-width=400 .tabset}
+-------------------------------------
+
+### plot_ly
+
+Using functions from the `plotly` package, `plotly` plots can be directly created using syntax similar to `ggplot2`:
+
+```{r, echo = TRUE, eval = FALSE}
+plot_ly(data = iris, 
+        x = ~Sepal.Length, 
+        y = ~Petal.Length, 
+        color = ~Species,
+        colors = viridis::viridis(3)) %>% 
+  add_markers()
+```
+
+#### Data and mapping
+
+The `plot_ly` function is analogus to the `ggplot` function from `ggplot2` and, like `ggplot`, this function sets-up the base layer of the plot. Again, the `iris` data is supplied and specific columns are mapped to `x`, `y` and `color` aesthetics.
+
+#### Geometric objects
+
+Under `plotly`, geometries are added using functions with the `add_` prefix rather that the `geom_` prefix of used in `ggplot2`. Points are added here using `add_markers` and, like `ggplot2`, several other geometries can be specified, such as lines (`add_lines`), bars (`add_bars`), text (`add_text`).
+
+#### Scales
+
+Unlike `ggplot2`, scales are not modified using specific functions with a `scale_` prefix, rather, scales are specified in the `plot_ly` function call itself or via the `layout` function. Here, colors are specified using the `colors` argument in the `plot_ly` function.
+
+### Output
+
+```{r}
+plot_ly(data = iris, 
+        x = ~Sepal.Length, 
+        y = ~Petal.Length, 
+        color = ~Species,
+        colors = viridis::viridis(3)) %>% 
+  add_markers()
+```
+
+
+
+
 Skeleton {data-orientation=columns}
 =======================================================================
 
@@ -168,186 +456,8 @@ plot_ly(data = shared_lw) %>%
 ```
 
 
-rmarkdown {data-navmenu="Basics"}
-=======================================================================
 
-Row {data-height=250}
--------------------------------------
 
-### R markdown
-
-The package `rmarkdown` enables the writing of `markdown` text and `R` code in the same document (extension `.Rmd`). Most R markdown files includes three types of content:
-
-1. A YAML header surrounded by `----`
-2. Text following `markdown` formatting
-3. R code chunks surrounded by `` ``` ``
-
-
-
-
-Row {data-height=600}
--------------------------------------
-
-### YAML
-
-The first step in setting up an R markdown file is to define a YAML header. In the [skeleton](#skeleton), it looks like this:  
-
-````
----
-title: "flexdashboard + plotly + crosstalk"
-output: flexdashboard::flex_dashboard
----
-````
-
-This is where the output type is defined along with other items such as title, author, date, etc. A `flex_dashboard` is requested here. There are are growing number of output types supported by R markdown (e.g. html_document, pdf_document, word_document). 
-
-
-### Markdown
-
-Next, write plain text using markdown syntax to describe how to format the text in the final document. 
-
-- `Plain text` simply translates to Plain text in the default font of the output document.
-- Italics and bold are specified using asterisk and/or underscores:
-    - `*italic*` or `_italic_` $\rightarrow$ *italic*
-    - `**bold**` or `__bold__` $\rightarrow$ **bold**
-    - `**_bold-italic_** ` $\rightarrow$ **_bold-italic_** 
-- Equations can be specified using LaTeX syntax:
-    - `$W = \alpha L ^{\beta}$` $\rightarrow$ $W = \alpha L ^{\beta}$
-- Ordered and unordered lists are generated using numbers and dashes or asterisk, respectively:
-    - `1. ordered item 1` $\rightarrow$ 1. &nbsp; ordered item 1
-    - `- unordered item` $\rightarrow$ • &nbsp; unordered item
-- Headers are define using hashtags:
-   - `##### Header 5` $\rightarrow$ <h5> Header 5 </h5>
-   - Note that markdown headers with three hashtags or less have specific formatting functions in `flexdashboard`
-
-
-### R
-
-Finally, mix in `R` code by surrounding chunks of code using one backtick for inline code (e.g.`` `r knitr::inline_expr("1+1")` `` will print 2 in the output) or three backticks to run several lines of code and/or display a table or plot. The chunk below will print the top three rows of the `cars` data-set:
-
-````
-```{r} `r ''`
-head_cars <- head(cars, 3)
-head_cars
-```
-````
-Resulting in the following output:
-
-```{r}
-head_cars <- head(cars, 3)
-head_cars
-```
-
-
-
-flexdashboard {data-navmenu="Basics"}
-=======================================================================
-
-Row {data-height=200}
--------------------------------------
-
-### flexdashboard
-
-The `flexdashboard` package can be used to render groups of related text, figures and tables into a dashboard. Using a combination of `markdown` syntax and `R` code (i.e. R markdown), this package facilitates a wide range of layout options and each component can include output from packages such as `plotly`, `leaflet`, `ggplot2`, and so on. The package also integrates nicely with `shiny` and `crosstalk`, providing options for increasing the interactivity of the dashboard. Some layout and component options are highlited below.
-
-Row {data-height=600}
--------------------------------------
-
-### Layout
-
-Individual charts are defined using markdown's level 3 header (`### Chart title`) and they are, by default, stacked vertically within columns defined using markdown's level 2 header (`---------`). The code below will create a `flexdashboard` with two stacked columns and three charts:
-
-````
----
-title: "Layout example 1"
-output: flexdashboard::flex_dashboard
----
-
-Column
--------------------------------------
-
-### Chart 1
-
-
-Column
--------------------------------------
-
-### Chart 2
-
-
-### Chart 3
-
-
-````
-
-The output from this example has been duplicated [here](#layout-example-1).
-
-Alternatively, charts can be organized by row by modifying the YAML header:
-
-````
----
-title: "Layout example 2"
-output: 
-  flexdashboard::flex_dashboard:
-    orientation: rows
----
-
-Row
--------------------------------------
-
-### Chart 1
-
-
-Row
--------------------------------------
-
-### Chart 2
-
-
-### Chart 3
-
-
-````
-The output from this example has been duplicated [here](#layout-example-2).
-
-
-### Components
-
-The components of a dashboard can hold a wide range of outputs. The code below generates a mixture of tabular and graphical output. The table is generated following `markdown` syntax with inline `R` code and the interactive plot is generated using `plotly`.
-
-````
----
-title: "Components example"
-output: flexdashboard::flex_dashboard
----
-
-Column {data-width=300}
--------------------------------------
-
-### Table  
-
-Summary statistics of the `volcano` data-set
-
-| Statistic     | Elevation                   |
-|:------------- |:--------------------------- |
-| Min           | `r knitr::inline_expr('min(volcano)')`            | 
-| Median        | `r knitr::inline_expr('median(volcano)')`         |
-| Mean          | `r knitr::inline_expr('round(mean(volcano))')`    |
-| Max           | `r knitr::inline_expr('max(volcano)')`            |
-
-
-Column {data-width=700}
--------------------------------------
-
-### Plot
-
-```{r} `r ''`
-plotly::plot_ly(z = volcano, type = "surface")
-```
-
-````
-
-The output from this example has been duplicated [here](#components-example). Note the use of the `data-width` attribute to make the table chart relatively narrow.
 
 
 Layout example 1 {data-orientation=columns .hidden}
