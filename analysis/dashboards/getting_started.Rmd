@@ -13,6 +13,7 @@ h5 {display: inline;}
 
 ```{r setup, include=FALSE}
 library(plotly)
+library(leaflet)
 library(crosstalk)
 ```
 
@@ -95,7 +96,7 @@ output: flexdashboard::flex_dashboard
 ---
 ````
 
-This is where the output type is defined along with other items such as title, author, date, etc. A `flex_dashboard` is requested here. There are are growing number of output types supported by R markdown (e.g. html_document, pdf_document, word_document). 
+This is where the output type is defined along with other items such as title, author, date, etc. A `flex_dashboard` is requested here. There are are growing number of output types supported by R markdown (e.g. `html_document`, `pdf_document`, `word_document`). 
 
 
 ### Markdown
@@ -274,13 +275,14 @@ Column {data-width=400 .tabset}
 Using the `ggplotly` function, a user can construct a plot using `ggplot2` and supply the plot object to `ggplotly` to convert it to an interactive `plotly` graphic:
 
 ```{r, echo = TRUE, eval = FALSE}
+library(ggplot2)
 p <- ggplot(data = iris, 
             mapping = aes(x = Sepal.Length, 
                           y = Petal.Length, 
                           color = Species)) +
   geom_point() +
   scale_color_manual(values = viridis::viridis(3))
-ggplotly(p)
+plotly::ggplotly(p)
 ```
 
 #### Data and mapping
@@ -299,13 +301,14 @@ Finally, colors were modified using `scale_color_manual`. While the colors are m
 ### Output
 
 ```{r}
+library(ggplot2)
 p <- ggplot(data = iris, 
             mapping = aes(x = Sepal.Length, 
                           y = Petal.Length, 
                           color = Species)) +
   geom_point() +
   scale_color_manual(values = viridis::viridis(3))
-ggplotly(p)
+plotly::ggplotly(p)
 ```
 
 
@@ -317,6 +320,7 @@ Column {data-width=400 .tabset}
 Using functions from the `plotly` package, `plotly` plots can be directly created using syntax similar to `ggplot2`:
 
 ```{r, echo = TRUE, eval = FALSE}
+library(plotly)
 plot_ly(data = iris, 
         x = ~Sepal.Length, 
         y = ~Petal.Length, 
@@ -327,7 +331,7 @@ plot_ly(data = iris,
 
 #### Data and mapping
 
-The `plot_ly` function is analogus to the `ggplot` function from `ggplot2` and, like `ggplot`, this function sets-up the base layer of the plot. Again, the `iris` data is supplied and specific columns are mapped to `x`, `y` and `color` aesthetics.
+The `plot_ly` function is analogous to the `ggplot` function from `ggplot2` and, like `ggplot`, this function sets-up the base layer of the plot. Again, the `iris` data is supplied and specific columns are mapped to `x`, `y` and `color` aesthetics.
 
 #### Geometric objects
 
@@ -340,6 +344,7 @@ Unlike `ggplot2`, scales are not modified using specific functions with a `scale
 ### Output
 
 ```{r}
+library(plotly)
 plot_ly(data = iris, 
         x = ~Sepal.Length, 
         y = ~Petal.Length, 
@@ -348,6 +353,72 @@ plot_ly(data = iris,
   add_markers()
 ```
 
+
+
+crosstalk {data-navmenu="Basics" data-orientation=columns}
+=======================================================================
+
+Column
+-------------------------------------
+
+### crosstalk
+
+The `crosstalk` package enables HTML widgets, such as `plotly` and `leaflet`, to communicate with each other without `shiny`. As such, self-contained html files with similar behaviour to `shiny` applications can be built using `crosstalk`.
+
+A first step to using `crosstalk` is to set-up a shared data-set using the `SharedData` function:
+
+```{r, echo = TRUE}
+library(crosstalk)
+sub_quakes <- subset(quakes, stations %in% c(10, 20, 50, 100))
+shared_quakes <- SharedData$new(sub_quakes)
+```
+
+The `quakes` data is used for this example. As shown to the right using `leaflet` and `plotly`, HTML widgets using this shared data will be linked and selections in one plot will affect the other plot.
+
+The `crosstalk` package also includes a series of functions for filtering the shared data (`filter_checkbox`, `filter_slider` and `filter_select`). When used in a `flexdashboard`, and other interactive contexts, the following lines of code will produce the check-box, slider and drop-down filters shown below.
+
+```{r, echo = TRUE, eval = FALSE}
+filter_checkbox("stations", "Stations", shared_quakes, 
+                ~stations, inline = TRUE)
+filter_slider("depth", "Depth", shared_quakes, ~depth)
+filter_select("mag", "Magnitude", shared_quakes, 
+              ~cut(mag, breaks = seq(1, 10, 0.5), right = FALSE))
+```
+
+
+```{r}
+filter_checkbox("stations", "Stations", shared_quakes, 
+                ~stations, inline = TRUE)
+filter_slider("depth", "Depth", shared_quakes, ~depth)
+filter_select("mag", "Magnitude", shared_quakes, 
+              ~cut(mag, breaks = seq(1, 10, 0.5), right = FALSE))
+```
+
+
+Column
+--------------------------------------
+
+### leaflet
+
+```{r}
+leaflet(shared_quakes) %>%
+  addTiles() %>%
+  addCircleMarkers(stroke = FALSE,
+                   fillOpacity = 0.5,
+                   color = ~viridis::viridis(4)[factor(stations)])
+```
+
+
+### plotly
+
+```{r}
+plot_ly(data = shared_quakes) %>% 
+  add_markers(x = ~depth, 
+              y = ~mag, 
+              color = ~factor(stations),
+              colors = viridis::viridis(4),
+              marker = list(size = 15))
+```
 
 
 
@@ -367,7 +438,7 @@ cat(htmltools::includeText("skeleton.Rmd"))
 
 ### Details
 
-This skeleton is a verbatim copy of an R markdown file (extension `.Rmd`) set-up to produce a simple `flexdashboard` with interactive `plotly` visuals connected by `crosstalk`. Like most R markdown files, it includes three types of content:
+This skeleton is a verbatim copy of an R markdown file (`` `r xfun::embed_file("skeleton.Rmd", text = "skeleton.Rmd")` ``) set-up to produce a simple `flexdashboard` with interactive `plotly` visuals connected by `crosstalk`. Like most R markdown files, it includes three types of content:
 
 1. A YAML header surrounded by `----`
 2. Text following `markdown` formatting
@@ -395,7 +466,7 @@ shared_lw <- SharedData$new(lw, ~record)
 ```
 ````
 
-This is where the `plotly` and `crosstalk` packages are loaded along with some sample data. The sample data includes length and weight data (columns `length` and `weight`, respectively) along with fitted values and residuals from a length-weight regression (columns called `fit` and `res`, respectively). The `SharedData` function from `crosstalk` package is also used here to generate a data object that can be "shared" across independent plots.
+This is where the `plotly` and `crosstalk` packages are loaded along with some sample data (`` `r xfun::embed_file("length-weight_data.csv", text = "length-weight_data.csv")` ``). The sample data includes length and weight data (columns `length` and `weight`, respectively) along with fitted values and residuals from a length-weight regression (columns called `fit` and `res`, respectively). The `SharedData` function from `crosstalk` package is also used here to generate a data object that can be "shared" across independent plots.
 
 Following this chunk of R code is a level 2 markdown header that tells flexdashboard to introduce a column break and place the subsequent components into separate tabs:
 
