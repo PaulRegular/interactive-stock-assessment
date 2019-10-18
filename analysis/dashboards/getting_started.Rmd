@@ -39,7 +39,7 @@ Row {data-height=500}
 
 - Uses [**rmarkdown**](https://rmarkdown.rstudio.com/) to render a group of related figures, tables and text into a dashboard  
 - Layout is flexible and the components automatically re-size to fill the browser and adapt to mobile displays
-- Supports a wide range of components, including base plot, ggplots, gauges, tables and [htmlwidgets](http://www.htmlwidgets.org/index.html) such as [**plotly**](https://plotly-r.com)
+- Supports a wide range of components, including base plot, ggplots, gauges, tables and [htmlwidgets](http://www.htmlwidgets.org/index.html) such as [**plotly**](https://plotly-r.com), [**leaflet**](https://rstudio.github.io/leaflet/) and [**DT**](https://rstudio.github.io/DT/)
 - Optionally use [**shiny**](http://shiny.rstudio.com/) or [**crosstalk**](https://rstudio.github.io/crosstalk/) to bolster interactivity
 
 > Source: https://rmarkdown.rstudio.com/flexdashboard/
@@ -57,7 +57,7 @@ Row {data-height=500}
 
 - Enables cross-widget interactions by linking brushing and/or filtering across multiple views
 - i.e. Interactions with one plot can affect change in another plot  
-- Supports a wide range of [htmlwidgets](http://www.htmlwidgets.org/index.html), such as [**plotly**](https://plotly-r.com) and [**leaflet**](https://rstudio.github.io/leaflet/)
+- Supports a wide range of [htmlwidgets](http://www.htmlwidgets.org/index.html), such as [**plotly**](https://plotly-r.com), [**leaflet**](https://rstudio.github.io/leaflet/) and [**DT**](https://rstudio.github.io/DT/)
 
 
 > Source: https://rstudio.github.io/crosstalk/
@@ -223,7 +223,7 @@ Next, write plain text using markdown syntax to describe how to format the text 
 
 ### R
 
-Finally, mix in `R` code by surrounding chunks of code using one backtick for inline code (e.g.`` `r knitr::inline_expr("1+1")` `` will print 2 in the output) or three backticks to run several lines of code and/or display a table or plot. The below chunk will print the top three rows of the `cars` data-set:
+Finally, mix in `R` code by surrounding chunks of code using one backtick for inline code (e.g.`` `r knitr::inline_expr("1+1")` `` will print 2 in the output) or three backticks to run several lines of code and/or display a table or plot. The chunk below will print the top three rows of the `cars` data-set:
 
 ````
 ```{r} `r ''`
@@ -240,5 +240,178 @@ head_cars
 
 
 
+flexdashboard {data-navmenu="Basics"}
+=======================================================================
+
+Row {data-height=200}
+-------------------------------------
+
+### flexdashboard
+
+The `flexdashboard` package can be used to render groups of related text, figures and tables into a dashboard. Using a combination of `markdown` syntax and `R` code (i.e. R markdown), this package facilitates a wide range of layout options and each component can include output from packages such as `plotly`, `leaflet`, `ggplot2`, and so on. The package also integrates nicely with `shiny` and `crosstalk`, providing options for increasing the interactivity of the dashboard. Some layout and component options are highlited below.
+
+Row {data-height=600}
+-------------------------------------
+
+### Layout
+
+Individual charts are defined using markdown's level 3 header (`### Chart title`) and they are, by default, stacked vertically within columns defined using markdown's level 2 header (`---------`). The code below will create a `flexdashboard` with two stacked columns and three charts:
+
+````
+---
+title: "Layout example 1"
+output: flexdashboard::flex_dashboard
+---
+
+Column
+-------------------------------------
+
+### Chart 1
+
+
+Column
+-------------------------------------
+
+### Chart 2
+
+
+### Chart 3
+
+
+````
+
+The output from this example has been duplicated [here](#layout-example-1).
+
+Alternatively, charts can be organized by row by modifying the YAML header:
+
+````
+---
+title: "Layout example 2"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+---
+
+Row
+-------------------------------------
+
+### Chart 1
+
+
+Row
+-------------------------------------
+
+### Chart 2
+
+
+### Chart 3
+
+
+````
+The output from this example has been duplicated [here](#layout-example-2).
+
+
+### Components
+
+The components of a dashboard can hold a wide range of outputs. The code below generates a mixture of tabular and graphical output. The table is generated following `markdown` syntax with inline `R` code and the interactive plot is generated using `plotly`.
+
+````
+---
+title: "Components example"
+output: flexdashboard::flex_dashboard
+---
+
+Column {data-width=300}
+-------------------------------------
+
+### Table  
+
+Summary statistics of the `volcano` data-set
+
+| Statistic     | Elevation                   |
+|:------------- |:--------------------------- |
+| Min           | `r knitr::inline_expr('min(volcano)')`            | 
+| Median        | `r knitr::inline_expr('median(volcano)')`         |
+| Mean          | `r knitr::inline_expr('round(mean(volcano))')`    |
+| Max           | `r knitr::inline_expr('max(volcano)')`            |
+
+
+Column {data-width=700}
+-------------------------------------
+
+### Plot
+
+```{r} `r ''`
+plotly::plot_ly(z = volcano, type = "surface")
+```
+
+````
+
+The output from this example has been duplicated [here](#components-example). Note the use of the `data-width` attribute to make the table chart relatively narrow.
+
+
+Layout example 1 {data-orientation=columns .hidden}
+=======================================================================
+
+Column
+-------------------------------------
+
+### Chart 1
+
+
+Column
+-------------------------------------
+
+### Chart 2
+
+
+### Chart 3
+
+
+Layout example 2 {data-orientation=rows .hidden}
+=======================================================================
+
+Row
+-------------------------------------
+
+### Chart 1
+
+
+Row
+-------------------------------------
+
+### Chart 2
+
+
+### Chart 3
+
+
+Components example {data-orientation=columns .hidden}
+=======================================================================
+
+
+Column {data-width=300}
+-------------------------------------
+
+### Table  
+
+Summary statistics of the `volcano` data-set
+
+| Statistic     | Elevation                   |
+|:------------- |:--------------------------- |
+| Min           | `r min(volcano)`            |
+| Median        | `r median(volcano)`         |
+| Mean          | `r round(mean(volcano))`    |
+| Max           | `r max(volcano)`            |
+
+
+Column {data-width=700}
+-------------------------------------
+
+### Plot
+
+```{r}
+plotly::plot_ly(z = volcano, type = "surface")
+```
 
 
