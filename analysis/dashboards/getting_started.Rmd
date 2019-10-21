@@ -3,7 +3,6 @@ title: "Dashboards for stock assessments: Getting started"
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
-    source_code: embed
 ---
 
 <style>
@@ -64,8 +63,139 @@ Row {data-height=500}
 > Source: https://rstudio.github.io/crosstalk/
 
 
+TEMP {.hidden}
+=======================================================================
 
-rmarkdown {data-navmenu="Basics"}
+### leaflet
+
+```{r, eval = TRUE, include=FALSE}
+leaflet::leaflet() # subsequent leaflet would not render withouth an eariler call to leaflet for some unknown reason?
+```
+
+
+
+
+Skeleton {data-orientation=columns}
+=======================================================================
+
+Column {.tabset}
+-------------------------------------
+
+### Code
+
+```{r echo = FALSE, comment = ""}
+cat(htmltools::includeText("skeleton.Rmd"))
+```
+
+> This will generate a simple flexdashboard with two interactive figures (duplicated to the right)
+
+### Quick start
+
+**1\.** `r xfun::embed_files(c("skeleton.Rmd", "length-weight_data.csv"), text = "Download code and data")`  
+
+**2\.** Open `skeleton.Rmd` in Rstudio  
+
+**3\.** Install packages: `install.packages(c("flexdashboard", "plotly", "crosstalk"))`  
+
+**4\.** Knit file by typing `Ctrl+Shift+K` or use the `r knitr::include_graphics("knit_button.png", dpi = 175)` button
+
+
+
+### Details
+
+This skeleton is a verbatim copy of an R markdown file (`` `r xfun::embed_file("skeleton.Rmd", text = "skeleton.Rmd")` ``) set-up to produce a simple `flexdashboard` with interactive `plotly` visuals connected by `crosstalk`. Like most R markdown files, it includes three types of content:
+
+1. A YAML header surrounded by `----`
+2. Text following `markdown` formatting
+3. R code chunks surrounded by `` ``` ``
+
+The YAML header includes the metadata for the file, such as the document title and output format: 
+
+````
+---
+title: "flexdashboard + plotly + crosstalk"
+output: flexdashboard::flex_dashboard
+---
+````
+
+While only a title and format was specified in the skeleton, many other options are available (e.g. author, date).
+
+The next section is a chunk of R code:
+
+````
+```{r setup, include=FALSE} `r ''`
+library(plotly)
+library(crosstalk)
+lw <- read.csv("length-weight_data.csv")
+shared_lw <- SharedData$new(lw, ~record)
+```
+````
+
+This is where the `plotly` and `crosstalk` packages are loaded along with some sample data (`` `r xfun::embed_file("length-weight_data.csv", text = "length-weight_data.csv")` ``). The sample data includes length and weight data (columns `length` and `weight`, respectively) along with fitted values and residuals from a length-weight regression (columns called `fit` and `res`, respectively). The `SharedData` function from `crosstalk` package is also used here to generate a data object that can be "shared" across independent plots.
+
+Following this chunk of R code is a level 2 markdown header that tells flexdashboard to introduce a column break and place the subsequent components into separate tabs:
+
+````
+Column {.tabset}
+-------------------------------------
+````
+
+Following this break, independent tabs are defined using three hashtags followed by an optional tab name (level 3 markdown header). This header can be followed by either markdown text or R code. Here, two tabs are generated with `plotly` plots using shared data from `crosstalk`:
+
+````
+### Length-Weight relationship
+
+```{r} `r ''`
+plot_ly(data = shared_lw) %>% 
+    add_markers(x = ~length, y = ~weight, name = "Observed") %>% 
+    add_lines(x = ~length, y = ~exp(fit), name = "Predicted")
+```
+
+### Residuals vs. fitted values
+
+```{r} `r ''`
+plot_ly(data = shared_lw) %>% 
+    add_markers(x = ~fit, y = ~res)
+```
+
+````
+
+The native syntax of `plotly` was inspired by the grammar of graphics and, as such, its general structure will be familiar to those who have used `ggplot2`. The package has also been structured to be pipe (`%>%`) and `dplyr` friendly, making the code more intuitive and efficient. Though the script ends with the residual vs. fitted plot, the dashboard can easily be extended to include other diagnostic plots, such as a histogram of the residuals.
+
+Once this script is "Knit" (`Ctrl+Shift+K` in Rstudio), a stand-alone html document will be produced with the plots rendered into independent tabs (shown to the right). Clicking a specific point in one plot will highlight the corresponding point in the other plot. In short, `flexdashboard` sets up the structure of the document, `plotly` produces the interactive figures and `crosstalk` connects the plots held in independent tabs. 
+
+Of course, this is only a rudimentary overview of what is possible with `flexdashboard`, `plotly` and `crosstalk`. A wide range of layout options are possible using `flexdashboard`, `plotly` can produce more than just scatter and line plots and `crosstalk` can connect various widgets. See the links provided on the [Background](#background) page for more details on each package. The hope here is that this skeleton serves as a starting point from which to build more elaborate dashboards tailored to specific needs.
+
+
+
+Column {.tabset}
+-------------------------------------
+
+```{r}
+lw <- read.csv("length-weight_data.csv")
+shared_lw <- SharedData$new(lw, ~record)
+```
+
+### Length-Weight relationship
+
+```{r}
+plot_ly(data = shared_lw) %>% 
+    add_markers(x = ~length, y = ~weight, name = "Observed") %>% 
+    add_lines(x = ~length, y = ~exp(fit), name = "Predicted")
+```
+
+### Residuals vs. fitted values
+
+```{r}
+plot_ly(data = shared_lw) %>% 
+    add_markers(x = ~fit, y = ~res)
+```
+
+
+
+
+
+rmarkdown {data-navmenu="Extra"}
 =======================================================================
 
 Row {data-height=250}
@@ -137,7 +267,7 @@ head_cars
 
 
 
-flexdashboard {data-navmenu="Basics"}
+flexdashboard {data-navmenu="Extra"}
 =======================================================================
 
 Row {data-height=200}
@@ -247,7 +377,7 @@ plotly::plot_ly(z = volcano, type = "surface")
 The output from this example has been duplicated [here](#components-example). Note the use of the `data-width` attribute to make the table chart relatively narrow.
 
 
-plotly {data-navmenu="Basics" data-orientation=columns}
+plotly {data-navmenu="Extra" data-orientation=columns}
 =======================================================================
 
 Column {data-width=250}
@@ -355,7 +485,7 @@ plot_ly(data = iris,
 
 
 
-crosstalk {data-navmenu="Basics" data-orientation=columns}
+crosstalk {data-navmenu="Extra" data-orientation=columns}
 =======================================================================
 
 Column
@@ -419,114 +549,6 @@ plot_ly(data = shared_quakes) %>%
               colors = viridis::viridis(4),
               marker = list(size = 15))
 ```
-
-
-
-Skeleton {data-orientation=columns}
-=======================================================================
-
-Column {.tabset}
--------------------------------------
-
-### Code
-
-```{r echo = FALSE, comment = ""}
-cat(htmltools::includeText("skeleton.Rmd"))
-```
-
-> This will generate a simple flexdashboard with two interactive figures (duplicated to the right)
-
-### Details
-
-This skeleton is a verbatim copy of an R markdown file (`` `r xfun::embed_file("skeleton.Rmd", text = "skeleton.Rmd")` ``) set-up to produce a simple `flexdashboard` with interactive `plotly` visuals connected by `crosstalk`. Like most R markdown files, it includes three types of content:
-
-1. A YAML header surrounded by `----`
-2. Text following `markdown` formatting
-3. R code chunks surrounded by `` ``` ``
-
-The YAML header includes the metadata for the file, such as the document title and output format: 
-
-````
----
-title: "flexdashboard + plotly + crosstalk"
-output: flexdashboard::flex_dashboard
----
-````
-
-While only a title and format was specified in the skeleton, many other options are available (e.g. author, date).
-
-The next section is a chunk of R code:
-
-````
-```{r setup, include=FALSE} `r ''`
-library(plotly)
-library(crosstalk)
-lw <- read.csv("length-weight_data.csv")
-shared_lw <- SharedData$new(lw, ~record)
-```
-````
-
-This is where the `plotly` and `crosstalk` packages are loaded along with some sample data (`` `r xfun::embed_file("length-weight_data.csv", text = "length-weight_data.csv")` ``). The sample data includes length and weight data (columns `length` and `weight`, respectively) along with fitted values and residuals from a length-weight regression (columns called `fit` and `res`, respectively). The `SharedData` function from `crosstalk` package is also used here to generate a data object that can be "shared" across independent plots.
-
-Following this chunk of R code is a level 2 markdown header that tells flexdashboard to introduce a column break and place the subsequent components into separate tabs:
-
-````
-Column {.tabset}
--------------------------------------
-````
-
-Following this break, independent tabs are defined using three hashtags followed by an optional tab name (level 3 markdown header). This header can be followed by either markdown text or R code. Here, two tabs are generated with `plotly` plots using shared data from `crosstalk`:
-
-````
-### Length-Weight relationship
-
-```{r} `r ''`
-plot_ly(data = shared_lw) %>% 
-    add_markers(x = ~length, y = ~weight, name = "Observed") %>% 
-    add_lines(x = ~length, y = ~exp(fit), name = "Predicted")
-```
-
-### Residuals vs. fitted values
-
-```{r} `r ''`
-plot_ly(data = shared_lw) %>% 
-    add_markers(x = ~fit, y = ~res)
-```
-
-````
-
-The native syntax of `plotly` was inspired by the grammar of graphics and, as such, its general structure will be familiar to those who have used `ggplot2`. The package has also been structured to be pipe (`%>%`) and `dplyr` friendly, making the code more intuitive and efficient. Though the script ends with the residual vs. fitted plot, the dashboard can easily be extended to include other diagnostic plots, such as a histogram of the residuals.
-
-Once this script is "Knit" (`Ctrl+Shift+K` in Rstudio), a stand-alone html document will be produced with the plots rendered into independent tabs (shown to the right). Clicking a specific point in one plot will highlight the corresponding point in the other plot. In short, `flexdashboard` sets up the structure of the document, `plotly` produces the interactive figures and `crosstalk` connects the plots held in independent tabs. 
-
-Of course, this is only a rudimentary overview of what is possible with `flexdashboard`, `plotly` and `crosstalk`. A wide range of layout options are possible using `flexdashboard`, `plotly` can produce more than just scatter and line plots and `crosstalk` can connect various widgets. See the links provided on the [Background](#background) page for more details on each package. The hope here is that this skeleton serves as a starting point from which to build more elaborate dashboards tailored to specific needs.
-
-
-
-Column {.tabset}
--------------------------------------
-
-```{r}
-lw <- read.csv("length-weight_data.csv")
-shared_lw <- SharedData$new(lw, ~record)
-```
-
-### Length-Weight relationship
-
-```{r}
-plot_ly(data = shared_lw) %>% 
-    add_markers(x = ~length, y = ~weight, name = "Observed") %>% 
-    add_lines(x = ~length, y = ~exp(fit), name = "Predicted")
-```
-
-### Residuals vs. fitted values
-
-```{r}
-plot_ly(data = shared_lw) %>% 
-    add_markers(x = ~fit, y = ~res)
-```
-
-
 
 
 
