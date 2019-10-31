@@ -1,0 +1,38 @@
+
+.gdbar img {
+  width: 300px !important;
+  height: 44px !important;
+  margin: 7px 7px;
+}
+
+.gdbar {
+  width: 400px !important;
+  height: 59px !important;
+}
+
+slides > slide:not(.nobackground):before {
+  width: 300px;
+  height: 44px;
+  background-size: 300px 44px;
+}
+
+.title-slide hgroup h1 {
+  font-size: 50px;
+  letter-spacing: 0;
+}
+
+/* smaller font size for a page */
+.tiny {
+  font-size: 8.3pt;
+}
+
+/* tighter margins */
+.tighter > p {
+  margin-top: -25px;
+}
+
+table.rmdtable td, table th {
+    font-size: 55%;
+    padding: 1em 0.5em;
+    line-height: 18px;
+}
