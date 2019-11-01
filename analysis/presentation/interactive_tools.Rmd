@@ -25,8 +25,14 @@ knitr::opts_knit$set(root.dir = "../..")
 
 ```{r data}
 ## xaringan::inf_mr()
+
 library(NCAM)
 library(plotly)
+library(ggplot2)
+library(emojifont)
+
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+
 load("data/NCAM_2018.RData")
 fit <- ncam_2018
 tabs <- tidy_model(fit)
@@ -101,9 +107,103 @@ orca(p, file = "analysis/presentation/figures/bg-fig.png",
 &nbsp;&nbsp;&nbsp;- Tukey (1977)  
 
 - Discovery is one of the most exciting parts of science
-- Visulizations are one of the tools we use to reveal patterns
+- Visualizations are one of the tools we use to reveal patterns
 - Models allow us to simplify and describe these patterns
 - At various stages, we need to communicate our findings
+
+
+## Communicating information 
+
+
+Simplified workflow:
+
+<hr>
+
+<div style="float: left; width: 20%; text-align: center;">
+Data  
+<font size="20"><i class="fa fa-database"></i></font>
+</div>
+
+<div style="float: left; width: 20%; text-align: center;">
+<br>
+$\rightarrow$
+</div>
+
+<div style="float: left; width: 20%; text-align: center;">
+Models  
+<font size="20"><i class="fa fa-chart-area"></i></font>
+</div>
+
+<div style="float: left; width: 20%; text-align: center;">
+<br>
+$\rightarrow$
+</div>
+
+<div style="float: left; width: 20%; text-align: center;">
+Discuss  
+<font size="20"><i class="fa fa-comments"></i></font>
+</div>
+
+<hr>
+
+<div>
+- Connections may not come easy
+    - Growing volume and variety of data
+    - Increasingly complex models
+    - Diverse backgrounds
+
+</div>
+
+
+## Stock assessments <i class="fa fa-fish"></i>
+
+<div style="float: left; width: 65%;">
+
+- Communicating stock assessment results isn't getting easier  
+    - Growing volume and variate of data  
+    - Increasingly complex models  
+    - Diverse backgrounds  
+- Traditional formats sometimes 
+    - Overwhelm participants with endless tables and figures
+    - Fail to convey the richness of information available 
+    
+</div>  
+    
+<div style="float: right; width: 35%;">
+
+```{r, out.width = "100%"}
+knitr::include_graphics("figures/doc_screenshots.PNG")
+```
+
+</div>  
+
+
+## Interactive tools
+
+<div style="float: left; width: 55%;">
+
+- Simplify communication and improve accessibility
+- Common tools that are used daily on a range of websites
+- Their use is no longer restricted to website developers
+    - Integrated into software commonly used by the research community
+    - Surprisingly easy to generate interactive dashboards
+    - Growing number of users
+
+</div>  
+    
+<div style="float: right; width: 40%; padding-left: 5%">
+
+```{r, out.width = "100%"}
+knitr::include_graphics("figures/canada_poll_tracker.PNG")
+```
+
+</div>  
+
+
+## Objective
+
+- Here we aim to demonstrate that interactive tools simplify our workflow, from data and model exploration to communication
+
 
 
 

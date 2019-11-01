@@ -1,29 +1,84 @@
 
+/* global font from Google Fonts */
+slides > slide {
+  font-family: 'Montserrat', sans-serif;
+}
+
+body {
+  background-color: #000000;
+}
+
+
+/* title size, etc. */
+.title-slide hgroup h1 {
+  font-size: 35px;
+  letter-spacing: 0;
+  line-height: 1.5em;
+  margin-right: 150px;
+}
+.title-slide hgroup h2 {
+  font-size: 35px;
+  letter-spacing: 0;
+  color: #666666;
+  line-height: 1.5em;
+  margin-right: 150px;
+}
+
+
+/* logo sizes */
 .gdbar img {
   width: 300px !important;
   height: 44px !important;
-  margin: 7px 7px;
+  margin: 8px 8px;
 }
-
 .gdbar {
   width: 400px !important;
   height: 59px !important;
 }
-
 slides > slide:not(.nobackground):before {
-  width: 300px;
-  height: 44px;
-  background-size: 300px 44px;
+  width: 250px;
+  height: 36px;
+  background-size: 250px 36px;
 }
 
-.title-slide hgroup h1 {
-  font-size: 50px;
-  letter-spacing: 0;
+/* list spacing */
+li{
+    margin-top: 18px;
+}
+li:first-child {
+    margin-top:18px;
 }
 
-/* smaller font size for a page */
-.tiny {
-  font-size: 8.3pt;
+
+/* table style */
+/* https://stackoverflow.com/questions/25869429/custom-table-with-r-markdown-v2-and-ioslides */
+table,
+.table-condensed,
+table.rmdtable {
+  width: auto;
+  margin-left: 0;
+  margin-right: auto;
+}
+table,
+.table-condensed,
+table.rmdtable,
+table.rmdtable .header th,
+.table > thead > tr > th {
+  border: 0;
+}
+table.rmdtable th,
+table.rmdtable td,
+table th,
+table.rmdtable tr > td:first-child,
+table.rmdtable .even {
+  font-size: 100%;
+  padding: 0.4em 0.5em;
+  color: inherit;
+  background: #FFF;
+  font-weight: normal;
+}
+.table > tbody > tr > td {
+  border-width: 0;
 }
 
 /* tighter margins */
@@ -31,8 +86,32 @@ slides > slide:not(.nobackground):before {
   margin-top: -25px;
 }
 
-table.rmdtable td, table th {
-    font-size: 55%;
-    padding: 1em 0.5em;
-    line-height: 18px;
+/* header format */
+h3 {
+  font-size: 25px;
+  margin-top: -30px;
+}
+h2 {
+  font-size: 40px;
+}
+
+/* crosstalk filters */
+.control-label {
+  color: inherit;
+}
+.selectize-input {
+  color: inherit;
+}
+.selectize-dropdown {
+  color: inherit;
+}
+
+hr.fade {
+border: 0;
+height: 1px;
+background: #333;
+background-image: -webkit-linear-gradient(left, #ccc, #333, #ccc);
+background-image: -moz-linear-gradient(left, #ccc, #333, #ccc);
+background-image: -ms-linear-gradient(left, #ccc, #333, #ccc);
+background-image: -o-linear-gradient(left, #ccc, #333, #ccc);
 }
