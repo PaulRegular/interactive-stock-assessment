@@ -12,6 +12,10 @@ bibliography: references.bib
 csl: csas.csl
 ---
 
+<style>
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+</style>
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, 
                       message = FALSE, 
@@ -194,7 +198,8 @@ knitr::include_graphics("figures/doc_screenshots.PNG")
 <div style="float: right; width: 40%; padding-left: 5%">
 
 ```{r, out.width = "100%"}
-knitr::include_graphics("figures/canada_poll_tracker.PNG")
+# knitr::include_graphics("figures/canada_poll_tracker.PNG")
+knitr::include_url("https://newsinteractives.cbc.ca/elections/poll-tracker/canada/", height = "300px")
 ```
 
 </div>  
@@ -202,8 +207,154 @@ knitr::include_graphics("figures/canada_poll_tracker.PNG")
 
 ## Objective
 
-- Here we aim to demonstrate that interactive tools simplify our workflow, from data and model exploration to communication
+- Using examples we aim to demonstrate that interactive tools can simplify our workflow, from data and model exploration to communication
+<br>
+- Examples:
+    1. **RStrap Explorer:** A tool for examinging fishery-independent survey data
+    2. **Tag Explorer:** A mapping tool developed for the exploration of a long-term tagging study
+    3. **NCAM Explorer:** A tool for exploring results from the Northern Cod Assessment Model
 
 
+## RStrap Explorer
+
+<div style="float: left; width: 50%;">
+
+- Fisheries-independent surveys have become a mainstay in stock assessment
+- Stratified-random surveys have been conducted by DFO for > 40 years
+- Typically analyzed using stratified analyses (RStrap in NL region)
+
+</div>  
+    
+<div style="float: right; width: 45%; padding-left: 5%">
+
+<br>
+<img src="figures/teleost_twitter_crop.jpg" width="100%"/>
+<font size="1"> 
+<br>
+&nbsp; <a href="https://twitter.com/coastguardcan/status/879410397790515201">Canadian Coast Guard | Twitter</a>
+</font>
+
+</div>  
+
+
+## RStrap Explorer {.smaller}
+
+> - Running a series of stratified analysis can be cumbersome
+
+```{r, eval = FALSE, echo = TRUE}
+
+library(Rstrap)
+
+## Load survey data
+load("converted_set_details_2017-04-27.Rdata")
+load("converted_length-frequency_data_2017-04-27.Rdata")
+load("age-growth_data_2017-04-27.Rdata")
+
+## 3NO Witch Flounder
+witch <- strat.fun(setdet = setdet, data.series = "Campelen", 
+                   species = 890, survey.year = 1995:2012, 
+                   season = "spring", NAFOdiv = c("3N", "3O"))
+
+## 3K Roughhead Grenadier (length disaggregated)
+grenadier <- strat.fun(setdet = setdet, lf = lf, data.series = "Campelen", 
+                       program = "strat2 & strat1", species = 474, survey.year = 2012, 
+                       season = "fall", NAFOdiv = "3K", strat = 622:654, sex = "unsexed", 
+                       length.group = 0.5, group.by = "length")
+
+## 2J3KL Greenland Halibut (length and age disaggregated)
+turbot <- strat.fun(setdet = setdet, lf = lf, ag = ag, data.series = "Campelen", 
+                    program = "strat2 & strat1", species = 892, survey.year = 1998:2012, 
+                    season = "fall", NAFOdiv = c("2J", "3K", "3L"), 
+                    sex = c("male","female","unsexed"), length.group = 1, 
+                    group.by = "length & age")
+
+## 3Ps Atlantic Cod (length and age disaggregated)
+cod <- strat.fun(setdet = setdet, lf = lf, ag = ag, data.series = "Campelen", 
+                 program = "strat2 & strat1", species = 438, survey.year = 1998:2012, 
+                 season = "spring", NAFOdiv = "3P", sex = c("male","female","unsexed"), 
+                 length.group = 1, group.by = "length & age")
+
+
+```
+
+- This doesn't include code for plotting these results
+
+
+## RStrap Explorer
+
+- A dashboard was created using the **`shiny`**, **`flexdashboard`**, **`plotly`**, and **`crosstalk`** packages to dynamically run and explore RStrap results
+- Four primary pages:
+    1. **Survey Indices** contains stock level estimates of biomass and abundance
+    2. **Age & Length Distributions** contains length and age frequency plots 
+    3. **Recruitment** displays recruitment indices
+    4. **Help** provides additional context to the survey data and analysis
+
+
+## RStrap Explorer {data-background="figures/RStrap_dashboard_biomass.png" data-background-position="center bottom"}
+
+
+## RStrap Explorer {data-background="figures/RStrap_dashboard_freq.png" data-background-position="center bottom"}
+
+
+## Tag Explorer
+
+<div style="float: left; width: 55%;">
+
+- For some data-rich stocks, mark and recapture studies are carried out to estimate movement, growth rate, natural mortality, etc.
+- There is a long-standing tagging program for Northern cod
+    - \>60 years, >60,000 records, 1,000 - 10,000 tags deployed annually
+
+</div> 
+
+<div style="float: right; width: 40%; padding-left: 5%">
+
+<img src="figures/cod_tagging.jpg" width="100%"/>
+<font size="1"> 
+Photo: John Brattey 
+</font>
+
+</div>  
+
+
+## Tag Explorer
+
+> - Spatial explorations of these data have been limited since the seminal work by Taggart et al. 1995
+
+<div style="float: left; width: 25.6%; padding: 1%">
+<div class="drop-shadow" style="background-color: rgb(236, 192, 107);">
+<img src="figures/taggart_1.png" width="100%"/>
+</div>
+</div>  
+
+<div style="float: left; width: 26.4%; padding: 1%">
+
+<div class="drop-shadow">
+<img src="figures/taggart_2.png" width="100%"/>
+</div>
+
+</div>  
+
+<div style="float: left; width: 42%; padding: 1%">
+
+<div class="drop-shadow">
+<img src="figures/taggart_3.png" width="100%"/>
+</div>
+
+</div>  
+
+- **Nearly 500 pages!**
+
+## Tag Explorer
+
+- A dashboard was created using the **`shiny`**, **`shinydashboard`**, and **`leaflet`** packages to dynamically explore this large dataset
+- Contains
+    - One primary page, **Main map**, where release and recovery locations are mapped
+    - A series of summary pages where these data are summarised
+
+
+## Tag Explorer {data-background="figures/tagging_dashboard_map_tab.png" data-background-position="center bottom"}
+
+
+## Tag Explorer {data-background="figures/tagging_dashboard_summary_tab.png" data-background-position="center bottom"}
 
 

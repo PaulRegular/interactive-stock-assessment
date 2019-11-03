@@ -115,3 +115,19 @@ background-image: -moz-linear-gradient(left, #ccc, #333, #ccc);
 background-image: -ms-linear-gradient(left, #ccc, #333, #ccc);
 background-image: -o-linear-gradient(left, #ccc, #333, #ccc);
 }
+
+
+/* limit the height of code chunks */
+pre {
+  max-height: 300px;
+  overflow-y: auto;
+}
+pre[class] {
+  max-height: 300px;
+}
+
+/* for a drop shadow around an image */
+.drop-shadow { 
+  box-shadow: 2px 2px 8px 4px #999; 
+}
+
