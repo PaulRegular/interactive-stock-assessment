@@ -98,13 +98,13 @@ p <- p %>%
          margin = list(t = 0, l = 0, r = 0, b = 0, pad = 0)) %>% 
   plotly::config(displayModeBar = FALSE)
 
-orca(p, file = "analysis/presentation/figures/bg-fig.png", 
+orca(p, file = "analysis/presentation/graphics/bg-fig.png", 
      height = 700, width = 1100, scale = 6)
 
 ```
 
 
-## Background {data-background="figures/bg-fig.png"}
+## Background {data-background="graphics/bg-fig.png"}
 
 *The greatest value of a picture is when it forces us to notice*   
 *what we never expected to see.*  
@@ -176,7 +176,7 @@ Discuss
 <div style="float: right; width: 35%;">
 
 ```{r, out.width = "100%"}
-knitr::include_graphics("figures/doc_screenshots.PNG")
+knitr::include_graphics("graphics/doc_screenshots.PNG")
 ```
 
 </div>  
@@ -198,7 +198,7 @@ knitr::include_graphics("figures/doc_screenshots.PNG")
 <div style="float: right; width: 40%; padding-left: 5%">
 
 ```{r, out.width = "100%"}
-# knitr::include_graphics("figures/canada_poll_tracker.PNG")
+# knitr::include_graphics("graphics/canada_poll_tracker.PNG")
 knitr::include_url("https://newsinteractives.cbc.ca/elections/poll-tracker/canada/", height = "300px")
 ```
 
@@ -210,7 +210,7 @@ knitr::include_url("https://newsinteractives.cbc.ca/elections/poll-tracker/canad
 - Using examples we aim to demonstrate that interactive tools can simplify our workflow, from data and model exploration to communication
 <br>
 - Examples:
-    1. **RStrap Explorer:** A tool for examinging fishery-independent survey data
+    1. **RStrap Explorer:** A tool for examining fishery-independent survey data
     2. **Tag Explorer:** A mapping tool developed for the exploration of a long-term tagging study
     3. **NCAM Explorer:** A tool for exploring results from the Northern Cod Assessment Model
 
@@ -228,7 +228,7 @@ knitr::include_url("https://newsinteractives.cbc.ca/elections/poll-tracker/canad
 <div style="float: right; width: 45%; padding-left: 5%">
 
 <br>
-<img src="figures/teleost_twitter_crop.jpg" width="100%"/>
+<img src="graphics/teleost_twitter_crop.jpg" width="100%"/>
 <font size="1"> 
 <br>
 &nbsp; <a href="https://twitter.com/coastguardcan/status/879410397790515201">Canadian Coast Guard | Twitter</a>
@@ -290,10 +290,10 @@ cod <- strat.fun(setdet = setdet, lf = lf, ag = ag, data.series = "Campelen",
     4. **Help** provides additional context to the survey data and analysis
 
 
-## RStrap Explorer {data-background="figures/RStrap_dashboard_biomass.png" data-background-position="center bottom"}
+## RStrap Explorer {data-background="graphics/RStrap_dashboard_biomass.png" data-background-position="center bottom"}
 
 
-## RStrap Explorer {data-background="figures/RStrap_dashboard_freq.png" data-background-position="center bottom"}
+## RStrap Explorer {data-background="graphics/RStrap_dashboard_freq.png" data-background-position="center bottom"}
 
 
 ## Tag Explorer
@@ -308,7 +308,7 @@ cod <- strat.fun(setdet = setdet, lf = lf, ag = ag, data.series = "Campelen",
 
 <div style="float: right; width: 40%; padding-left: 5%">
 
-<img src="figures/cod_tagging.jpg" width="100%"/>
+<img src="graphics/cod_tagging.jpg" width="100%"/>
 <font size="1"> 
 Photo: John Brattey 
 </font>
@@ -322,14 +322,14 @@ Photo: John Brattey
 
 <div style="float: left; width: 25.6%; padding: 1%">
 <div class="drop-shadow" style="background-color: rgb(236, 192, 107);">
-<img src="figures/taggart_1.png" width="100%"/>
+<img src="graphics/taggart_1.png" width="100%"/>
 </div>
 </div>  
 
 <div style="float: left; width: 26.4%; padding: 1%">
 
 <div class="drop-shadow">
-<img src="figures/taggart_2.png" width="100%"/>
+<img src="graphics/taggart_2.png" width="100%"/>
 </div>
 
 </div>  
@@ -337,7 +337,7 @@ Photo: John Brattey
 <div style="float: left; width: 42%; padding: 1%">
 
 <div class="drop-shadow">
-<img src="figures/taggart_3.png" width="100%"/>
+<img src="graphics/taggart_3.png" width="100%"/>
 </div>
 
 </div>  
@@ -346,15 +346,142 @@ Photo: John Brattey
 
 ## Tag Explorer
 
-- A dashboard was created using the **`shiny`**, **`shinydashboard`**, and **`leaflet`** packages to dynamically explore this large dataset
+- A dashboard was created using the **`shiny`**, **`shinydashboard`**, and **`leaflet`** packages to dynamically explore this large data-set
 - Contains
     - One primary page, **Main map**, where release and recovery locations are mapped
-    - A series of summary pages where these data are summarised
+    - A series of summary pages where these data are summarized
 
 
-## Tag Explorer {data-background="figures/tagging_dashboard_map_tab.png" data-background-position="center bottom"}
+## Tag Explorer {data-background="graphics/tagging_dashboard_map_tab.png" data-background-position="center bottom"}
 
 
-## Tag Explorer {data-background="figures/tagging_dashboard_summary_tab.png" data-background-position="center bottom"}
+## Tag Explorer {data-background="graphics/tagging_dashboard_summary_tab.png" data-background-position="center bottom"}
+
+
+## NCAM Explorer
+
+<div style="float: left; width: 50%; padding-right: 5%;">
+
+- Integrated stock assessment models are becoming more common
+- Advances in computational power and methods $\rightarrow$ possibilities
+- Requires a solid understanding of the inputs, methods and outputs
+    - Understanding is a prerequisite for communication
+
+</div> 
+
+<div class="drop-shadow" style="float: right; width: 40%; padding: 2.5%; font-size: 8px;">
+
+**Process equations**  
+<br>
+Stochastic cohort model with a plus group to model the unobserved states:
+$$\log(N_{a,y}) = \left\{\begin{matrix}
+ \log(N_{a-1,y-1}) - Z_{a-1,y-1} + \delta_{a,y}, & a < A \\
+ \log\{N_{a-1,y-1}\exp(-Z_{a-1,y-1}) + N_{a,y-1}\exp(-Z_{a,y-1})\} + \delta_{a,y}, & a = A.
+\end{matrix}\right. $$
+
+The ages are 1-10+ and years are 1975-2015. $Z_{a,y} = F_{a,y} + M_{a,y}$, where $M_{a,y} = 0.2$ is the base case assumption. 
+
+Recruitments, $N_{1,1}, ... N_{1,Y}$, are treated as uncorrelated lognormal random variables
+$$\log(N_{1,y}) \overset{iid}\sim N(r, \sigma_{r}^2).$$
+
+Catches are modeled using the Baranov catch equation,
+$$C_{a,y} = N_{a,y}\{1 - \exp(-Z_{a,y})\}F_{a,y}/Z_{a,y}.$$
+
+Fishing moralities are modeled as a stochastic process, with
+$$Cov\{\log(F_{a,y}),\log(F_{a-j,y-k})\} = \frac{\sigma_{F}^2 \varphi_{F,a}^j \varphi_{F,y}^k}{(1-\varphi_{F,a}^2)(1-\varphi_{F,y}^2)}.$$
+
+**Observation equations**  
+<br>
+The model predicted catch for survey $s$ is
+$$\log(I_{s,a,y}) = \log(q_{s,a}) + \log(N_{a,y}) - t_{s,y}Z_{a,y} + \varepsilon_{s,a,y}, ~~ \varepsilon_{s,a,y} \overset{iid}\sim N(0, \sigma_{s,G(a)}^2).$$
+
+Survey variance was split out and self-weighted by age groups 1-3, 4-7, and 8-10+
+
+Total catch and age compositions were treated separately. Total catch was modeled as lognormal, 
+$$\log(C_{obs,y}) = \log(C_{y}) + \varepsilon_{C,y}, ~~ \varepsilon_{C,y} \overset{iid}\sim N(0, \sigma_{C}^2)$$
+Age compositions were modeled as multiplicative logistic normal with a censored component for zero's
+
+</div>  
+
+## NCAM Explorer <img src="graphics/cod.png" height="100px" style="margin-bottom: -35px; margin-left: 10px;">
+
+- **Challenge:** the data-rich case of Northern cod
+    - Assessed using an age-structured, state-space assessment model, called NCAM, which integrates:
+        - Research vessel autumn trawl surveys (1983-present)
+        - Sentinel fishery surveys (1995-present)
+        - Inshore acoustic surveys (1995-2009)
+        - Fishery catch-at-age compositions and partial fishery landings (1983-present)
+        - Tagging data (1983-present)
+
+## NCAM Explorer
+
+> - **Communication:** standard approach involves compiling and presenting static documentation
+
+<hr>
+
+<div style="float: left; width: 20%; text-align: center;">
+Code  
+<font size="20"><i class="fa fa-file-code"></i></font>
+</div>
+
+<div style="float: left; width: 20%; text-align: center;">
+<br>
+$\rightarrow$
+</div>
+
+<div style="float: left; width: 20%; text-align: center;">
+Plots & Tables  
+<font size="20"><i class="fa fa-file-image"></i></font>
+<font size="20"><i class="fa fa-file-excel"></i></font>
+</div>
+
+<div style="float: left; width: 20%; text-align: center;">
+<br>
+$\rightarrow$
+</div>
+
+<div style="float: left; width: 20%; text-align: center;">
+Documentation  
+<font size="20"><i class="fa fa-file-word"></i></font>
+<font size="20"><i class="fa fa-file-powerpoint"></i></font>
+</div>
+
+<hr>
+
+- Involves a lot of copy-pasting
+- Important details may not be visible
+- Linear format may be the best way to explore ideas
+
+
+## NCAM Explorer
+
+> - A dashboard was created using the **`flexdashboard`**, **`plotly`**, and **`crosstalk`** packages to explore and communicate results from NCAM
+
+<hr>
+
+<div style="float: left; width: 33.3333%; text-align: center;">
+Code  
+<font size="20"><i class="fa fa-file-code"></i></font>
+</div>
+
+<div style="float: left; width: 33.3333%; text-align: center;">
+<br>
+$\rightarrow$
+</div>
+
+<div style="float: left; width: 33.3333%; text-align: center;">
+HTML  
+<font size="20"><i class="far fa-file-code"></i></font>
+</div>
+
+<hr>
+
+- Contains a series of pages with plots and tables typically presented at assessment meetings
+
+
+## NCAM Explorer
+
+<iframe src="graphics/NCAM_dashboard.html" style="height: 700px; width: 1100px; margin-top: -150px; margin-left: -60px; margin-right: -60px; position: absolute; z-index: 1;"></iframe>
+
 
 
