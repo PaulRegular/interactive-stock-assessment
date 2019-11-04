@@ -484,4 +484,96 @@ HTML
 <iframe src="graphics/NCAM_dashboard.html" style="height: 700px; width: 1100px; margin-top: -150px; margin-left: -60px; margin-right: -60px; position: absolute; z-index: 1;"></iframe>
 
 
+## Interactive vs. static
+
+- Static formats are useful for explaining ideas
+- Interactive formats are useful for exploring ideas
+    - Easy and efficient access to the details via drop-down filters and data-rich illustrations
+    - Navigation bar circumvents scrolling through pages or digging through files
+    - **Bonus:** automation circumvents copy-pasting
+
+## Towards open stock-assessment
+
+<hr>
+
+<div style="float: left; width: 12.5%; text-align: center;">
+Data  
+<font size="20"><i class="fa fa-database"></i></font>
+</div>
+
+<div style="float: left; width: 5%; text-align: center;">
+<br>
+$\rightarrow$
+</div>
+
+<div style="float: left; width: 12.5%; text-align: center;">
+Code  
+<font size="20"><i class="fa fa-code"></i></font>
+</div>
+
+<div style="float: left; width: 5%; text-align: center;">
+<br>
+$\rightarrow$
+</div>
+
+<div style="float: left; width: 12.5%; text-align: center;">
+Models  
+<font size="20"><i class="fa fa-chart-area"></i></font>
+</div>
+
+<div style="float: left; width: 5%; text-align: center;">
+<br>
+$\rightarrow$
+</div>
+
+<div style="float: left; width: 12.5%; text-align: center;">
+Code  
+<font size="20"><i class="fa fa-code"></i></font>
+</div>
+
+<div style="float: left; width: 5%; text-align: center;">
+<br>
+$\rightarrow$
+</div>
+
+<div style="float: left; width: 12.5%; text-align: center;">
+Document  
+<font size="20"><i class="fa fa-file"></i></font>
+</div>
+
+<div style="float: left; width: 5%; text-align: center;">
+<br>
+$\rightarrow$
+</div>
+
+<div style="float: left; width: 12.5%; text-align: center;">
+Discuss  
+<font size="20"><i class="fa fa-comments"></i></font>
+</div>
+
+<hr>
+
+- Although these tools do not reveal the entire "data pipeline", transparency is improved
+- Accessible to a broad audience $\rightarrow$ interdisciplinary input 
+- Greater access $\rightarrow$ richer peer-review
+- Richer peer-review $\rightarrow$ improved and widely supported science advice
+
+
+## Conclusion
+
+- There is a cost to developing interactive tools
+- However, the learning curve is relatively shallow
+   - The tools highlighted here were developed by ecologists with R experience
+- Benefits > cost
+    - Efficient delivery of products
+    - Richer explorations and discussions
+    - Collective understanding
+
+## Acknowledgements
+
+We thank the numerous colleagues and participants of various stakeholder and stock assessment meetings who encouraged us to further develop these interactive visualization tools, and especially those who took the time to make suggestions on how to make them more accessible and useful. 
+
+# Thank you!
+
+
 
