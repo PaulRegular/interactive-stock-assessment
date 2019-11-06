@@ -7,7 +7,7 @@ output: flexdashboard::flex_dashboard
 library(plotly)
 library(crosstalk)
 lw <- read.csv("length-weight_data.csv")
-shared_lw <- SharedData$new(lw, ~record)
+shared_lw <- SharedData$new(lw)
 ```
 
 Column {.tabset}

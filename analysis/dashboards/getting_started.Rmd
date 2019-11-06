@@ -127,7 +127,7 @@ The next section is a chunk of R code:
 library(plotly)
 library(crosstalk)
 lw <- read.csv("length-weight_data.csv")
-shared_lw <- SharedData$new(lw, ~record)
+shared_lw <- SharedData$new(lw)
 ```
 ````
 
@@ -173,7 +173,7 @@ Column {.tabset}
 
 ```{r}
 lw <- read.csv("length-weight_data.csv")
-shared_lw <- SharedData$new(lw, ~record)
+shared_lw <- SharedData$new(lw)
 ```
 
 ### Length-Weight relationship
@@ -336,6 +336,38 @@ Row
 
 ````
 The output from this example has been duplicated [here](#layout-example-2).
+
+Also note that multiple pages can be generated using markdown's level 1 header:
+
+````
+---
+title: "Layout example 1"
+output: flexdashboard::flex_dashboard
+---
+
+Page 1
+====================================
+
+Column
+-------------------------------------
+
+### Chart 1
+
+
+Page 2
+====================================
+
+Column
+-------------------------------------
+
+### Chart 2
+
+
+### Chart 3
+
+
+````
+
 
 
 ### Components
