@@ -2,22 +2,20 @@
 output: word_document
 ---
 
-Howard I. Browman, Ph.D.  
-Editor-in-Chief  
-ICES Journal of Marine Science  
-Institute of Marine Research  
-Marine Ecosystem Acoustics Group  
-Austevoll Research Station  
-5392 Storebø  
-Norway  
+Editorial office  
+Canadian Journal of Fisheries and Aquatic Sciences  
+Canadian Science Publishing (NRC Research Press)  
+65 Auriga Drive, Suite 203   
+Ottawa, ON K2E 7W6  
+Canada  
 
 `r format(Sys.time(), '%Y-%m-%d')`
 
-Dr. Browman,
+Dear Editors,
 
-I am writing to submit our manuscript entitled, **"Improving the communication and accessibility of stock assessment using interactive visualization tools"** for consideration as a **_Quo Vadimus_** article in **ICES Journal of Marine Science**. In our manuscript, we discuss the merits of applying modern interactive visualization tools to stock assessment processes and we hope to convince readers that these tools, which we use every day on a range of web sites, are very accessible to practicing biologists. We argue that the application of these tools alleviates some of the difficulty in presenting the mass of information produced by complex monitoring programs and statistical models to end-users in a meaningful, interactive and engaging way. To exemplify this point, we describe the structure of three interactive dashboards developed to aid the exploration and communication of results from 1) a fishery-independent trawl survey, 2) a mark-recapture tagging program, and 3) a stock assessment model. In each case we discuss the efficacy of applying such tools in a stock assessment context and contrast this approach with more traditional modes of communicating the results from complex monitoring programs and stock assessment models. 
+I am writing to submit our manuscript entitled, **"Improving the communication and accessibility of stock assessment using interactive visualization tools"** for consideration as a **_Perspectives_** article in **Canadian Journal of Fisheries and Aquatic Sciences**. In our manuscript, we discuss the merits of applying modern interactive visualization tools to stock assessment processes and we hope to convince readers that these tools, which we use every day on a range of web sites, are very accessible to practicing biologists. We argue that the application of these tools alleviates some of the difficulty in presenting the mass of information produced by complex monitoring programs and statistical models to end-users in a meaningful, interactive and engaging way. To exemplify this point, we describe the structure of three interactive dashboards developed to aid the exploration and communication of results from 1) a fishery-independent trawl survey, 2) a mark-recapture tagging program, and 3) a stock assessment model. In each case we discuss the efficacy of applying such tools in a stock assessment context and contrast this approach with more traditional modes of communicating the results from complex monitoring programs and stock assessment models. 
 
-We believe that this is a fitting and timely article for the Journal's **_Quo Vadimus_** type as there are a growing number of scientists from a wide range of disciplines applying these tools to explore and communicate their results. We can personally attest that the application of interactive tools has helped us in our daily work and we hope that our perspective will appeal to readers of **ICES Journal of Marine Science** and encourage the application of interactive tools.
+We believe that this is a fitting and timely article for the Journal's **_Perspectives_** type as there are a growing number of scientists from a wide range of disciplines applying these tools to explore and communicate their results. We can personally attest that the application of interactive tools has helped us in our daily work and we hope that our perspective will appeal to readers of **Canadian Journal of Fisheries and Aquatic Sciences** and encourage the application of interactive tools.
 
 We look forward to your decision.
 
