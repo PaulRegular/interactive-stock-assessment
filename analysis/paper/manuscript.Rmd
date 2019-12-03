@@ -10,18 +10,11 @@ output:
 bibliography: references.bib
 csl: cjfas.csl
 abstract: |
-  **Running title**: Interactive stock assessment
-  
-  **Conflict of Interest Statement**: The authors have no conflicts of interest to declare. 
-  
-  **Data Availability Statement**: Data sharing is not applicable to this article as no data were generated and no analysis to draw scientific inference was conducted in this study.  
-  
+
   **Corresponding author**: Paul M. Regular, Fisheries and Oceans Canada, Northwest Atlantic Fisheries Center, 80 East White Hills, St. John's, Newfoundland and Labrador, A1C 5X1, Canada, E-mail: Paul.Regular@dfo-mpo.gc.ca, Phone: 1-709-772-2067
   
-  **Abstract**: Scientists across many fields are faced with the challenge of synthesizing and communicating information from large and complex data sets. The field of stock assessment is no exception as the volume and variety of the data has grown alongside the computational methods used to integrate them. While this growth in data and model complexity has improved the assessments of many stocks, the process of communicating results from multiple monitoring programs and integrated assessment models to colleagues, stakeholders and fisheries managers in a meaningful way has become more daunting. The traditional approach of presenting information across a series of static slides often fails to convey the richness of information available and, as such, important patterns and details are easily overlooked. Here we contend that this problem can be mediated through the effective use of new open source tools for building interactive visualizations. These tools allow a broader audience to conduct detailed explorations of the results, leading to a deeper and collective understanding of both the data and models used to inform stock assessments. As a consequence, the results of the peer review process are more open and accessible.
-  
-  **Keywords**: dashboard, data exploration, dynamic documents, integrated analysis, model validation, open stock assessment
-  
+  **Abstract**: Scientists across many fields are faced with the challenge of synthesizing and communicating information from large and complex data sets. The field of stock assessment is no exception as the volume and variety of the data has grown alongside the computational methods used to integrate them. While this growth in data and model complexity has improved many stock assessments, the process of communicating key results to colleagues and stakeholders in a meaningful way has become more daunting. The traditional approach of presenting information across a series of static slides often fails to convey the richness of information available and, as such, important patterns and details are easily overlooked. Here we contend that this problem can be mediated through the effective use of new open source tools for building interactive visualizations. These tools allow a broader audience to conduct detailed explorations of the results, leading to a deeper and collective understanding of both the data and models used to inform stock assessments. As a consequence, the peer review process is more open and accessible.
+
 ---
 
 *The greatest value of a picture is when it forces us to notice what we never expected to see.*  
