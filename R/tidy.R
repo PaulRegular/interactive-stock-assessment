@@ -58,6 +58,14 @@ tidy_sdreport <- function(model) {
       if (length(split_values[[nm]]) == tmb.data$Y + 1) {
         vals <- cbind(data.frame(year = tmb.data$years_plus1), vals)
       }
+      if (length(split_values[[nm]]) == tmb.data$Y * tmb.data$A) {
+        vals <- cbind(expand.grid(age = tmb.data$ages, year = tmb.data$years), vals)
+      }
+      if (length(split_values[[nm]]) == tmb.data$Y * length(tmb.data$M_breaks_start)) {
+        grp <- paste0(tmb.data$M_breaks_start + min(tmb.data$ages), "-",
+                      tmb.data$M_breaks_end + min(tmb.data$ages))
+        vals <- cbind(expand.grid(age_group = grp, year = tmb.data$years), vals)
+      }
     }
     l[[nm]] <- vals
   }

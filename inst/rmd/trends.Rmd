@@ -1,0 +1,526 @@
+
+Retro {data-navmenu="Trends" `r if (is.null(fit$retro)) ".hidden"`}
+================================================================================
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Stock status
+
+```{r, eval = !is.null(fit$retro)}
+
+bms_plot <- trans_est(retro_tabs$log_ssb) %>%
+  plot_retro(ylab = "SSB (t)", lwd = 1, col = pred_col)
+
+abn_plot <- trans_est(retro_tabs$log_recruitment, scale = 0.001) %>%
+  plot_retro(ylab = "Recruitment (age 2)", lwd = 1, col = pred_col)
+
+blim_plot <- trans_est(retro_tabs$log_ssb_lrp) %>%
+  plot_retro(ylab = "SSB/Blim", lwd = 1, col = pred_col) %>%
+  add_segments(x = min_year, xend = max_year + 1, y = 1, yend = 1, color = I("black"),
+               linetype = I(3), name = "Blim", text = NULL, hoverinfo = "none")
+
+subplot(abn_plot, bms_plot, blim_plot, nrows = 3, shareX = TRUE, titleY = TRUE)
+
+
+```
+
+
+### Mohn's rho
+
+```{r, eval = !is.null(fit$retro)}
+
+bms_plot <- trans_est(retro_tabs$log_ssb) %>%
+  plot_mohns(col = pred_col, ylab = "SSB")
+
+abn_plot <- trans_est(retro_tabs$log_recruitment, scale = 0.001) %>%
+  plot_mohns(ylab = "Recruitment (age 2)", col = pred_col)
+
+blim_plot <- trans_est(retro_tabs$log_ssb_lrp) %>%
+  plot_mohns(ylab = "SSB/Blim", col = pred_col)
+
+subplot(abn_plot, bms_plot, blim_plot, nrows = 3, shareX = TRUE, titleY = TRUE) %>% 
+  layout(annotations = left_label("Relative difference", offset = 50),
+         margin = list(l = 75))
+
+
+```
+
+> Relative difference = (retro estimate - current estimate) / current estimate; Mohn's rho = mean(relative difference)
+
+
+### Difference
+
+```{r, eval = !is.null(fit$retro)}
+
+bms_plot <- retro_tabs$log_ssb %>%
+  plot_retro_deltas(in_col = pred_col, ylab = "log(SSB)")
+
+abn_plot <- retro_tabs$log_recruitment %>%
+  plot_retro_deltas(ylab = "log(Recruitment)", in_col = pred_col)
+
+blim_plot <- retro_tabs$log_ssb_lrp %>%
+  plot_retro_deltas(ylab = "log(SSB/Blim)", in_col = pred_col)
+
+subplot(abn_plot, bms_plot, blim_plot, nrows = 3, shareX = TRUE, titleY = TRUE) %>% 
+  layout(annotations = left_label("Difference", offset = 50),
+         margin = list(l = 75))
+
+
+```
+
+> Difference = retro estimate - current estimate; approximate 95% intervals based on retro standard deviation + current standard deviation
+
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Mortality Rates
+
+
+```{r, eval = !is.null(fit$retro)}
+
+z_plot <- trans_est(retro_tabs$log_aveZ) %>%
+  plot_retro(ylab = "Average Z (ages 5+)", lwd = 1, col = pred_col)
+
+m_plot <- trans_est(retro_tabs$log_aveM) %>%
+  plot_retro(ylab = "Average M (ages 5+)", lwd = 1, col = pred_col)
+
+f_plot <- trans_est(retro_tabs$log_aveF) %>%
+  plot_retro(ylab = "Average F (ages 5+)", lwd = 1, col = pred_col)
+
+subplot(z_plot, m_plot, f_plot, nrows = 3, shareX = TRUE, titleY = TRUE)
+
+
+```
+
+
+### Mohn's rho
+
+```{r, eval = !is.null(fit$retro)}
+
+z_plot <- trans_est(retro_tabs$log_aveZ) %>%
+  plot_mohns(ylab = "Average Z (ages 5+)", col = pred_col)
+
+m_plot <- trans_est(retro_tabs$log_aveM) %>%
+  plot_mohns(ylab = "Average M (ages 5+)", col = pred_col)
+
+f_plot <- trans_est(retro_tabs$log_aveF) %>%
+  plot_mohns(ylab = "Average F (ages 5+)", col = pred_col)
+
+subplot(z_plot, m_plot, f_plot, nrows = 3, shareX = TRUE, titleY = TRUE) %>% 
+  layout(annotations = left_label("Relative difference", offset = 50),
+         margin = list(l = 75))
+
+
+```
+
+> Relative difference = (retro estimate - current estimate) / current estimate; Mohn's rho = mean(relative difference)
+
+### Difference
+
+```{r, eval = !is.null(fit$retro)}
+
+z_plot <- retro_tabs$log_aveZ %>%
+  plot_retro_deltas(ylab = "log(Average Z)", in_col = pred_col)
+
+m_plot <- retro_tabs$log_aveM %>%
+  plot_retro_deltas(ylab = "log(Average M)", in_col = pred_col)
+
+f_plot <- retro_tabs$log_aveF %>%
+  plot_retro_deltas(ylab = "log(Average F)", in_col = pred_col)
+
+subplot(z_plot, m_plot, f_plot, nrows = 3, shareX = TRUE, titleY = TRUE) %>% 
+  layout(annotations = left_label("Difference", offset = 50),
+         margin = list(l = 75))
+
+```
+
+> Difference = retro estimate - current estimate; approximate 95% intervals based on retro standard deviation + current standard deviation
+
+
+
+Comps {data-navmenu="Trends" `r if (is.null(tmp$comp)) ".hidden"`}
+================================================================================
+
+Row
+--------------------------------------------------------------------------------
+
+### Stock status
+
+```{r, eval = !is.null(tmp$comp)}
+
+abn_plot <- trans_est(comp_tabs$log_recruitment, scale = 0.001) %>% 
+  plot_comps(ylab = "Recruitment (age 2)", col = cols)
+
+bms_plot <- trans_est(comp_tabs$log_ssb) %>% 
+  plot_comps(ylab = "SSB (t)", col = cols, showlegend = FALSE)
+
+blim_plot <- trans_est(comp_tabs$log_ssb_lrp) %>%
+  plot_comps(ylab = "SSB/Blim", col = cols, showlegend = FALSE) %>%
+  add_segments(x = min_year, xend = max_year + 1, y = 1, yend = 1, color = I("black"),
+               linetype = I(3), name = "Blim", text = NULL, hoverinfo = "none", showlegend = FALSE)
+
+subplot(abn_plot, bms_plot, blim_plot, nrows = 3, shareX = TRUE, titleY = TRUE)
+
+```
+
+
+Row
+--------------------------------------------------------------------------------
+
+### Mortality Rates
+
+```{r, eval = !is.null(tmp$comp)}
+
+z_plot <- trans_est(comp_tabs$log_aveZ) %>%
+  plot_comps(ylab = "Average Z (ages 5+)", col = cols)
+
+m_plot <- trans_est(comp_tabs$log_aveM) %>%
+  plot_comps(ylab = "Average M (ages 5+)", col = cols, showlegend = FALSE)
+
+f_plot <- trans_est(comp_tabs$log_aveF) %>%
+  plot_comps(ylab = "Average F (ages 5+)", col = cols, showlegend = FALSE)
+
+subplot(z_plot, m_plot, f_plot, nrows = 3, shareX = TRUE, titleY = TRUE)
+
+```
+
+
+
+
+
+Status and rates {data-navmenu="Trends"}
+================================================================================
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Stock status
+
+```{r}
+
+## Note: biomass is in tonnes and numbers are in thousands
+bms <- rbind(data.frame(metric = "SSB", tabs$log_ssb),
+             data.frame(metric = "Ages 2+", tabs$log_biomass))
+abn <- rbind(data.frame(metric = "Age 2", tabs$log_recruitment),
+             data.frame(metric = "Ages 2+", tabs$log_abundance))
+
+bms_plot <- trans_est(bms) %>%
+  plot_trend(ylab = "Biomass (t)", group = "metric", col = cols,
+             annotate = TRUE)
+
+abn_plot <- trans_est(abn, scale = 0.001) %>%
+  plot_trend(ylab = "Abundance", group = "metric", col = cols,
+             annotate = TRUE)
+
+blim_plot <- trans_est(tabs$log_ssb_lrp) %>%
+  plot_trend(ylab = "SSB/Blim", annotate = TRUE, col = cols) %>%
+  add_segments(x = min_year, xend = max_year + 1, y = 1, yend = 1, color = I("black"),
+               linetype = I(3), name = "Blim", text = NULL, hoverinfo = "none") %>%
+  add_text(x = max_year + 1.2, y = 1, text = paste(round(fit$rep$blim / 1000), "kt"),
+           color = I("black"), textposition = "right", hoverinfo = "none")
+
+subplot(abn_plot, bms_plot, blim_plot, nrows = 3, shareX = TRUE, titleY = TRUE)
+
+
+```
+
+### Abundance at age
+
+```{r}
+plot_surface(fit$rep$N_matrix * 1000, ages = ages, years = years_plus1, name = "N")
+```
+
+<!-- ### Biomass at age -->
+
+<!-- ```{r} -->
+<!-- plot_surface(fit$rep$biomass_matrix, ages = ages, years = years_plus1, name = "Biomass") -->
+<!-- ``` -->
+
+### SSB at age
+
+```{r}
+plot_surface(fit$rep$ssb_matrix, ages = ages, years = years_plus1, name = "SSB")
+```
+
+<!-- ### Exploitable biomass at age -->
+
+<!-- ```{r} -->
+<!-- S <- apply(fit$rep$F_matrix, 2, function(x) x / max(x)) -->
+<!-- B <- fit$rep$N_matrix[, seq(ncol(S))] * fit$tmb.data$midyw -->
+<!-- E <- B * S -->
+<!-- plot_surface(E, ages = ages, years = years, name = "Exploitable biomass") -->
+<!-- ``` -->
+
+
+### Demographics
+
+```{r}
+
+a <- tidy_mat(fit$rep$N_matrix * 1000, ages = ages, years = years_plus1, value = "abundance") %>% 
+  dplyr::left_join(trans_est(tabs$log_abundance, scale = 0.001), by = "year") %>% 
+  rename(tot_abundance = est, tot_abundance_lwr = lwr, tot_abundance_upr = upr,
+         tot_abundance_sd = sd)
+
+b <- tidy_mat(fit$rep$biomass_matrix, ages = ages, years = years_plus1, value = "biomass") %>% 
+  dplyr::left_join(trans_est(tabs$log_biomass), by = "year") %>% 
+  rename(tot_biomass = est, tot_biomass_lwr = lwr, tot_biomass_upr = upr,
+         tot_biomass_sd = sd)
+
+c <- tidy_mat(fit$rep$ssb_matrix, ages = ages, years = years_plus1, value = "ssb") %>% 
+  dplyr::left_join(trans_est(tabs$log_ssb), by = "year") %>% 
+  dplyr::rename(tot_ssb = est, tot_ssb_lwr = lwr, tot_ssb_upr = upr,
+                tot_ssb_sd = sd)
+
+d <- dplyr::left_join(a, b, by = c("year", "age")) %>%
+  dplyr::left_join(c, by = c("year", "age")) %>%
+  mutate(cohort = year - age,
+         abundance_prop = abundance / tot_abundance,
+         abundance_lab = paste0("Abundance<br>", 
+                                ifelse(gsub("[[:digit:]]", "", text_units(tot_abundance_lwr)) ==
+                                         gsub("[[:digit:]]", "", text_units(tot_abundance_upr)),
+                                       gsub("[[:alpha:]]", "", text_units(tot_abundance_lwr)),
+                                       text_units(tot_abundance_lwr)), "-", 
+                                text_units(tot_abundance_upr)),
+         biomass_prop = -(biomass / tot_biomass),
+         biomass_lab = paste0("Biomass<br>", 
+                              ifelse(gsub("[[:digit:]]", "", text_units(tot_biomass_lwr)) ==
+                                       gsub("[[:digit:]]", "", text_units(tot_biomass_upr)),
+                                     gsub("[[:alpha:]]", "", text_units(tot_biomass_lwr)),
+                                     paste0(text_units(tot_biomass_lwr), "t")), "-", 
+                              text_units(tot_biomass_upr), "t"),
+         ssb_prop = -(ssb / tot_ssb),
+         ssb_lab = paste0("SSB<br>", 
+                          ifelse(gsub("[[:digit:]]", "", text_units(tot_ssb_lwr)) ==
+                                   gsub("[[:digit:]]", "", text_units(tot_ssb_upr)),
+                                 gsub("[[:alpha:]]", "", text_units(tot_ssb_lwr)),
+                                 paste0(text_units(tot_ssb_lwr), "t")), "-", 
+                          text_units(tot_ssb_upr), "t")) %>%
+  arrange(year, age)
+
+max_x <- max(c(d$abundance_prop, d$biomass_prop)) * 1.2
+xlabs <- pretty(c(-max_x, max_x), n = 10)
+
+rec <- fit$rep$N_matrix[1, ]
+rec_spikes <- find_peaks(rec, m = 1)
+rec_spikes <- years[rec_spikes] - min(ages)
+
+d$spike <- d$cohort
+d$spike_start <- d$biomass_prop
+d$spike_end <- d$abundance_prop
+d$spike[!(d$spike %in% rec_spikes)] <- " "
+d$spike_start[!(d$spike %in% rec_spikes)] <- 0
+d$spike_end[!(d$spike %in% rec_spikes)] <- 0
+
+
+d %>%
+  plot_ly(y = ~age, frame = ~year, showlegend = FALSE,
+          hoverinfo = "none", cliponaxis = FALSE) %>%
+  add_paths(x = ~abundance_prop, fill = "tozerox",
+            color = I(cols[1]), line = list(width = 1)) %>%
+  # add_paths(x = ~biomass_prop, fill = "tozerox",
+  #           color = I(cols[2]), line = list(width = 1)) %>%
+  add_paths(x = ~ssb_prop, fill = "tozerox",
+            color = I(cols[2]), line = list(width = 1)) %>%
+  add_text(x = max_x, text = ~cohort, textposition = "right") %>%
+  add_text(x = ~abundance_prop + 0.01, color = I("grey50"),
+           text = ~spike, textposition = "center right") %>%
+  add_text(x = ~ssb_prop - 0.01, color = I("grey50"),
+           text = ~spike, textposition = "center left") %>%
+  add_text(x = 0, y = ~max(age), text = ~paste0(year, "<br>"),
+           textposition = "center top", size = I(18)) %>%
+  # add_text(x = max_x / 2, y = ~max(age), text = "Abundance<br>",
+  #          textposition = "center top", color = I(cols[1]),
+  #          size = I(18)) %>%
+  add_text(x = max_x / 2, y = ~max(age), text = ~abundance_lab,
+           textposition = "center top", color = I(cols[1]),
+           size = I(18)) %>%
+  # add_text(x = -max_x / 2, y = ~max(age), text = ~biomass_lab,
+  #          textposition = "center top", color = I(cols[2]),
+  #          size = I(18)) %>%
+  add_text(x = -max_x / 2, y = ~max(age), text = ~ssb_lab,
+           textposition = "center top", color = I(cols[2]),
+           size = I(18)) %>%
+  add_annotations(x = 0, y = 1, yshift = 35, text = "Age",
+                  xanchor = "right", yanchor = "top",
+                  font = list(size = 14),
+                  xref = "paper", yref = "paper", showarrow = FALSE) %>%
+  add_annotations(x = 1, y = 1, yshift = 35, xshift = -5,
+                  text = "Cohort",
+                  xanchor = "left", yanchor = "top",
+                  font = list(size = 14),
+                  xref = "paper", yref = "paper", showarrow = FALSE) %>%
+  layout(xaxis = list(range = c(-max_x, max_x),
+                      title = "Percent",
+                      tickmode = "array",
+                      tickvals = xlabs,
+                      ticktext = paste0(abs(xlabs) * 100, "%")),
+         yaxis = list(title = ""),
+         margin = list(l = 50, r = 70, t = 50, b = 50)) %>%
+  animation_opts(frame = 1000, transition = 0) %>%
+  animation_slider(currentvalue = list(prefix = "Year: ",
+                                       font = list(color = "transparent")))
+
+
+
+```
+
+
+> Totals are lower and upper 95% confidence intervals
+
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Mortality Rates
+
+
+```{r}
+
+f <- data.frame(metric = "Ages 5+", tabs$log_aveF)
+z <- data.frame(metric = "Ages 5+", tabs$log_aveZ)
+m <- data.frame(metric = "Ages 5+", tabs$log_aveM)
+
+z_plot <- trans_est(z) %>%
+  plot_trend(ylab = "Average Z", group = "metric",
+             annotate = TRUE, col = cols)
+
+m_plot <- trans_est(m) %>%
+  plot_trend(ylab = "Average M", group = "metric",
+             annotate = TRUE, col = cols)
+
+f_plot <- trans_est(f) %>%
+  plot_trend(ylab = "Average F", group = "metric",
+             annotate = TRUE, col = cols)
+
+subplot(z_plot, m_plot, f_plot, nrows = 3, shareX = TRUE, titleY = TRUE)
+
+
+```
+
+<!-- ### Z at age -->
+
+<!-- ```{r} -->
+<!-- plot_surface(fit$rep$Z_matrix, ages = ages, years = years, name = "Z") -->
+<!-- ``` -->
+
+### M at age
+
+```{r}
+plot_surface(fit$rep$Mpe_matrix, ages = ages, years = years, name = "M")
+```
+
+### F at age
+
+```{r}
+plot_surface(fit$rep$F_matrix, ages = ages, years = years, name = "F")
+```
+
+### Z, M and F
+
+```{r}
+plot_zmf_surface(z = fit$rep$Z_matrix, m = fit$rep$Mpe_matrix, f = fit$rep$F_matrix,
+                 ages = ages, years = years)
+```
+
+> Z = purples, M = blues, F = reds
+
+
+### Process error
+
+```{r}
+
+pe <- fit$rep$pe
+plot_surface(pe, years = c(years, fit$tmb.data$proj_years)[-1], 
+             ages = fit$tmb.data$pe_ages, name = "pe", 
+             col = RColorBrewer::brewer.pal(9, "RdBu")) %>%
+  add_surface(matrix(0, nrow = nrow(pe), ncol = ncol(pe)), showscale = FALSE,
+              color = I("black"), opacity = 0.8)
+
+```
+
+
+<!-- ### Process error (bubble) -->
+
+<!-- ```{r} -->
+<!-- pe <- tidy_mat(fit$rep$pe, years = c(years, fit$tmb.data$proj_years)[-1], -->
+<!--                ages = fit$tmb.data$pe_ages, value = "res") -->
+<!-- bubble_plot(pe, pos_col = pos_col, neg_col = neg_col) -->
+<!-- ``` -->
+
+
+
+Productivity  {data-navmenu="Trends"}
+================================================================================
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Recruitment
+
+```{r}
+trans_est(tabs$log_recruitment, scale = 0.001) %>%
+  plot_trend(ylab = "Recruitment", col = pred_col)
+```
+
+### SSB
+
+```{r}
+trans_est(tabs$log_ssb) %>%
+  plot_trend(ylab = "SSB (t)", col = pred_col)
+```
+
+### RPS
+
+```{r}
+trans_est(tabs$log_rps) %>%
+  filter(year >= min_year + min(ages)) %>% 
+  plot_trend(ylab = "RPS (thousand / tonne)", col = pred_col) %>% 
+  layout(xaxis = list(range = c(min_year, max_year + 1)))
+```
+
+### SSB x Recruitment
+
+```{r}
+
+ssb <- trans_est(tabs$log_ssb)
+rec <- trans_est(tabs$log_recruitment, scale = 0.001)
+rps <- trans_est(tabs$log_rps)
+names(ssb) <- paste0("ssb_", names(ssb))
+names(rec) <- paste0("rec_", names(rec))
+names(rps) <- paste0("rps_", names(rps))
+ssb$year <- ssb$ssb_year + min(ages)
+rec$year <- rec$rec_year
+rps$year <- rps$rps_year
+sr <- merge(ssb, rec, by = "year")
+sr <- merge(sr, rps, by = "year")
+sr$lab <- paste0("Recruitment year: ", sr$rec_year, "<br>SSB year: ", sr$ssb_year)
+
+plot_xy_errorbar(sr, x = ~ssb_est, y = ~rec_est,
+                 x_lwr = ~ssb_lwr, x_upr = ~ssb_upr,
+                 y_lwr = ~rec_lwr, y_upr = ~rec_upr,
+                 text = ~lab, xlab = "SSB (t)", ylab = "Recruitment",
+                 col = ~year, clab = "Year")
+
+```
+
+### SSB x RPS
+
+```{r}
+p <- plot_xy_errorbar(sr, x = ~ssb_est, y = ~rps_est,
+                 x_lwr = ~ssb_lwr, x_upr = ~ssb_upr,
+                 y_lwr = ~rps_lwr, y_upr = ~rps_upr,
+                 text = ~lab, xlab = "SSB (t)", ylab = "RPS (thousand / tonne)",
+                 col = ~year, clab = "Year")
+p
+```
+
+### log(SSB) x log(RPS)
+
+```{r}
+p %>% layout(yaxis = list(type = "log"),
+             xaxis = list(type = "log"))
+```
+
+

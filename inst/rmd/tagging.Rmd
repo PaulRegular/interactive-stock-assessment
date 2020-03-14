@@ -1,0 +1,264 @@
+
+Tagging
+================================================================================
+
+
+Inputs {.sidebar}
+--------------------------------------------------------------------------------
+
+#### **Filters**
+
+```{r}
+
+## Prep tag data and fits
+tag_dat <- data.frame(
+  exp = c(fit$tmb.data$old_tag_exp, fit$tmb.data$tag_exp),
+  n_rel = c(fit$tmb.data$old_N_rel, fit$tmb.data$N_rel),
+  rel_year = c(fit$tmb.data$old_rel_year, fit$tmb.data$rel_year) + min(years),
+  cap_year = c(fit$tmb.data$old_cap_year, fit$tmb.data$cap_year) + min(years),
+  age = c(fit$tmb.data$old_tag_age, fit$tmb.data$tag_age),
+  pred = c(fit$rep$old_tag_report, fit$rep$tag_report),
+  obs = c(fit$tmb.data$old_N_cap, fit$tmb.data$N_cap),
+  res = c(fit$rep$old_tag_std_resid, fit$rep$tag_std_resid),
+  period = c(rep("pre 1996", length(fit$tmb.data$old_tag_exp)),
+             rep("post 1996", length(fit$tmb.data$tag_exp))),
+  theta = c(plogis(est$theta[fit$tmb.data$theta_map + 1]), rep(NA, length(fit$tmb.data$tag_exp))),
+  theta_lwr = c(plogis(est_lwr$theta[fit$tmb.data$theta_map + 1]), rep(NA, length(fit$tmb.data$tag_exp))),
+  theta_upr = c(plogis(est_upr$theta[fit$tmb.data$theta_map + 1]), rep(NA, length(fit$tmb.data$tag_exp)))
+)
+tag_dat$delay <- tag_dat$cap_year - tag_dat$rel_year
+tag_dat$text <- paste("exp:", tag_dat$exp, "</br>",
+                      "age:", tag_dat$age, "</br>",
+                      "delay:", tag_dat$delay, "</br>")
+tag_dat$exp_no <- ifelse(nchar(tag_dat$exp == 4), substr(tag_dat$exp, 3, 4), substr(tag_dat$exp, 5, 6)) %>% 
+  as.numeric()
+tag_dat$year_exp <- tag_dat$rel_year + tag_dat$exp_no / 100
+
+
+Udev <- data.frame(
+  exp = c(unique(fit$tmb.data$old_tag_exp), unique(fit$tmb.data$tag_exp)),
+  Udev = c(est$old_Udev, est$Udev),
+  Udev_lwr = c(est_lwr$old_Udev, est_lwr$Udev),
+  Udev_upr = c(est_upr$old_Udev, est_upr$Udev)
+)
+
+Fay <- tidy_mat(fit$rep$F_matrix, ages = ages, years = years, value = "Fay")
+names(Fay)[names(Fay) == "year"] <- "rel_year"
+
+tag_dat <- merge(tag_dat, Udev, by = "exp")
+tag_dat <- merge(tag_dat, Fay, by = c("rel_year", "age"))
+tag_dat$Fsay <- tag_dat$Fay * exp(tag_dat$Udev)
+tag_dat$Fsay_lwr <- tag_dat$Fay * exp(tag_dat$Udev_lwr)
+tag_dat$Fsay_upr <- tag_dat$Fay * exp(tag_dat$Udev_upr)
+
+## Share data across multiple plots
+d <- crosstalk::SharedData$new(tag_dat, ~exp)
+base <- plot_ly(d, cliponaxis = FALSE) %>% 
+  group_by(exp) %>% 
+  highlight(off = "plotly_doubleclick")
+
+
+crosstalk::filter_select("period", "Period", d, ~period)
+crosstalk::filter_select("rel_year", "Release year", d, ~rel_year)
+crosstalk::filter_select("exp", "Experiment", d, ~exp)
+
+
+```
+
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Recaptures
+
+```{r}
+
+y_ticktext <- c(50, 500, pretty(c(0, 6000), 4))
+y_tickvals <- sqrt(y_ticktext)
+
+rel_plot <- base %>%
+  filter(rel_year == cap_year) %>%
+  group_by(exp) %>%
+  summarise(rel_year = unique(rel_year), tot_rel = sum(n_rel), period = unique(period)) %>%
+  add_markers(x = ~jitter(rel_year, factor = 0.5), 
+              y = ~sqrt(tot_rel), hoverinfo = "text",
+              text = ~paste("Experiment:", exp, "<br>Release year:", rel_year, "<br>N:", tot_rel),
+              stroke = I(obs_col), color = ~period, colors = c(obs_col, "white"),
+              marker = list(opacity = 0.8, line = list(width = 1.5))) %>%
+  layout(shapes = list(type = "line", x0 = 1996, x1 = 1996,
+                       y0 = 0, y1 = 1000, yref = "y",
+                       line = list(width = 1, dash = "dot")),
+         yaxis = list(title = "N released",
+                      tickvals = y_tickvals,
+                      ticktext = y_ticktext,
+                      range = range(y_tickvals)),
+         xaxis = list(title = "Year", tickformat = "d"))
+
+y_ticktext <- c(5, 20, pretty(c(0, 500), 10))
+y_tickvals <- sqrt(y_ticktext)
+
+cap_plot <- base %>%
+  group_by(exp, rel_year, cap_year) %>%
+  summarise(sum_pred = sum(pred), sum_obs = sum(obs),
+            period = unique(period)) %>%
+  group_by(exp) %>%
+  add_markers(x = ~cap_year, y = ~sqrt(sum_obs), name = "",
+              hoverinfo = "text",
+              showlegend = FALSE, text = ~paste("Experiment:", exp, 
+                                                "<br>Release year:", rel_year, 
+                                                "<br>Recapture year:", cap_year, 
+                                                "<br>Observed N:", sum_obs),
+              stroke = I(obs_col), color = ~period, colors = c(obs_col, "white"),
+              marker = list(opacity = 0.8, line = list(width = 1.5))) %>%
+  add_lines(x = ~cap_year, y = ~sqrt(sum_pred), color = I(pred_col), name = "Predicted",
+            alpha = 0.7, showlegend = TRUE, symbol = NULL, hoverinfo = "text",
+            text = ~paste("Experiment:", exp, 
+                          "<br>Release year:", rel_year, 
+                          "<br>Recapture year:", cap_year, 
+                          "<br>Predicted N:", round(sum_pred))) %>%
+  layout(shapes = list(type = "line", x0 = 1996, x1 = 1996,
+                       y0 = 0, y1 = 1000, yref = "y2",
+                       line = list(width = 1, dash = "dot")),
+         yaxis = list(title = "N recaptured",
+                      tickvals = y_tickvals,
+                      ticktext = y_ticktext,
+                      range = range(y_tickvals)),
+         xaxis = list(title = "Year", tickformat = "d"))
+
+
+subplot(rel_plot, cap_plot, shareX = TRUE, titleX = TRUE, titleY = TRUE,
+        nrows = 2, heights = c(0.3, 0.7))
+
+
+```
+
+> Y-axis is in square root scale
+
+
+### Residuals
+
+```{r}
+
+ticktext <- c(5, pretty(c(tag_dat$pred, tag_dat$obs), 10))
+tickvals <- sqrt(ticktext)
+
+max_caps <- sqrt(max(c(tag_dat$pred, tag_dat$obs)))
+
+a <- base %>%
+  add_markers(x = ~sqrt(pred), y = ~sqrt(obs),
+              text = ~text, showlegend = FALSE,
+              stroke = I(obs_col), color = ~period, colors = c(obs_col, "white"),
+              marker = list(opacity = 0.8, line = list(width = 1.5))) %>%
+  add_lines(x = ~sqrt(obs), y = ~sqrt(obs), split = ~period,
+            line = list(color = "black", width = 1), # had to split by period to render line with WebGL (reason unknown)
+            hoverinfo = "none", showlegend = FALSE) %>% 
+  layout(xaxis = list(title = "Predicted number of recaptures",
+                      tickvals = tickvals,
+                      ticktext = ticktext),
+         yaxis = list(title = "Observed number of recaptures",
+                      tickvals = tickvals,
+                      ticktext = ticktext,
+                      scaleanchor = "x")) %>%
+  toWebGL()
+
+
+ticktext <- c(5, pretty(tag_dat$pred, 10))
+tickvals <- sqrt(ticktext)
+
+b <- base %>%
+  add_markers(x = ~sqrt(pred), y = ~res,
+              text = ~text, showlegend = FALSE,
+              stroke = I(obs_col), color = ~period, colors = c(obs_col, "white"),
+              marker = list(opacity = 0.8, line = list(width = 1.5))) %>%
+  layout(xaxis = list(title = "Predicted number of recaptures",
+                      tickvals = tickvals,
+                      ticktext = ticktext),
+         yaxis = list(title = "Standardized residuals")) %>% 
+  toWebGL()
+
+subplot(a, b, nrows = 1, shareX = FALSE, shareY = FALSE, 
+        titleX = TRUE, titleY = TRUE, margin = 0.05)
+
+```
+
+> Observation and prediction axes are in square root scale
+
+
+### Initial F deviations
+
+
+```{r}
+
+base %>%
+  filter(rel_year == cap_year) %>%
+  add_markers(x = ~jitter(rel_year, factor = 1.5), 
+              y = ~Udev, text = ~paste("F deviation:", round(Udev, 2), "<br>",
+                                       "Release year:", rel_year, "<br>",
+                                       "Experiment:", exp),
+              hoverinfo = "text",
+              showlegend = FALSE, stroke = I(pred_col), 
+              color = ~period, colors = c(pred_col, "white"),
+              marker = list(opacity = 0.8, line = list(width = 1.5))) %>%
+  layout(shapes = list(type = "line", x0 = 1996, x1 = 1996,
+                       y0 = min(tag_dat$Udev), y1 = max(tag_dat$Udev),
+                       line = list(width = 1, dash = "dot")),
+         yaxis = list(title = "Initial F deviation"),
+         xaxis = list(title = "Year", tickformat = "d"))
+
+```
+
+
+### Thetas
+
+```{r}
+
+base %>% 
+  filter(!is.na(theta)) %>% 
+  dplyr::distinct(exp, theta, theta_upr, theta_lwr, 
+                  period, rel_year, year_exp) %>% 
+  mutate(fexp = factor(exp)) %>% 
+  add_segments(x = ~fexp, xend = ~fexp,
+               y = ~theta_lwr, yend = ~theta_upr,
+               color = I(cols[1]), showlegend = FALSE,
+               text = ~exp, marker = list(color = "transparent")) %>%
+  add_markers(x = ~fexp, y = ~theta, showlegend = FALSE,
+              marker = list(symbol = "200", 
+                            color = "white", size = 8,
+                            line = list(color = toRGB(cols[1]),
+                                        width = 1.5)),
+              text = ~exp) %>% 
+  layout(yaxis = list(title = "Theta"),
+         xaxis = list(title = "Experiment"))
+
+```
+
+
+### Reporting rates
+
+```{r}
+
+cov_mat <- Matrix::as.matrix(fit$tmb.data$SRR_cov_matrix)
+rr <- data.frame(year = fit$tmb.data$SRR_years,
+                 est = fit$tmb.data$log_SRR_est,
+                 sd = sqrt(diag(cov_mat)))
+rr$lwr <- rr$est - 1.96 * rr$sd
+rr$upr <- rr$est + 1.96 * rr$sd
+rr <- trans_est(rr)
+rr$model <- "Random Walk"
+
+ncam_rr <- data.frame(year = fit$tmb.data$SRR_years,
+                      est = est$log_SRR, sd = sd$log_SRR)
+ncam_rr$lwr <- ncam_rr$est - 1.96 * ncam_rr$sd
+ncam_rr$upr <- ncam_rr$est + 1.96 * ncam_rr$sd
+ncam_rr <- trans_est(ncam_rr)
+ncam_rr$model <- "NCAM"
+
+rr <- rbind(rr, ncam_rr)
+
+plot_trend(rr, group = "model", col = cols, ylab = "Reporting rates", annotate = TRUE)
+
+
+```
+
+
+

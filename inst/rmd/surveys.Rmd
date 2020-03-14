@@ -1,0 +1,314 @@
+
+RV Survey  {data-navmenu="Surveys"}
+================================================================================
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### RV survey index
+
+```{r}
+
+obs <- colSums(fit$tmb.data$est_wt * fit$tmb.data$RV_index * fit$tmb.data$trawl_units)
+pred <- colSums(fit$tmb.data$est_wt * exp(fit$rep$Elog_RV_index) * fit$tmb.data$trawl_units)
+obs[obs == 0] <- NA
+pred[pred == 0] <- NA
+d <- data.frame(year = years, obs = obs, pred = pred)
+
+# ## RV biomass
+# obs <- colSums(fit$tmb.data$RV_index * fit$tmb.data$trawl_units * fit$tmb.data$weight)
+# pred <- colSums(exp(fit$rep$Elog_RV_index) * fit$tmb.data$trawl_units * fit$tmb.data$weight)
+# d <- data.frame(year = years, obs = obs, pred = pred)
+# write.table(d, file = "clipboard", sep = "\t", row.names = FALSE, quote = FALSE)
+
+plot_obs_pred(d, obs_col = obs_col, pred_col = pred_col, ylab = "RV survey index",
+              showlegend = TRUE, type = "log")
+
+```
+
+> Y-axes in log scale
+
+### Index at age
+
+```{r}
+
+d <- frame_d <- tidy_mats(list(obs = fit$tmb.data$RV_index,
+                               pred = exp(fit$rep$Elog_RV_index),
+                               wt = fit$tmb.data$est_wt),
+                          ages = ages, years = years)
+d$obs[d$wt == 0] <- NA
+d$pred[d$wt == 0] <- NA
+d$cohort <- frame_d$cohort <- factor(d$year - d$age)
+d$age <- frame_d$age <- factor(d$age)
+
+facet_obs_pred(d, by = "age",
+               which = c(2, 8, 3, 9, 4, 10, 5, 11, 6, 12, 7, 13), # done to order by column
+               nrows = 6, ylab = "Mean numbers per tow",
+               obs_col = obs_col, pred_col = pred_col, type = "log")
+
+```
+
+> Y-axes in log scale
+
+### Index at age (frame)
+
+```{r}
+plot_obs_pred(data = frame_d, showlegend = TRUE, 
+              type = "log", frame = "age",
+              obs_col = obs_col, pred_col = pred_col,
+              ylab = "Mean numbers per tow")
+```
+
+> Y-axes in log scale
+
+
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Residuals
+
+```{r}
+
+d <- tidy_mats(list(res = fit$rep$RV_resid,
+                    keep = fit$tmb.data$ind_zero == 0 & fit$tmb.data$est_wt == 1,
+                    fit = fit$rep$Elog_RV_index),
+               ages = ages, years = years)
+d <- d[d$keep, ]
+d$cohort <- d$year - d$age
+d$rec <- seq(nrow(d))
+plot_resid(d, col = obs_col, line_col = pred_col)
+
+```
+
+
+### Residuals (bubble)
+
+```{r}
+
+d <- tidy_mats(list(res = fit$rep$RV_resid,
+                    zero = fit$tmb.data$ind_zero,
+                    wt = fit$tmb.data$est_wt),
+               ages = ages, years = years)
+d <- d[d$wt == 1, ]
+bubble_plot(d, pos_col = pos_col, neg_col = neg_col, na_col = obs_col)
+
+```
+
+
+
+SN Survey {data-navmenu="Surveys"}
+================================================================================
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Sentinel gillnet survey index
+
+```{r}
+
+obs <- colSums(fit$tmb.data$SN_GN_index)
+pred <- colSums(exp(fit$rep$Elog_SN_GN_index))
+d <- data.frame(year = fit$tmb.data$SN_years, obs = obs, pred = pred)
+
+plot_obs_pred(d, obs_col = obs_col, pred_col = pred_col, ylab = "Sentinel survey index",
+              showlegend = TRUE, type = "log")
+
+```
+
+> Y-axes in log scale
+
+### Index at age
+
+```{r}
+
+d <- tidy_mats(list(obs = fit$tmb.data$SN_GN_index,
+                    pred = exp(fit$rep$Elog_SN_GN_index)),
+               ages = fit$tmb.data$SN_ages, years = fit$tmb.data$SN_years)
+d$cohort <- factor(d$year - d$age)
+d$age <- factor(d$age)
+
+facet_obs_pred(d, by = "age",
+               which = c(3, 7, 4, 8, 5, 9, 6, 10), # done to order by column
+               nrows = 4, ylab = "Sentinel survey index",
+               obs_col = obs_col, pred_col = pred_col, type = "log")
+
+```
+
+> Y-axes in log scale
+
+### Index at age (frame)
+
+```{r}
+plot_obs_pred(data = d, showlegend = TRUE, 
+              type = "log", frame = "age",
+              obs_col = obs_col, pred_col = pred_col,
+              ylab = "Sentinel survey index")
+```
+
+> Y-axes in log scale
+
+
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Residuals
+
+```{r}
+
+d <- tidy_mats(list(res = fit$rep$log_SN_GN_resid,
+                    fit = fit$rep$Elog_SN_GN_index),
+               ages = fit$tmb.data$SN_ages,
+               years = fit$tmb.data$SN_years)
+d$cohort <- d$year - d$age
+d$rec <- seq(nrow(d))
+plot_resid(d, col = obs_col, line_col = pred_col)
+
+```
+
+
+### Residuals (bubble)
+
+```{r}
+
+d <- tidy_mat(fit$rep$log_SN_GN_resid,
+              ages = fit$tmb.data$SN_ages,
+              years = fit$tmb.data$SN_years, value = "res")
+bubble_plot(d, pos_col = pos_col, neg_col = neg_col)
+
+```
+
+
+
+
+SS Survey {data-navmenu="Surveys"}
+================================================================================
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Smith sound acoustic biomass estimates
+
+```{r}
+
+d <- data.frame(year = fit$tmb.data$SS_bms_years,
+                obs = fit$tmb.data$SSbms,
+                pred = fit$rep$ESSbms)
+plot_obs_pred(d, obs_col = obs_col, pred_col = pred_col, ylab = "Biomass (t)",
+              showlegend = TRUE)
+
+```
+
+
+### Numbers at age
+
+```{r}
+
+d <- tidy_mats(list(obs = fit$tmb.data$SS_agecomps,
+                    pred = fit$rep$ESS_agecomps),
+               ages = fit$tmb.data$SS_ages,
+               years = fit$tmb.data$SS_age_years)
+
+facet_obs_pred(d, by = "age",
+               which = c(2, 8, 3, 9, 4, 10, 5, 11, 6, 12, 7, 13), # done to order by column
+               nrows = 6, ylab = "Numbers caught", rangemode = "tozero",
+               obs_col = obs_col, pred_col = pred_col)
+
+```
+
+### Numbers at age (frame)
+
+```{r}
+plot_obs_pred(data = d, showlegend = TRUE, 
+              frame = "age",
+              obs_col = obs_col, pred_col = pred_col,
+              ylab = "Numbers caught")
+```
+
+
+
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Residuals
+
+```{r}
+
+d <- tidy_mats(list(res = fit$rep$SS_agecomps_resid_std,
+                    fit = fit$rep$ESS_agecomps),
+               ages = fit$tmb.data$SS_ages,
+               years = fit$tmb.data$SS_age_years)
+d$cohort <- d$year - d$age
+d$rec <- seq(nrow(d))
+plot_resid(d, col = obs_col, line_col = pred_col)
+
+```
+
+
+### Residuals (bubble)
+
+```{r}
+
+d <- tidy_mat(fit$rep$SS_agecomps_resid_std,
+              ages = fit$tmb.data$SS_ages,
+              years = fit$tmb.data$SS_age_years, value = "res")
+bubble_plot(d, pos_col = pos_col, neg_col = neg_col)
+
+```
+
+
+
+
+Catchability {data-navmenu="Surveys"}
+================================================================================
+
+
+Row
+--------------------------------------------------------------------------------
+
+### RV survey catchability
+
+```{r}
+
+q <- exp(fit$rep$log_RV_Qa + log(fit$tmb.data$trawl_units))
+plot_surface(q, ages = ages, years = years, name = "q")
+
+```
+
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Proportion of the stock in Smith Sound
+
+```{r}
+p <- matrix(0, nrow = length(ages), ncol = length(years),
+            dimnames = list(ages, years))
+ss_p <- fit$rep$SSD
+ss_years <- fit$tmb.data$SS_years
+ss_ages <- fit$tmb.data$SS_ages
+rownames(ss_p) <- ss_ages
+colnames(ss_p) <- ss_years
+p[as.character(ss_ages), as.character(ss_years)] <- ss_p
+plot_surface(p, ages = ages, years = years, name = "p")
+
+```
+
+
+### Sentinel gillnet survey catchability
+
+```{r}
+
+log_qy <- t(replicate(length(fit$tmb.data$SN_ages), fit$rep$SN_GN_Qy))
+log_qa <- fit$rep$log_SN_GN_Qa
+q <- exp(log_qy + log_qa)
+plot_surface(q, ages = fit$tmb.data$SN_ages,
+             years = fit$tmb.data$SN_years,
+             name = "q")
+
+```
+
+
+

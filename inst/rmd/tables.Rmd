@@ -1,0 +1,302 @@
+
+Inputs {data-navmenu="Tables"}
+================================================================================
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Landings
+
+```{r}
+kable(inputs$landings, caption = "Reported landings (t) of cod from NAFO Divs. 2J+3KL from 1959 onward")
+```
+
+
+### Catch at age
+
+```{r}
+kable(inputs$catch.num, caption = "Catch numbers-at-age (thousands) for the commercial cod fishery in NAFO Divs. 2J+3KL.")
+```
+
+<!-- ### Monthly landings -->
+
+<!-- ```{r} -->
+<!-- d <- inputs$catch.month -->
+<!-- dimnames(d) <- list(year = rownames(d), month = month.name) -->
+<!-- kable(d, caption = "Monthly reported landings of cod from NAFO Divs. 2J+3KL.") -->
+<!-- ``` -->
+
+### RV index
+
+```{r}
+d <- data.table::dcast(inputs$index, year ~ age, value.var = "index")
+mat <- d[, as.character(2:14)]
+rownames(mat) <- d$year
+kable(mat, caption = "Mean number of cod per tow at age in the index strata for the autumn DFO RV bottom-trawl surveys of NAFO Divs. 2J+3KL.", digits = 3)
+```
+
+### SN index
+
+```{r}
+d <- data.table::dcast(inputs$sentinel, year ~ AGE, value.var = "EST")
+mat <- d[, as.character(3:10)]
+rownames(mat) <- d$year
+kable(mat, caption = 'Standardized age-disaggregated sentinel gill-net (5 1/2" mesh) catch rates (fish / net) of cod in NAFO Divs. 2J+3KL.', digits = 3)
+```
+
+### SS index
+
+```{r}
+d <- inputs$SS.bms[, c("Year", "month", "Biomass", "se2")]
+names(d) <- c("Year", "Month", "Biomass", "SE^2^")
+kable(d, caption = "Acoustic biomass estimates (t) for Smith Sound, Trinity Bay, from Rose et al. (2011).")
+```
+
+### SS age composition
+
+```{r}
+kable(inputs$SS_agecomps, caption = "Age composition of cod sampled during acoustic surveys in Smith Sound during 1995-2003. For details see Rose et al. 2011.")
+```
+
+### Weight at age
+
+```{r}
+d <- inputs$pwts
+d <- d[d$year <= max(inputs$index$year), ]
+d <- data.table::dcast(d, year ~ age, value.var = "weight")
+mat <- d[, as.character(2:14)]
+rownames(mat) <- d$year
+kable(mat, caption = "Beginning of year weight-at-age estimates (kg) from a generalized Von Bertalanffy (VonB2) growth model described in Cadigan (2016) fitted by cohort to average weight at age data for cod from autumn bottom-trawl surveys in Division 2J+3KL.", digits = 3)
+```
+
+### Maturity at age
+
+```{r}
+d <- inputs$mats
+d <- d[d$year <= max(inputs$index$year), ]
+d <- data.table::dcast(d, year ~ age, value.var = "mat")
+mat <- d[, as.character(2:14)]
+rownames(mat) <- d$year
+kable(mat, caption = "Estimated proportions mature for female cod from NAFO Div. 2J+3KL from DFO RV autumn bottom trawl surveys. Estimates were obtained from a cohort-specific binomial logistic regression model fitted to observed proportions mature at age.", digits = 3)
+```
+
+### Tag summary
+
+```{r}
+d <- inputs$mtag1 %>% 
+  group_by(rel_year, exp) %>% 
+  summarise(NAFO = unique(div),
+            Nrel = sum(unique(released)), 
+            Ncap = sum(recaptured))
+names(d) <- c("Year", "Experiment", "NAFO division", "N~released~", "N~recaptured~")
+kable(d, caption = "Number of tagged cod released and recaptured by experiment.")
+```
+
+
+Settings {data-navmenu="Tables"}
+================================================================================
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Catch bounds
+
+```{r}
+d <- data.frame(Year = fit$tmb.data$years, Lower = fit$tmb.data$LRL, Upper = fit$tmb.data$LRU)
+kable(d, caption = "Lower and upper catch multipliers used for generating catch bounds.")
+```
+
+### Baseline M
+
+```{r}
+m <- fit$tmb.data$M_matrix
+rownames(m) <- ages
+colnames(m) <- years
+kable(t(m), caption = "Baseline levels of natural mortality (M) at age.")
+```
+
+
+Output {data-navmenu="Tables"}
+================================================================================
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Parameter estimates
+
+```{r}
+
+par_tab <- tidy_pars(fit)
+rownames(par_tab) <- NULL
+options(knitr.kable.NA = '')
+kable(par_tab, digits = 3, caption = "Estimates of model fits, population parameters and variance parameters, with coefficients of variation.")
+
+```
+
+> Note: RV = DFO Research Vessel survey; SN = Sentinel survey; SS = Smith Sound; D = proportion of stock in Smith Sound; NB = negative binomial
+
+### Parameter estimates (retro)
+
+```{r}
+
+par_tabs <- lapply(names(fit$retro), function(nm) {
+  d <- data.frame(tyear = as.numeric(nm), tidy_pars(fit$retro[[nm]]))
+  d$id <- seq(nrow(d))
+  d
+})
+par_tabs <- do.call(rbind, par_tabs)
+final_par_tab <- data.frame(tyear = max(years), par_tab)
+final_par_tab$id <- seq(nrow(final_par_tab))
+par_tabs <- rbind(par_tabs, final_par_tab)
+par_tabs <- par_tabs[order(par_tabs$id, par_tabs$tyear), ]
+par_tabs <- par_tabs[, c("Quantity", "Symbol", "tyear", "Estimate", "CV")]
+par_tabs$Quantity <- as.character(par_tabs$Quantity)
+par_tabs$Quantity[duplicated(par_tabs$Quantity)] <- ""
+par_tabs$Symbol <- as.character(par_tabs$Symbol)
+par_tabs$Symbol[duplicated(par_tabs$Symbol)] <- ""
+par_tabs <- par_tabs[, c("Quantity", "Symbol", "tyear", "Estimate", "CV")]
+rownames(par_tabs) <- NULL
+names(par_tabs)[names(par_tabs) == "tyear"] <- "Terminal Year"
+
+kable(par_tabs, digits = 3, caption = "Estimates of retrospective model fits, population parameters and variance parameters, with coefficients of variation.")
+
+```
+
+> Note: RV = DFO Research Vessel survey; SN = Sentinel survey; SS = Smith Sound; D = proportion of stock in Smith Sound; NB = negative binomial
+
+### Stock size
+
+```{r}
+
+tab_name <- c("log_abundance" = "Abundance (millions)", 
+              "log_recruitment" = "Recruits (age 2; millions)", 
+              "log_biomass" = "Biomass (kt)", 
+              "log_ssa" = "Spawners (millions)", 
+              "log_ssb" = "SSB (kt)", 
+              "log_ssb_lrp" = "SSB/Blim n(%)")
+
+nms <- names(tab_name)
+status_tab <- trans_est(tabs[[nms[1]]], scale = 1000)[, c("year", "est", "lwr", "upr")]
+names(status_tab) <- c("Year", paste(tab_name[[nms[1]]], c("", "L 95% CI", "U 95% CI")))
+
+for (n in nms[-1]) {
+  s <- ifelse(n == "log_ssb_lrp", 0.01, 1000)
+  tab <- trans_est(tabs[[n]], scale = s)[, c("year", "est", "lwr", "upr")]
+  names(tab) <- c("Year", paste(tab_name[[n]], c("", "L 95% CI", "U 95% CI")))
+  status_tab <- merge(status_tab, tab, by = "Year")
+}
+
+knitr::kable(status_tab, digits = 0, caption = "Northern cod stock size estimates with lower (L) and upper (U) 95% confidence intervals (CI)")
+
+```
+
+
+### Rates
+
+```{r}
+
+tab_name <- c("log_aveZ" = "Average Z (ages 5+)", 
+              "log_aveM" = "Average M (ages 5+)", 
+              "log_aveF" = "Average F (ages 5+)")
+
+nms <- names(tab_name)
+rate_tab <- trans_est(tabs[[nms[1]]])[, c("year", "est", "lwr", "upr")]
+names(rate_tab) <- c("Year", paste(tab_name[[nms[1]]], c("", "L 95% CI", "U 95% CI")))
+
+for (n in nms[-1]) {
+  tab <- trans_est(tabs[[n]], scale = 1)[, c("year", "est", "lwr", "upr")]
+  names(tab) <- c("Year", paste(tab_name[[n]], c("", "L 95% CI", "U 95% CI")))
+  rate_tab <- merge(rate_tab, tab, by = "Year")
+}
+
+knitr::kable(rate_tab, digits = 3, caption = "Northern cod stock mortality rate estimates with lower (L) and upper (U) 95% confidence intervals (CI)")
+
+```
+
+
+### Abundance-at-age
+
+```{r}
+N_matrix <- rbind(fit$rep$N_matrix, fit$rep$abundance)
+dimnames(N_matrix) <- list(age = c(ages, "Total"), year = years_plus1)
+knitr::kable(t(N_matrix) / 1000, caption = "Abundance-at-age estimates (millions).", digits = 2)
+```
+
+### Mature abundance-at-age
+
+```{r}
+ssa_matrix <- rbind(fit$rep$ssa_matrix, fit$rep$ssa)
+dimnames(ssa_matrix) <- list(age = c(ages, "Total"), year = years_plus1)
+knitr::kable(t(ssa_matrix) / 1000, caption = "Mature abundance-at-age estimates (millions).", digits = 2)
+```
+
+
+### Biomass-at-age
+
+```{r}
+B_matrix <- rbind(fit$rep$biomass_matrix, fit$rep$biomass)
+dimnames(B_matrix) <- list(age = c(ages, "Total"), year = years_plus1)
+knitr::kable(t(B_matrix) / 1000, caption = "Biomass-at-age estimates (kt).", digits = 2)
+```
+
+### Mature biomass-at-age
+
+```{r}
+ssb_matrix <- rbind(fit$rep$ssb_matrix, fit$rep$ssb)
+dimnames(ssb_matrix) <- list(age = c(ages, "Total"), year = years_plus1)
+knitr::kable(t(ssb_matrix) / 1000, caption = "Mature biomass-at-age estimates (kt).", digits = 2)
+```
+
+
+<!-- ### Exploitable biomass -->
+
+<!-- ```{r} -->
+<!-- S <- apply(fit$rep$F_matrix, 2, function(x) x / max(x)) -->
+<!-- B <- fit$rep$N_matrix[, seq(ncol(S))] * fit$tmb.data$midyw -->
+<!-- E <- B * S -->
+<!-- ebms_matrix <- rbind(E, colSums(E)) -->
+<!-- dimnames(ebms_matrix) <- list(age = c(ages, "Total"), year = years) -->
+<!-- knitr::kable(t(ebms_matrix) / 1000, -->
+<!--              caption = "Exploitable biomass estimates (kt).", digits = 3) -->
+<!-- ``` -->
+
+### Predicted catch
+
+```{r}
+pred_catch_wt_matrix <- rbind(fit$rep$pred_catch_wt_matrix, fit$rep$pred_catch_wt)
+dimnames(pred_catch_wt_matrix) <- list(age = c(ages, "Total"), year = years)
+knitr::kable(t(pred_catch_wt_matrix) / 1000, 
+             caption = "NCAM predicted catch at age (kt).", digits = 3)
+```
+
+
+### Z-at-age
+
+```{r}
+Z_matrix <- fit$rep$Z_matrix
+dimnames(Z_matrix) <- list(age = ages, year = years)
+knitr::kable(t(Z_matrix), caption = "Z-at-age estimates.", digits = 3)
+```
+
+### M-at-age
+
+```{r}
+pe_ages <- fit$tmb.data$pe_ages
+M_matrix <- fit$rep$Mpe_matrix
+dimnames(M_matrix) <- list(age = ages, year = years)
+M_matrix <- M_matrix[as.character(pe_ages), ]
+rownames(M_matrix) <- c(as.character(head(pe_ages, -1)), paste0(tail(pe_ages, 1), "+"))
+knitr::kable(t(M_matrix), caption = "M-at-age estimates.", digits = 3)
+```
+
+### F-at-age
+
+```{r}
+F_matrix <- fit$rep$F_matrix
+dimnames(F_matrix) <- list(age = ages, year = years)
+knitr::kable(t(F_matrix), caption = "F-at-age estimates.", digits = 3)
+```
+
+
+
+

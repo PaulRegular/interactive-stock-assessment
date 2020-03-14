@@ -157,7 +157,8 @@ plot_trend <- function(data, group = NULL, ylab = "", title = "", ci = "ribbon",
   p <- p %>%
     add_lines(y = ~est, name = trace_names[2], line = list(width = lwd)) %>%
     layout(title = title,
-           xaxis = list(title = "Year", range = c(min_year, max_year)),
+           xaxis = list(title = "Year", range = c(min_year, max_year),
+                        tickformat = "d"),
            yaxis = list(title = ylab))
   p
 
@@ -184,7 +185,7 @@ plot_retro <- function(data, col = '#1f77b4', ...) {
   data[data$terminal_year != max_year, c("lwr", "upr")] <- NA
   p <- plot_trend(data, group = "terminal_year", col = col, ...)
   data$grp <- data$terminal_year
-  marker_data <- data %>% group_by(terminal_year) %>% filter(dplyr::row_number() == n())
+  marker_data <- data %>% group_by(terminal_year) %>% filter(dplyr::row_number() == dplyr::n())
   p %>% add_markers(data = marker_data, x = ~year, y = ~est)
 
 }
@@ -224,7 +225,7 @@ plot_mohns <- function(data = NULL, ylab = "Relative difference", col = '#1f77b4
           color = I(col)) %>%
     add_markers() %>%
     add_segments(x = ~year, xend = ~year, y = 0, yend = ~pdiff) %>%
-    layout(xaxis = list(title = "Year"),
+    layout(xaxis = list(title = "Year", tickformat = "d"),
            yaxis = list(title = ylab),
            annotations = top_label(paste("Mohn's rho =", round(mohns, 3))))
 
@@ -272,7 +273,7 @@ plot_retro_deltas <- function(data = NULL, ylab = "Difference",
     add_markers(name = "Difference") %>%
     add_segments(x = ~year, xend = ~year, y = ~lwr, yend = ~upr,
                  name = "95% CI") %>%
-    layout(xaxis = list(title = "Year"),
+    layout(xaxis = list(title = "Year", tickformat = "d"),
            yaxis = list(title = ylab))
 
 }
@@ -353,7 +354,8 @@ plot_proj <- function(data = NULL, group = NULL, xlim = NULL, ylim = NULL, ylab 
                                          font = list(color = "black", size = 13))) %>%
     layout(shapes = lines,
            xaxis = list(title = "Year", range = xlim,
-                        tickvals = min(data$year):max(data$year)),
+                        tickvals = min(data$year):max(data$year),
+                        tickformat = "d"),
            yaxis = list(title = ylab, range = ylim,
                         ticksuffix = ticksuffix))
 }
@@ -372,13 +374,15 @@ plot_proj <- function(data = NULL, group = NULL, xlim = NULL, ylim = NULL, ylab 
 #' @param group       column to group observed and fitted values by
 #' @param group_cols  colors for the groups (must equal number of groups)
 #' @param stack_group stack values across groups (add y values)?
+#' @param frame       column for creating animation frames
 #'
 #' @export
 #'
 
 plot_obs_pred <- function(data, ylab = "", obs_col = '#1f77b4', pred_col = '#ff7f0e',
                           showlegend = FALSE, title = "", type = "-", rangemode = "normal",
-                          group = NULL, group_cols = NULL, stack_group = NULL) {
+                          group = NULL, group_cols = NULL, stack_group = NULL,
+                          frame = NULL) {
 
   if (is.null(group)) {
     data <- data
@@ -387,7 +391,13 @@ plot_obs_pred <- function(data, ylab = "", obs_col = '#1f77b4', pred_col = '#ff7
     data <- crosstalk::SharedData$new(data, ~group)
   }
 
-  p <- plot_ly(data = data, x = ~year, showlegend = showlegend, fill = "none")
+  if (!is.null(frame)) {
+    f <- as.formula(paste0("~", frame))
+  } else {
+    f <- NULL
+  }
+
+  p <- plot_ly(data = data, x = ~year, showlegend = showlegend, fill = "none", frame = f)
 
   if (is.null(group)) {
     p <- p %>%
@@ -405,15 +415,27 @@ plot_obs_pred <- function(data, ylab = "", obs_col = '#1f77b4', pred_col = '#ff7
                 stackgroup = ifelse(stack_group, "pred", NULL))
   }
 
+  if (!is.null(frame) && type == "log") {
+    ylim <- range(log10(data$pred))
+  } else {
+    ylim <- NULL
+  }
+
   p <- p %>%
     layout(
-      xaxis = list(title = "Year"),
-      yaxis = list(title = ylab, type = type, rangemode = rangemode),
+      xaxis = list(title = "Year", tickformat = "d"),
+      yaxis = list(title = ylab, type = type, rangemode = rangemode,
+                   range = ylim),
       annotations = top_label(title)
     )
 
   if (!is.null(group)) {
     p <- p %>% highlight(on = "plotly_click", off = "plotly_relayout")
+  }
+
+  if (!is.null(frame)) {
+    p <- p %>%
+      animation_opts(frame = 500, transition = 0)
   }
 
   p
@@ -461,20 +483,23 @@ facet_obs_pred <- function(data, by = "age", which = NULL,
 #'
 #' @param data        data.frame with 'year', 'age', 'res' and 'zero' (optional) columns.
 #'                    'zero' columns itentifies censored observations
+#' @param pos_col     color for positive values
+#' @param neg_col     color for negative values
+#' @param na_col      color for censored values
 #'
 #' @export
 #'
 
-bubble_plot <- function(data) {
+bubble_plot <- function(data, pos_col = "#E41A1C", neg_col = "#377EB8", na_col = "#A9A9A9") {
   d <- data
   d$sign <- ifelse(d$res > 0, "+", "-")
   if ("zero" %in% names(d)) {
     d$res[d$zero == 1] <- min(abs(d$res))
     d$sign[d$zero == 1] <- "0"
-    cols <- c("#E41A1C", "#377EB8", "#A9A9A9")
+    cols <- c(pos_col, neg_col, na_col)
   } else {
     d$zero <- 0
-    cols <- c("#E41A1C", "#377EB8")
+    cols <- c(pos_col, neg_col)
   }
   ## add a small amount of noise, otherwise plotly does not plot values with the same number
   d$abs_res <- jitter(abs(d$res), factor = 0.000000000001)
@@ -482,7 +507,7 @@ bubble_plot <- function(data) {
           color = ~sign, colors = cols, sizes = c(5, 500), symbol = ~zero,
           symbols = c("16", "1")) %>%
     add_markers() %>%
-    layout(xaxis = list(title = "Year"),
+    layout(xaxis = list(title = "Year", tickformat = "d"),
            yaxis = list(title = "Age"))
 }
 
@@ -697,7 +722,7 @@ plot_comps <- function(data = NULL, ylab = NULL, col = NULL, showlegend = TRUE) 
                                         color = I(model_cols[i]))
   }
   base %>%
-    layout(xaxis = list(title = "Year"),
+    layout(xaxis = list(title = "Year", tickformat = "d"),
            yaxis = list(title = ylab))
 
 }
@@ -721,7 +746,7 @@ plot_landings <- function(data = NULL, cols = c("#31688EFF", "#35B779FF")) {
   p1 <- trans_est(landings) %>%
     plot_trend(ylab = "Landings (t)", group = "metric", annotate = TRUE, col = cols) %>%
     add_ribbons(ymin = fit$tmb.data$landings_L, ymax = fit$tmb.data$landings_U,
-                color = I(cols[2]), opacity = 0.3, line = list(width = 0),
+                color = I(cols[2]), opacity = 0.5, line = list(width = 0),
                 name = "Catch bounds") %>%
     add_lines(y = fit$tmb.data$landings, color = I(cols[2]), linetype = I(3),
               name = "Observed") %>%
@@ -736,7 +761,7 @@ plot_landings <- function(data = NULL, cols = c("#31688EFF", "#35B779FF")) {
   d$ratio <- d$pred / d$obs
   p2 <- plot_ly(data = d, x = ~year, y = ~ratio, showlegend = FALSE) %>%
     add_ribbons(x = fit$tmb.data$years, ymin = fit$tmb.data$LRL, ymax = fit$tmb.data$LRU,
-                color = I(cols[2]), opacity = 0.3, line = list(width = 0), name = "Catch bounds") %>%
+                color = I(cols[2]), opacity = 0.5, line = list(width = 0), name = "Catch bounds") %>%
     add_lines(color = I(cols[1]), name = "Pred/Obs") %>%
     add_lines(y = rep(1, nrow(d)), linetype = I(3), color = I(cols[2])) %>%
     add_text(y = tail(d$ratio, 1), x = max_year + 0.2, text = "Pred/Obs",

@@ -1,0 +1,141 @@
+
+Landings {data-navmenu="Fishery"}
+================================================================================
+
+Row {.tabset .tabset-dropdown}
+--------------------------------------------------------------------------------
+
+### Landings
+
+```{r}
+
+plot_landings(fit, cols = c(pred_col, obs_col))
+
+```
+
+
+> Y-axes in log scale
+
+
+### Numbers at age
+
+```{r}
+
+d <- tidy_mats(list(obs = t(inputs$catch.num[as.character(years), as.character(ages)]),
+                    pred = fit$rep$pred_catch),
+               ages = ages, years = years)
+d$cohort <- factor(d$year - d$age)
+d$age <- factor(d$age)
+
+facet_obs_pred(d, by = "age", type = "log",
+               which = c(2, 8, 3, 9, 4, 10, 5, 11, 6, 12, 7, 13), # done to order by column
+               nrows = 6, ylab = "Proportion",
+               obs_col = obs_col, pred_col = pred_col) %>%
+  layout(yaxis = list(rangemode = "tozero"))
+
+```
+
+> Y-axes in log scale; also note that model fits to composition - this plot is included for illustration
+
+
+### Numbers at age (frame)
+
+```{r}
+plot_obs_pred(data = d, showlegend = TRUE, type = "log",
+              frame = "age", ylab = "Numbers",
+              obs_col = obs_col, pred_col = pred_col)
+
+```
+
+> Y-axes in log scale; also note that model fits to composition - this plot is included for illustration
+
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Proportions at age
+
+```{r}
+
+d <- tidy_mats(list(obs = fit$tmb.data$catch_prop,
+                    pred = fit$rep$pred_prop_catch),
+               ages = ages, years = years)
+d$cohort <- factor(d$year - d$age)
+d$age <- factor(d$age)
+
+facet_obs_pred(d, by = "age",
+               which = c(2, 8, 3, 9, 4, 10, 5, 11, 6, 12, 7, 13), # done to order by column
+               nrows = 6, ylab = "Proportion",
+               obs_col = obs_col, pred_col = pred_col) %>%
+  layout(yaxis = list(rangemode = "tozero"))
+
+```
+
+
+### Proportions at age (frame)
+
+```{r}
+
+plot_obs_pred(data = d, showlegend = TRUE, type = "linear",
+              frame = "age", ylab = "Proportion",
+              obs_col = obs_col, pred_col = pred_col)
+
+```
+
+
+### Residuals
+
+```{r}
+
+d <- tidy_mats(list(res = fit$rep$CA_resid,
+                    fit = fit$rep$pred_crl),
+               ages = ages[-length(ages)], years = years)
+d$cohort <- d$year - d$age
+d$rec <- seq(nrow(d))
+plot_resid(d, col = obs_col, line_col = pred_col)
+
+```
+
+> based on continuation ratio logits
+
+
+
+Selectivity {data-navmenu="Fishery"}
+================================================================================
+
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Proportions at age surface
+
+```{r}
+plot_surface(mat = fit$rep$pred_prop_catch, ages = ages, years = years, name = "P")
+```
+
+
+<!-- ### Numbers at age surface -->
+
+<!-- ```{r} -->
+<!-- plot_surface(mat = t(inputs$catch.num[as.character(years), as.character(ages)]),  -->
+<!--              ages = ages, years = years, name = "N") -->
+<!-- ``` -->
+
+<!-- > Note: model fits to composition - this plot is included for illustration -->
+
+
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Fishery selectivity
+
+```{r}
+
+S <- apply(fit$rep$F_matrix, 2, function(x) x / max(x))
+plot_surface(S, ages = ages, years = years, name = "S")
+
+```
+
+
+

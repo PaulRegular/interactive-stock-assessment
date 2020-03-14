@@ -1,0 +1,263 @@
+
+Assumptions  {data-navmenu="Projections" .storyboard}
+================================================================================
+
+
+### Assume the same selectivity curve as estimated by NCAM in the terminal year and apply catch multipliers
+
+```{r}
+
+Cp <- fit$tmb.data$Cp
+Cp_string <- text_c(Cp)
+Lp <- round(Cp * tail(fit$rep$pred_catch_wt, 1))
+Lp_string <- paste(text_c(Lp), "t")
+
+tidy_mat(fit$rep$F_matrix, ages = ages, years = years, value = "F") %>%
+  filter(year >= max(years) - 3) %>%
+  plot_ly(x = ~age, y = ~F, color = ~factor(year), colors = rev(cols)) %>%
+  add_lines(alpha = 0.5) %>%
+  filter(year == max(years)) %>%
+  add_lines(showlegend = FALSE, line = list(width = 3)) %>%
+  layout(xaxis = list(title = "Age"))
+
+```
+
+
+***
+- The following catch multipliers were applied: `r Cp_string`
+- This translates to `r Lp_string` of catch in the projection years
+
+
+### Assume natural mortality converges on the long-term mean, excluding the M spike between 1991 - 1994
+
+```{r}
+
+if (all(fit$tmb.data$Mp_mult != 1)) stop("TODO: make the mortality multiplier projection documentation dynamic")
+
+Mpe <- fit$rep$Mpe_matrix
+Mproj <- replicate(fit$tmb.data$Yp, fit$tmb.data$pnm)
+bpe <- fit$rep$bpe[, (fit$tmb.data$Y + 1):(fit$tmb.data$Y + fit$tmb.data$Yp)]
+Mproj <- Mproj * exp(bpe)
+Mproj <- cbind(Mpe, Mproj)
+proj_years <- fit$tmb.data$proj_years
+
+plot_surface(mat = Mproj, ages = ages, years = c(years, proj_years), name = "M")
+
+
+```
+
+
+### Assume mean recruitment from the last three years
+
+```{r}
+
+last_three <- tail(fit$tmb.data$years, 3)
+mean_rec <- exp(mean(tabs$log_recruitment$est[tabs$log_recruitment$year %in% last_three]))
+mean_rec <- data.frame(year = c(last_three, last_three[3] + fit$tmb.data$Yp), 
+                       mean_rec = mean_rec * 1000, grp = "mean")
+trans_est(tabs$log_recruitment, scale = 0.001) %>%
+  plot_trend(ylab = "Recruitment", col = pred_col) %>% 
+  add_lines(data = mean_rec, x = ~year, y = ~mean_rec, name = "mean",
+            color = I("black"), line = list(width = 1)) %>% 
+  add_text(x = max(years) + 1.2, y = mean_rec$mean_rec[1], 
+           text = "mean recruitment", 
+           textposition = "bottom right",
+           color = I("black")) %>%
+  layout(xaxis = list(range = c(min(years), max(years) + fit$tmb.data$Yp)))
+
+```
+
+
+### Assume averages weights and proportions mature from the last three years
+
+```{r}
+
+mat_p <- tidy_mat(fit$tmb.data$mat, ages = factor(ages), years = years, value = "mat") %>%
+  filter(year >= max(years) - 2) %>%
+  plot_ly(x = ~age, y = ~mat, color = ~factor(year), colors = rev(cols)) %>%
+  add_lines(alpha = 0.5) %>%
+  group_by(age) %>%
+  summarise(mat = mean(mat), year = "3y mean") %>%
+  add_lines(line = list(width = 3)) %>%
+  layout(xaxis = list(title = "Age"),
+         yaxis = list(title = "Proportion mature"))
+
+wt_p <- tidy_mat(fit$tmb.data$weight, ages = factor(ages), years = years, value = "weight") %>%
+  filter(year >= max(years) - 2) %>%
+  plot_ly(x = ~age, y = ~weight, color = ~factor(year), colors = rev(cols),
+          showlegend = FALSE) %>%
+  add_lines(alpha = 0.5) %>%
+  group_by(age) %>%
+  summarise(weight = mean(weight), year = "3y mean") %>%
+  add_lines(line = list(width = 3)) %>%
+  layout(xaxis = list(title = "Age"),
+         yaxis = list(title = "Weight (kg)"))
+
+subplot(mat_p, wt_p, titleY = TRUE, titleX = TRUE)
+
+```
+
+
+Past projections {data-navmenu="Projections" `r if (is.null(tmp$last)) ".hidden"`}
+================================================================================
+
+
+### Catch multiplier projections for SSB / Blim from the last RAP
+
+```{r, eval = !is.null(tmp$last)}
+
+d <- trans_est(last_tabs$Cproj_log_ssb_lrp)
+d$scenario <- factor(d$scenario)
+d$type <- "Projected"
+
+past_d <- trans_est(last_tabs$log_ssb_lrp)
+past_d <- past_d[past_d$year != max(past_d$year), ] # drop the last year here (it's in the projection output)
+past_d <- lapply(levels(d$scenario), function(s) data.frame(past_d, scenario = s))
+past_d <- do.call(rbind, past_d)
+past_d$type <- "Estimated"
+d <- rbind(past_d, d)
+xlim <- c(max(last$tmb.data$years) - 5.1, max(years) + 1.1)
+ylim <- range(d[d$year >= xlim[1] & d$year <= xlim[2], c("est", "lwr", "upr"), ])
+
+current_d <- trans_est(tabs$log_ssb_lrp)
+current_d <- lapply(levels(d$scenario), function(s) data.frame(current_d, scenario = s))
+current_d <- do.call(rbind, current_d)
+current_d$model <- "current RAP"
+current_d$type <- "Estimated"
+d$model <- "last RAP"
+d <- rbind(d, current_d)
+
+plot_proj(data = d, xlim = xlim, ylim = ylim, ylab = "SSB/Blim", group = "model",
+          vline = max(last$tmb.data$years) + 1, hline = 1, col = cols, showlegend = TRUE,
+          darken_proj = TRUE)
+
+```
+
+
+Retro projections {data-navmenu="Projections" `r if (is.null(fit$retro)) ".hidden"`}
+================================================================================
+
+
+### Catch multiplier projections for SSB / Blim from retrospective fits
+
+```{r, eval = !is.null(fit$retro)}
+
+d <- trans_est(retro_tabs$Cproj_log_ssb_lrp)
+d$terminal_year <- as.numeric(as.character(d$terminal_year))
+d$scenario <- factor(d$scenario)
+d$type <- "Projected"
+
+past_d <- trans_est(retro_tabs$log_ssb_lrp)
+past_d$terminal_year <- as.numeric(as.character(past_d$terminal_year))
+past_d <- past_d[past_d$year <= past_d$terminal_year, ] # drop the last year (it's in the projection output)
+past_d <- lapply(levels(d$scenario), function(s) data.frame(past_d, scenario = s))
+past_d <- do.call(rbind, past_d)
+past_d$type <- "Estimated"
+d <- rbind(past_d, d)
+d <- d[order(d$scenario, d$terminal_year, d$year), ]
+
+# xlim <- c(max(last$tmb.data$years) - 5.1, max(years) + 1.1)
+# ylim <- range(d[d$year >= xlim[1] & d$year <= xlim[2], c("est", "lwr", "upr"), ])
+
+plot_proj(data = d, ylab = "SSB/Blim", group = "terminal_year",
+          hline = 1, col = rev(viridis::viridis(length(unique(d$terminal_year)))), 
+          showlegend = TRUE, markers = FALSE, darken_proj = TRUE)
+
+```
+
+
+
+Results {data-navmenu="Projections"}
+================================================================================
+
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+
+### Catch multiplier projections for SSB~yp~ / SSB~`r max(years) + 1`~
+
+```{r}
+
+d <- trans_est(tabs$Cproj_log_ssb_ratio)
+d[, c("est", "lwr", "upr")] <- (d[, c("est", "lwr", "upr")] - 1) * 100
+d$scenario <- factor(d$scenario)
+xlim <- c(max(years) + 0.9, max(years) + 4.1)
+ylim <- range(d[d$year >= xlim[1] & d$year <= xlim[2], c("est", "lwr", "upr"), ])
+
+plot_proj(data = d, xlim = xlim, ylim = ylim, ylab = "Percent growth", ticksuffix = "%",
+          vline = max(years) + 1, col = pred_col) %>%
+  layout(yaxis = list(tickvals = seq(-200, 200, by = 25)))
+
+```
+
+
+
+### SSB / Blim
+
+```{r}
+
+d <- trans_est(tabs$Cproj_log_ssb_lrp)
+d <- d[d$year != max(years_plus1), ] # drop the first year (it's in the time series)
+d$type <- "Projected"
+d$scenario <- factor(d$scenario)
+
+## Append full time series to projections
+past_d <- trans_est(tabs$log_ssb_lrp)
+past_d <- lapply(levels(d$scenario), function(s) data.frame(past_d, scenario = s))
+past_d <- do.call(rbind, past_d)
+past_d$type <- ifelse(past_d$year == max(years_plus1), "Projected", "Estimated")
+d <- rbind(past_d, d)
+xlim <- c(max(years) - 2.1, max(years) + 4.1)
+ylim <- range(d[d$year >= xlim[1] & d$year <= xlim[2], c("est", "lwr", "upr"), ])
+
+plot_proj(data = d, xlim = xlim, ylim = ylim, ylab = "SSB/Blim",
+          vline = max(years) + 1, hline = 1, col = pred_col, darken_proj = TRUE)
+
+```
+
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### Prob(SSB~yp~ &ge; SSB~`r max(years) + 1`~)
+
+```{r}
+
+growth <- tabs$Cproj_log_ssb_ratio
+growth$p0 <- 1 - pnorm(0, mean = growth$est, sd = growth$sd)
+
+d <- growth[growth$year != max(years) + 1, ]
+d$scenario <- factor(d$scenario)
+plot_ly(data = d, x = ~year, y = ~scenario, z = ~p0) %>%
+  add_heatmap() %>%
+  add_annotations(x = ~year, y = ~scenario, text = ~round(p0, 2),
+                  showarrow = FALSE, font = list(color = "white")) %>%
+  colorbar(title = "P", limits = c(0, 1)) %>%
+  layout(yaxis = list(title = "Catch multiplier"),
+         xaxis = list(title = "Year", 
+                      tickvals = min(d$year):max(d$year)))
+
+```
+
+
+### Prob(SSB~yp~ &ge; B~lim~)
+
+```{r}
+
+growth <- tabs$Cproj_log_ssb_lrp
+growth$p0 <- 1 - pnorm(0, mean = growth$est, sd = growth$sd)
+
+d <- growth[growth$year != max(years) + 1, ]
+d$scenario <- factor(d$scenario)
+plot_ly(data = d, x = ~year, y = ~scenario, z = ~p0) %>%
+  add_heatmap() %>%
+  add_annotations(x = ~year, y = ~scenario, text = ~round(p0, 2),
+                  showarrow = FALSE, font = list(color = "white")) %>%
+  colorbar(title = "P", limits = c(0, 1)) %>%
+  layout(yaxis = list(title = "Catch multiplier"),
+         xaxis = list(title = "Year",
+                      tickvals = min(d$year):max(d$year)))
+
+```
+

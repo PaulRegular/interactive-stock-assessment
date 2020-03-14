@@ -1,0 +1,214 @@
+
+Background
+================================================================================
+
+Row {.tabset}
+--------------------------------------------------------------------------------
+
+### NCAM
+
+<h1>NCAM: A state-space stock assessment model for Northern cod</h1>
+
+```{r}
+
+ax <- list(
+  title = "",
+  zeroline = FALSE,
+  showline = FALSE,
+  showticklabels = FALSE,
+  showgrid = FALSE
+)
+
+xy <- approx(x = years_plus1, y = fit$rep$abundance + 1000000, n = 50)
+plot_ly(x = xy$x, y = xy$y, hoverinfo = "none",
+        fillcolor = toRGB(pred_col, alpha = 0.2),
+        type = 'scatter', mode = 'none', fill = 'tozeroy', showlegend = FALSE) %>%
+  add_trace() %>%
+  layout(xaxis = ax, yaxis = c(list(range = c(0, max(xy$y))), ax),
+         margin = list(l = 0, r = 0, b = 0, t = 0, pad = 0)) %>% 
+  plotly::config(displayModeBar = FALSE)
+
+```
+
+
+### General
+
+- An *integrated* *state-space* population dynamics model
+- *Integrated*
+    - Uses as much information as possible
+- *State-space*
+    - Includes process and observation equations + error
+    - Population processes are informed by observations from multiple sources
+    - Process errors are necessary for realistic stochastic projections
+- See Cadigan 2015 [1] and 2016 [2] for details
+
+### Data inputs
+
+- Reported landings (`r text_range(years)`)
+- Catch-at-age information (`r text_range(years)`)
+- Reported landings by month (`r text_range(years)`)
+- Offshore research vessel (RV) survey indices (`r text_range(c(1983, max(years)))`)
+- Inshore sentinel (SN) gillnet survey indices (`r text_range(fit$tmb.data$SN_years)`)
+- Inshore acoustic biomass surveys and age composition data from Smith Sound (SS; `r text_range(fit$tmb.data$SS_years)`)
+- Tagging data
+       
+### Biological inputs
+
+::: {}
+
+- RV survey data were used fit cohort-based models of:
+   - Proportion mature at age
+   - Beginning of year and mid-year stock weights at age [3]
+   `r if (min(years) < 1983) "   - **Note that hindcast values were used for years that predate the RV survey (1983)**"`
+- Baseline natural mortality (M) values
+   `r if (min(years) < 1983) "   - **Assumed the same baseline M values for years prior to the start year of the base case NCAM model (1983)**"`
+
+
+```{r}
+
+plot_ly(x = years, y = ages, z = fit$rep$M_matrix, height = 300, width = 500) %>%
+  add_surface() %>%
+  colorbar(title = "Mshift") %>%
+  layout(scene = list(
+    xaxis = list(title = "Year"),
+    yaxis = list(title = "Age"),
+    zaxis = list(title = "Mshift")
+  ))
+
+```
+
+:::
+
+
+
+### Partial catches
+
+::: {}
+
+- User sets lower and upper bounds on total catch weight
+
+```{r}
+
+plot_ly(x = years, y = fit$tmb.data$LRL, height = 300, width = 500) %>%
+  add_lines(name = "Lower", color = I(pos_col)) %>%
+  add_lines(y = fit$tmb.data$LRU, name = "Upper", color = I(neg_col)) %>%
+  add_lines(y = rep(1, length(years)), color = I("black"),
+            line = list(width = 1, dash = "dot"), showlegend = FALSE) %>%
+  layout(yaxis = list(title = "Catch multiplier"),
+         xaxis = list(title = "Year"))
+
+```
+
+<br>
+
+- Bounds are used via a censored likelihood
+`r if (min(years) < 1983) "   - **Assumed the same starting bounds as those chosen for the base case NCAM model for years prior to 1983**"`
+    - $l\left(C_{01}, \ldots, C_{o Y} | \boldsymbol{\theta}\right)=\sum_{y=1}^{Y} \log \left\{\Phi_{N}\left[\frac{\log \left(U_{Y} / C_{Y}\right)}{\sigma_{C}}\right]-\Phi_{N}\left[\frac{\log \left(C_{o Y} / C_{Y}\right)}{\sigma_{C}}\right]\right\}$
+
+```{r, fig.height = 3.5, fig.width = 8}
+
+C <- seq(400, 900, length = 500)
+U <- 750
+L <- 500
+CV <- seq(0.005, 0.1, by = 0.005)
+den <- vector("list", length(CV))
+for (i in seq_along(CV)) {
+  LZU <- (log(U) - log(C)) / CV[i]
+  LZL <- (log(L) - log(C)) / CV[i]
+  den[[i]] <- pnorm(LZU) - pnorm(LZL)
+}
+d <- data.frame(Catch = rep(C, length(C)), 
+                Likelihood = unlist(den), 
+                CV = rep(CV, each = length(C)) * 100)
+
+plot_ly(data = d, hoverinfo = "none", showlegend = FALSE, height = 300, width = 500) %>% 
+  add_lines(x = ~Catch, y = ~Likelihood, frame = ~CV, color = I(pred_col)) %>% 
+  add_segments(x = L, y = 0, xend = L, yend = 1.05,
+               color = I("black")) %>% 
+  add_text(x = L, y = 1.09, text = "Lower bound") %>% 
+  add_segments(x = U, y = 0, xend = U, yend = 1.05,
+               color = I("black")) %>% 
+  add_text(x = U, y = 1.09, text = "Upper bound") %>% 
+  animation_opts(transition = 0) %>% 
+  animation_button(visible = FALSE) %>% 
+  animation_slider(currentvalue = list(suffix = "%")) %>% 
+  layout(plot_bgcolor = "transparent", 
+         paper_bgcolor = "transparent") %>% 
+  config(displaylogo = FALSE, collaborate = FALSE, displayModeBar = FALSE)
+
+```
+
+<br>
+
+- Age composition modeled using continuation-ratio logits
+    - $l(\{X_{oa,y}\}|\boldsymbol{\theta})=\Sigma^{A-1}_{a=1}\Sigma^{Y}_{y=1}log\left[\varphi_N\left(\frac{X_{oa,y}-X_{a,y}}{\sigma_{Pa}}\right)\right]$
+
+
+:::
+
+
+### Surveys
+
+- Survey estimates are assumed to be log-normally distributed
+    - $E(I_{s,a,y})=q_{s,a}N_{a,y} exp(-t_{s,y}Z_{a,y})$
+    - $l\left(\left\{I_{s, a, y}\right\} | \boldsymbol{\theta}\right)=\sum_{a} \sum_{y} \log \left(\varphi_{N}\left\{\frac{\log \left(I_{s, a y}\right)-E\left[\log \left(I_{s, a, y}\right)\right]}{\sigma_{s, I}}\right\}\right)$
+
+- Shift q for the offshore RV survey by estimating the proportion of the stock in Smith Sound $(D_{a,y})$
+    - $E\left(I_{\mathrm{RV}, a, y}\right)=\left\{\begin{array}{ll}{q_{a} N_{a, y} \exp \left(-t Z_{a, y}\right),} & {y \neq 1995, \ldots, 2009} \\ {q_{a}\left(1-D_{a, y}\right) N_{a, y} \exp \left(-t Z_{a, y}\right),} & {y=1995, \ldots, 2009}\end{array}\right.$
+
+- Shift q for the inshore sentinel survey by estimating year effects that follow a random walk $(q_{s,y})$
+    - $log(q_{s,a,y})=log(q_{s,a})+log(q_{s,y})$
+
+
+### Tagging data
+
+- Age of tagged fish ~ length-at-release | Von Bertalanffy growth model [4]
+- Age-based tag returns in each experiment $(x)$ modeled using Baranov catch equation
+    - $R_{x, a, y}=\lambda_{x,y}N_{x, a, y}\left\{1-\exp \left(-Z_{x, a, y}\right)\right\} \frac{F_{x, a, y}}{Z_{x, a, y}}$
+        - note adjustment for reporting rate $(\lambda_{x,y})$
+
+- Adjust for incomplete mixing in release year: experiment $~F~$ is assumed to be random deviations from whole stock $~F~$
+    - $\log \left(F_{x, a, y}\right) \sim N\left\{\log \left(F_{a, y}\right), \sigma_{f x}^{2}\right\}$
+
+- Adjust for partial exposure to the fishery $(s_{x,y})$ and other mortality sources$(t_{x,y})$, tag loss $(\gamma_y)$ and tagging mortality $(u)$
+    - $Z_{x, a, y} = s_{x,y} F_{x, a, y} + t_{x,y} M_{a,y} + \gamma_y + u$
+
+
+### Population process
+
+- Cohort equation
+    - $N_{a,y}=N_{a-1,y-1}exp(-Z_{a-1,y-1})$
+
+- Baranov catch equation
+    - $C_{a,y}=N_{a,y}[1-exp(-Z_{a,y})]\frac{F_{a,y}}{Z_{a,y}}$
+
+- Process error $(\delta)$ is added to baseline $m$ values
+    - $log(M_{a,y})=log(m_{a,y})+\delta_{a,y}$
+
+- $\delta$ and $F$ modeled using 2D age-year AR1 process
+    - $\operatorname{Cov}\left(\delta_{a, y}, \delta_{a-j, y-k}\right)=\frac{\sigma_{\delta}^{2} \varphi_{\delta, \mathrm{age}} \varphi_{\delta, \mathrm{year}}^{k}}{\left(1-\varphi_{\delta, \mathrm{age}}^{2}\right)\left(1-\varphi_{\delta, \mathrm{year}}^{2}\right)}, \quad \operatorname{Corr}\left(\delta_{a, y}, \delta_{a-j, y-k}\right)=\varphi_{\delta, \mathrm{age}}^{j} \varphi_{\delta, \text { year }}^{k}$
+    - $\operatorname{Cov}\left[\log \left(F_{a, y}\right), \log \left(F_{a-j, y-k}\right)\right]=\frac{\sigma_{F}^{2} \varphi_{F, \text { age }}^{j} \varphi_{F \text { year }}^{k}}{\left(1-\varphi_{\text {Frage }}^{2}\right)\left(1-\varphi_{F, \text { year }}^{2}\right)}$
+
+
+### Summary
+
+- $N$ informed by reported landings and survey indices
+    - **Challenges:** bounds and catchability
+- $F$ and $M$ informed by catch composition, survey indices and tagging data
+    - **Challenges:** catchability, reporting rate, incomplete mixing
+- Different parameters confound population estimates from each data-set
+    - Statistical triangulation $\rightarrow$ underlying population process
+    - Same process $\therefore$ conflicting trends $\rightarrow$ poor fits
+
+
+### References
+
+1. Cadigan, N. G. A state-space stock assessment model for northern cod, including under-reported catches and variable natural mortality rates. Canadian Journal of Fisheries and Aquatic Sciences 73, 296–308 (2015).
+
+2. Cadigan, N. G. Updates to a northern cod (*Gadus morhua*) state-space integrated assessment model. DFO Canadian Science Advisory Secretariat Research Document 2016/022, 58 p. (2016).
+
+3. Cadigan, N. G. Weight-at-age growth models and forecasts for northern cod (*Gadus morhua*). DFO Canadian Science Advisory Secretariat Research Document 2016/016, 19 p. (2016).
+
+4. Cadigan, N. G. & Konrad, C. A cohort time-series von bertalanffy growth model for northern cod (*Gadus morhua*), and estimation of the age of tagged cod. DFO Canadian Science Advisory Secretariat Research Document 2016/017, 37 p. (2016).
+
+
