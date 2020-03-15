@@ -16,7 +16,7 @@ USA
 
 Dear Dr. Goethel,
 
-Thank you for considering another revision of manuscript cjfas-2019-0424,  **"Improving the communication and accessibility of stock assessment using interactive visualization tools"** by Paul M. Regular, Gregory J. Robertson, Robert Rogers and Keith P. Lewis. We are very grateful for the constructive and detailed reviews provided and we have made every effort to do justice to the reviewer's suggestions. In the process, we believe our manuscript has been greatly improved. Most notably we have expanded our introduction and discussion to include a more through exploration of the literature, emphasizing advances in fisheries science. We have also clarified the intent and audience for the tools highlighted in our manuscript and these changes should curtail impressions that these tools are supposed to be stand-alone documents. These changes should also alleviate impressions that interactive tools serve as a complete replacement for static documents when, in actual fact, they are most often used to complement static documentation. Please see below for more details on the changes we made in response to the reviews.
+Thank you for considering another revision of manuscript cjfas-2019-0424,  **"Improving the communication and accessibility of stock assessment using interactive visualization tools"** by Paul M. Regular, Gregory J. Robertson, Robert Rogers and Keith P. Lewis. We are very grateful for the constructive and detailed reviews provided and we have made every effort to do justice to the reviewer's suggestions. In the process, we believe our manuscript has been greatly improved. Most notably we have expanded our introduction and discussion to include a more through exploration of the literature, emphasizing advances in fisheries science. We have also clarified the intent and audience for the tools highlighted in our manuscript and these changes should curtail impressions that these tools are supposed to be stand-alone documents. These changes should also alleviate impressions that interactive tools serve as a complete replacement for static documents when, in fact, they are best used to complement static documentation. Please see below for more details on the changes we made in response to the reviews. 
 
 We submit this revised manuscript for your consideration and look forward to your decision.  
 
@@ -62,11 +62,11 @@ Reviewer 1 notes that some of the language may need to be toned down and further
 
 Similarly, there are a number of discussion points raised by the reviewers that should be incorporated into the manuscript. For instance, reviewer 3 suggests discussion on how to incorporate graphics that compare results across multiple model runs, how to streamline versioning and code updates, how to ensure compatibility among graphics code and assessment outputs as either are updated or reparametrized, and what the benefits/difficulties are of developing generic versus study-specific visualization tools. 
 
-*These are important points, several of which the first author coincidentally discussed with colleagues while this paper was in review. We have added a new section, "From bespoke to general tools", where we discuss the challenges and potential benefits of developing generic tools. We also acknowledge that the tools can be modified to visualize multiple model runs. In the following section, "Towards open stock assessment", we note that versioning can be traced using GitHub. The only item we did not cover was ensuring compatibility; this is where automated testing via TravisCI and the testthat package are sure to help, however, we did not add this to the discussion because 1) these are programming tools the authors have limited experience with, and 2) it is potentially superfluous to the main message of the paper.*
+*These are important points, several of which the first author coincidentally discussed with colleagues while this paper was in review. We have added a new section, "From bespoke to general tools", where we discuss the challenges and potential benefits of developing generic tools. We also acknowledge that the tools can be modified to visualize multiple model runs. In the following section, "Towards open stock assessment", we note that versioning can be traced using GitHub. The only item we did not cover was ensuring compatibility; this is where automated testing via TravisCI and the testthat package are sure to help, however, we did not add this to the discussion because 1) these are programming tools the authors have limited experience with, and 2) moving into technical areas beyond the scope of this paper.*
 
 I also agree that the link between interactive and static reports or presentations is unclear. It would seem that there needs to be a mix of approaches, but this is not really discussed. Similarly, what tips would the authors give for presenting results using interactive graphics? One element that is often useful with static presentations is the building of a ‘story or progress line’ (especially in model building or continuity exercises), which might be difficult to replicate if only using interactive graphics. It does not seem like an all or nothing approach is warranted, but that is the impression that I received from the article. I would suggest carefully reworking the discussion of how interactive graphics can be used when presenting to stakeholders and how static and interactive methods can be used synergistically. 
 
-*This is a fair point and, in hindsight, we see why the paper leaves this impression. To try and rectify this, we have clarified the intent of interactive tools in several places in the paper. We now explicitly note in the introduction that these tools are not meant to replace static modes of communication, rather they are often intended to supplement standard documents. This point is reiterated in the  "Towards open stock assessment" section, where we also highlight an example from Appendix A to make the point that advisory documents can be interactive, and these tend to be linear in structure. As with the previous iteration, we contend that a non-linear format can be useful for evaluating a stock assessment model. That being said, we take your point that a story may be more suitable in some cases. This format is possible with interactive documents as well because dashboards can be nested within html slide-shows, or dashboards can include "story-boards". These are very flexible tools and in this iteration of the manuscript we hope we have clarified their flexibility without discounting static formats. In short, we want to make the point that interactive tools are a potentially powerful tool to add to a biologists’ toolkit.*
+*This is a very good point and, in hindsight, we see why the paper leaves this impression. To try and rectify this, we have clarified the intent of interactive tools in several places in the paper. We now explicitly note in the introduction that these tools are not meant to replace static modes of communication, rather they are often intended to supplement standard documents. This point is reiterated in the  "Towards open stock assessment" section, where we also highlight an example from Appendix A to make the point that advisory documents (i.e. a linear story) can be interactive. As with the previous iteration, we contend that a non-linear format can be useful for evaluating a stock assessment model. That being said, we take your point that a story may be more suitable in some cases. This format is possible with interactive documents as well because dashboards can be nested within html slide-shows, or dashboards can include "story-boards". These are very flexible tools and in this iteration of the manuscript we hope we have clarified their flexibility without discounting static or linear formats. In short, we want to make the point that interactive tools are a potentially powerful tool to add to a biologists’ toolkit.*
 
 Finally, all of the reviewers have provided useful suggestions for improving the graphics, especially those utilized within the manuscript. Please carefully consider these and revise as warranted. 
 
@@ -170,7 +170,7 @@ Partial catches:
 
 -Need explanation as well as context, the tool overall should be able to tell a story by itself but it feels like a somewhat chaotic assembly of cut out figures from a stock assessment report. 
 
-*See "stand alone" comment above.*
+*See "stand alone" comment above. Nevertheless, we have added equations and an additional figure to provide more context. We have also added more text and equations to subsequent tabs.*
 
 Change in Q: 
 
@@ -188,23 +188,25 @@ References:
 
 -Should be more references and they should be linked to the documents. 
 
-*These are the key references for the accepted assessment model.*
+*More references have been added (all of the key references for the accepted assessment model).*
 
 Catch tab: 
 
 -Everywhere in the tool there is insufficient labelling and cryptic legends, for example it is not clear what is meant by ‘bounds’ or what is represented by the shaded area -the choices of colour and line types are questionable and inconsistent throughout the tool -there are two shaded areas in the bottom graph (absolute landings) without a key 
 
-*TODO: Paul*
+*Agreed, the colors were not ideal. We have made the colour scheme more consistent throughout the tool.*
 
 On the right side: 
 
 -there should be consistency in how observations and estimation are signified, going from a dashed line to solid circles adds unnecessary confusion -the graphs can have better titles such as ‘Age 2’ rather than ‘2’, for instance -other graphs, such as ‘fits by age’ are unwieldly and confusing, this, like a majority of graphs, does not represent a good use of data visualisation principles and betrays the authors’ lack of experience with graphic design. When there is a lot of data in one graph, making sure that interactivity works well is paramount, currently selecting a specific line is not so clear. Use different colour scheme. 
 
-*TODO: Paul*
+*True, the fits by age plots were confusing and only useful if the user selected a specific age using the legend. These plots have been removed and replaced by plots with a slider for selecting specific ages. Now the facet plot allows a user to assess the fits at a glance with one plot and, if interested in the details, shift to the frame plot to take a closer look at the fits to specific ages.*
 
 Overall there are too many graphs, offered in such a way as it is difficult to prioritise information. The design can be far more ergonomic, with graphs organised more helpfully and with a sense of hierarchy and a narrative, encouraging to explore key results first, while offering extra levels of details as a choice to those who want to pursue a particular matter further. There as an inconsistent and suboptimal from a design point of view use of colour. A data visualisation professional should be able to help with making a good use of colour to encode information and to help the user navigate through results without getting overwhelmed. I would particularly recommend enabling the user to make side by side comparisons of different combination of graphs that are currently in fixed/distinct places in the tool. 
 
-*Undoubtedly, there are many ways to organize this information and we have done our best to organize it in a way that makes sense to us. That is, the pages follow the general order in which our stock assessments tend to flow: 1) assess fits and residuals, 2) assess retrospective plots and derived quantities, 3) if 1 and 2 pass peer review, assess the projections. We know the tool is far from perfect and agree that it would benefit from input from programmers and/or graphic design experts but, unfortunately, we lack funding to pursue such consultations. This is a reality that many biologists face and a key point of our paper is that this limitation should not preclude the use of these tools.*
+*Undoubtedly, there are many ways to organize this information and, given this comment, we have tried to improve the layout of the tool. Overall, we have done our best to organize it in a way that makes sense to the aforementioned experts at the stock assessment meeting. That is, the pages follow the general order in which our stock assessments tend to flow: 1) assess fits and residuals, 2) assess retrospective plots and derived quantities, 3) if 1 and 2 pass peer review, assess the projections.*
+
+*We know the tool is far from perfect and agree that it would benefit from input from programmers and/or graphic design experts but, unfortunately, we lack funding to pursue such consultations. This is a reality that many biologists face and a key point of our paper is that this limitation should not preclude the use of these tools.*
 
 *See also previous comments to the AE.*
 
@@ -219,7 +221,7 @@ This is a clearly written and organized manuscript that presents an application 
 
 The manuscript repeatedly mentions the usefulness of these tools for stakeholders, both for data exploration and data modeling. In the data exploration figures (Figures 1 through 3), the interfaces would be more digestible to stakeholders if they included an annotation of what the user is viewing. For example, the Figure 1 view could include a note specifying that the error bars represent 95% confidence intervals, and species names should be used rather than, or in addition to, codes. Figure 2 could be improved by including units for the length bins, and Figure 3 should have a legend for the kernals. Each could also have a text field that gives an overview of the what the figure is showing and how a user can interact with the figure. 
 
-*TODO?: Greg & Bob*
+*All excellent suggestions, which will improve future iterations of the tools. These two tools, unlike the NCAM dashboard, were mainly built for use by the developer themselves. When these tools move to being used by larger communities, further documentation will be essential. Our intent in showing these two ‘in-house’ tools was to demonstrate that interactive visualization tools can be a valuable addition to an analysts tool box.*
 
 More broadly, the NCAM Explorer (Supplement 2) would also be more functional with increased annotation. The background tab provides important context but should be expanded beyond the "terse point-form" to serve as a user guide for each tab. These improvements apply to the tools themselves rather than to the manuscript. 
 
@@ -227,7 +229,7 @@ More broadly, the NCAM Explorer (Supplement 2) would also be more functional wit
 
 The one area where I think the manuscript should be expanded is in the "Towards open stock-assessment" section. The main reason given for increasing the transparency of stock assessment through tools such as these is to improve peer review. However, as mentioned at several other points in the manuscript, these tools are also valuable for increasing stakeholder engagement in and understanding of stock assessment. That function warrants equal attention to peer review in this section and could present ideas for how to introduce these tools to stakeholders and how to help them sift through the large volume of data to find what is most relevant to them. 
 
-*TODO?: Keith*
+*We have expanded the "Torwards open stock-assessment" section and, in the process, we hope we have clarified how these tools improve accessability and transparency by making it easy for others to access the details.*
 
 Lastly, Supplement 1 (getting_started.html) isn’t referenced anywhere in the paper. It can be removed from the supplementary files. 
 
@@ -278,7 +280,7 @@ Lines 262: The statement "Although these tools do not reveal the entire data pip
 
 Figure 2: I realize this figure is only for illustrative purposes, but it might be good to add a note about the strange pattern in the length compositions of American plaice in the 1980s. The spiky pattern with peaks in the same bins each year seems like an artifact of rounding error or conversion from some other type of length measurement.
 
-*TODO?: Bob*
+*This is a very astute observation and it is most likely related to changes in how Plaice length frequencies were recorded (3 to 1 cm scale). While this is an important detail to be cognisant of when analyzing these data, we have opted not to get into the minutiae of the sampling as it is outside the scope of this paper.*
 
 Again, I think this manuscript is a valuable contribution to the field, is of broad interest, and I encourage it to be published with or without the refinements proposed above.
 
