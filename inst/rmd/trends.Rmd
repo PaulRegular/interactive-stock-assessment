@@ -1,5 +1,5 @@
 
-Retro {data-navmenu="Trends" `r if (is.null(fit$retro)) ".hidden"`}
+Retrospective analysis {data-navmenu="Trends" `r if (is.null(fit$retro)) ".hidden"`}
 ================================================================================
 
 Row {.tabset}
@@ -140,7 +140,7 @@ subplot(z_plot, m_plot, f_plot, nrows = 3, shareX = TRUE, titleY = TRUE) %>%
 
 
 
-Comps {data-navmenu="Trends" `r if (is.null(tmp$comp)) ".hidden"`}
+Model comparison {data-navmenu="Trends" `r if (is.null(tmp$comp)) ".hidden"`}
 ================================================================================
 
 Row

@@ -16,7 +16,7 @@ USA
 
 Dear Dr. Goethel,
 
-Thank you for considering another revision of manuscript cjfas-2019-0424,  **"Improving the communication and accessibility of stock assessment using interactive visualization tools"** by Paul M. Regular, Gregory J. Robertson, Robert Rogers and Keith P. Lewis. We are very grateful for the constructive and detailed reviews provided and we have made every effort to do justice to the reviewer's suggestions. In the process, we believe our manuscript has been greatly improved. Most notably we have expanded our introduction and discussion to include a more through exploration of the literature, emphasizing advances in fisheries science. We have also clarified the intent and audience for the tools highlighted in our manuscript and these changes should curtail impressions that these tools are supposed to be stand-alone documents. These changes should also alleviate impressions that interactive tools serve as a complete replacement for static documents when, in fact, they are best used to complement static documentation. Please see below for more details on the changes we made in response to the reviews. 
+Thank you for considering another revision of manuscript cjfas-2019-0424.R1,  **"Improving the communication and accessibility of stock assessment using interactive visualization tools"** by Paul M. Regular, Gregory J. Robertson, Robert Rogers and Keith P. Lewis. We have carefully considered the latest round of suggestions and below we outline how we have addressed each point. 
 
 We submit this revised manuscript for your consideration and look forward to your decision.  
 
@@ -34,254 +34,95 @@ Phone: (709) 772-2067
 
 ----------------------------------------------------------------------------------------------------
   
-Associate Editor:  
+Comments to the Author:
 
-Dr. Regular, 
+The revised manuscript has undergone review by two of the original reviewers, both of whom have noted that all of their concerns had been addressed. I agree with the reviewers and have noted only a few minor issues and typos (outlined below). The article is well-written and presented in a straightforward way that, through the use of three excellent examples, demonstrates the power of interactive graphics/documents for presenting fisheries data and stock assessment results. I think the article will be of wide interest across the full complement of CJFAS readers including researchers, managers, and even fisheries stakeholders, which is further aided by its easily approached format and word-choice (i.e., general minimization of scientific/assessment jargon). 
 
-Thank you for your submission to the Canadian Journal of Fisheries and Aquatic Sciences. The submitted manuscript has now undergone extensive and thorough review by three independent reviewers. Each of the reviewers have indicated that the manuscript addresses a timely topic worthy of publication in CJFAS. However, a number of concerns were raised regarding overlooked issues related to communication and visualization. After reviewing the article myself, I agree with the reviewers that this perspectives article addresses an important subject that would be of interest to the broad readership of CJFAS, but it is slightly limited in its review of the existing literature on data visualization in fisheries applications and does not tackle some critical problems with utilizing interactive visualization tools. I have summarized the reviewers’ comments along with my own below. Given the concerns raised, I have suggested that the article would be suitable for future publication after major revision and further referee assignment. 
+It is worth noting that both the supplemental files are in html format. I found these files, particularly supplement 1 (interactive tutorial on how to develop your own dashboard for presenting interactive fisheries, or any other type, data), extremely useful and added greatly to the article itself. It will be important to provide readers access to these files, but I am not sure the best way to do so. The CJFAS editorial staff may have to work with the authors to determine the best approach. I was thinking perhaps a link on the abstract page, as well as, in the final document (maybe under the acknowledgements section). Hopefully, we can figure that out easily, but these files should definitely be accessible to readers.
 
-Although this is a perspective piece and I appreciated the succinctness of the manuscript, I think that a more thorough exploration of the literature on data visualization and stakeholder communication is warranted. As reviewer 1 points out, there have been a number of papers on this subject in recent years including Miller et al. (2019), which was part of a larger MSE special issue with a strong focus on stakeholder engagement (https://www.nrcresearchpress.com/toc/cjfas-mse/01/01). Other articles discussing communication in MSEs (e.g., Punt et al., 2017; https://academic.oup.com/icesjms/article/74/2/499/2907904) have also highlighted the importance of innovative and interactive visualization techniques. Similarly, the marine policy and socioeconomic literature has many examples of how data visualization can improve stakeholder interactions within participatory modeling initiatives (e.g., Levontin et al. 2017; https://www.sciencedirect.com/science/article/pii/S0308597X1630793X?via%3Dihub). I would suggest exploring the literature a bit more in depth and using these to expand the introduction and discussion. 
+Once you address the minor issues outlined below, the revised manuscript should be ready for publication in CJFAS.
 
-*We thank you for alerting us to these papers and have incorporated them where appropriate.*
+*We are thankful for the kind words and the helpful suggestions.*
 
-I think the introduction could include further discussion (with citations) of why improved data visualization techniques are warranted and how they can improve stakeholder engagement. 
+Thank you for you submission,
+Daniel Goethel
 
-*We now reference Levontin et al. 2017 in our introduction and we have added a general paragraph to the that highlights the diversity of existing interactive applications in fisheries research. With these changes, we have tried maintain the succinctness and generality of the introduction while adding more discussion of the fisheries research literature.*
+Note from Editorial Assistant: Supplementary files are provided to readers in the exact format you provide them so I suggest you upload the supplementary files as html but make sure you use the supplementary file designation.
 
-Similarly, the discussion could be expanded to better highlight some of the issues with developing these type of graphic tools. For instance, as noted by reviewer 1, scientists are not necessarily the best equipped to develop visualizations due to lack of expertise and time constraints. Ideally, graphic designers could be consulted to help design visuals that take into account the needs of all stakeholders, but the cost of hiring graphic designers may be prohibitive in some circumstances. 
+Line 30: 'to stock assessments'
 
-*We agree, and we have addressed this oversight in the _Conclusion_ section by noting that professional programmers and graphic designers would, ideally, be hired to construct interactive tools, however, it is rare for RFMOs to fund such initiatives. Most often, the task of communicating stock assessment results is left up to scientists without formal training in programming or graphic design. In our case, for instance, we would happily consult graphic design experts if we had funding to do so; alas, this is not the case and improvements must come from self-critical judgement, based on what we have gleaned from books on data visualization (e.g. The Visual Display of Quantitative Information by Edward Tufte, Data Visualization by Kieran Healy), along with constructive feedback from peers (e.g. Reviewer 1). In reality, all scientists have to communicate their research to the best of their ability, and the point of the paper is that interactive tools can be created by scientists without formal training in programming or graphic design. To use an analogy, consulting a chef will improve ones cooking, but one does not need to be a chef to make a meal. We have modified our conclusion to bolster this point.*
+*We have re-phrased this line to state "...these advances have surely improved the advice provided on stock status."*
 
-*Regarding time constraints, we have expanded our discussion on the learning curve and emphasize that an R user can start producing basic dashboards within a day using Supplement 1 as a guide. We also contend that, once over the learning curve, the time investment may not be significantly different than the investment one would make constructing a static presentation.*
+Lines 31-34: Bit of a long sentence.  I would suggest ending the first before the 'however' and beginning the second with it.
 
-Reviewer 1 notes that some of the language may need to be toned down and further supported by the literature. Interactive visualization tools are clearly useful and helpful for presenting the results of complex modeling approaches. However, further implementation is probably needed before any categorical statements can be made along the lines of transparency and accessibility of assessment models. Overall, I would also like to see more discussion of similar approaches and how they have been received by stakeholders. You provide a table in the appendix, but these were not really discussed in-depth. Using the case studies to support your points was very helpful and gave the manuscript a good flow, but I think highlighting a few other examples (spanning a variety of geographic areas and management agencies) within each sub-section (along with any difficulties encountered) would solidify the paper. 
+*Agreed, we have split this sentence as suggested.*
 
-*We have gone through our manuscript and we have tempered several conclusions. Some remain as our perspective is based on extensive verbal feedback at meetings from stakeholders and following tutorials the primary author has provided on this topic. In the "Towards open stock assessment" section, we also clarify why we think these interactive tools improve accessibility.*
+Line 148: Should start "A screen shot of the cod..."
 
-*We acknowledge that a formal survey would be more scientific and it would offer insights into ways of improving the dashboards, however, such a formal approach was outside the scope of this work. Likewise, a jurisdictional survey to learn about and speak to experiences outside our region would be an excellent addition to the paper, however, this too was outside the scope of this work. If we implemented such surveys we would likely be submitting this paper as a research article with stronger categorical statements.*
+*Done.*
 
-Similarly, there are a number of discussion points raised by the reviewers that should be incorporated into the manuscript. For instance, reviewer 3 suggests discussion on how to incorporate graphics that compare results across multiple model runs, how to streamline versioning and code updates, how to ensure compatibility among graphics code and assessment outputs as either are updated or reparametrized, and what the benefits/difficulties are of developing generic versus study-specific visualization tools. 
+Line 150: Should say "the recovery positions".
 
-*These are important points, several of which the first author coincidentally discussed with colleagues while this paper was in review. We have added a new section, "From bespoke to general tools", where we discuss the challenges and potential benefits of developing generic tools. We also acknowledge that the tools can be modified to visualize multiple model runs. In the following section, "Towards open stock assessment", we note that versioning can be traced using GitHub. The only item we did not cover was ensuring compatibility; this is where automated testing via TravisCI and the testthat package are sure to help, however, we did not add this to the discussion because 1) these are programming tools the authors have limited experience with, and 2) moving into technical areas beyond the scope of this paper.*
+*Done.*
 
-I also agree that the link between interactive and static reports or presentations is unclear. It would seem that there needs to be a mix of approaches, but this is not really discussed. Similarly, what tips would the authors give for presenting results using interactive graphics? One element that is often useful with static presentations is the building of a ‘story or progress line’ (especially in model building or continuity exercises), which might be difficult to replicate if only using interactive graphics. It does not seem like an all or nothing approach is warranted, but that is the impression that I received from the article. I would suggest carefully reworking the discussion of how interactive graphics can be used when presenting to stakeholders and how static and interactive methods can be used synergistically. 
+Lines 164-167: This statement is a bit too close in nature to the exact wording used throughout the Maunder and Punt (2013) reference. For instance from their abstract: "Contemporary use of integrated analysis involves using all available data, in as raw a form as appropriate, in a single analysis." And from the current paper: "Such issues have largely been curtailed in contemporary stock assessments thanks to advances in statistical computing that have facilitated the analysis of all available data, in as raw a form as appropriate, in a single integrated analysis." Please just reword the sentence a bit or use an exact quote from the reference.
 
-*This is a very good point and, in hindsight, we see why the paper leaves this impression. To try and rectify this, we have clarified the intent of interactive tools in several places in the paper. We now explicitly note in the introduction that these tools are not meant to replace static modes of communication, rather they are often intended to supplement standard documents. This point is reiterated in the  "Towards open stock assessment" section, where we also highlight an example from Appendix A to make the point that advisory documents (i.e. a linear story) can be interactive. As with the previous iteration, we contend that a non-linear format can be useful for evaluating a stock assessment model. That being said, we take your point that a story may be more suitable in some cases. This format is possible with interactive documents as well because dashboards can be nested within html slide-shows, or dashboards can include "story-boards". These are very flexible tools and in this iteration of the manuscript we hope we have clarified their flexibility without discounting static or linear formats. In short, we want to make the point that interactive tools are a potentially powerful tool to add to a biologists’ toolkit.*
+*Agreed, the wording was very similar. The sentence now reads "Such issues have largely been curtailed in contemporary stock assessments as advances in statistical computing have enabled integrated analyses of data from multiple monitoring programs (Maunder and Punt 2013)."*
 
-Finally, all of the reviewers have provided useful suggestions for improving the graphics, especially those utilized within the manuscript. Please carefully consider these and revise as warranted. 
+Line 182: What are 'partial fishery landings'? It might be worth explaining or just say 'fishery landings' to avoid unnecessary confusion.
 
-*We have made every effort to improve the graphics as suggested and while not compromising the readability and utility of the dashboard tool.  Please see responses to individual Reviewers below.*  
+*What we did not outline in the text is that the recreational fishery is not accounted for in the reported landings so we call the landings partial. Rather than get into these details, we have replaced "partial" with "reported" to avoid confusion and to keep things simple.*
 
-Similarly, please provide access to the source code (r code) via an online database (e.g., GitHub) as requested by reviewer 1.   
+Line 217: It is probably not worth going back and changing the NCAM explorer, but the use of 'comps' here is a bit confusing. I was expecting this to be an age/length composition tab not a model comparison tab.
 
-*We completely agree with the Reviewer.  The data and code used to produce the manuscript, supplement 1, and supplement 2 are available on GitHub.*  
+*We understand this expectation and we changed the page name to "Model comparison".*
 
-If the authors are able to revise the manuscript to adequately address the reviewers’ concerns, then it should be suitable for future publication.   
+Line 218:  I think saying explicitly 'from different model runs' would avoid confusion, because this could be interpreted as completely different assessment models were applied.
 
-Thank you,  
-Daniel Goethel  
+*Done.*
 
+Figure 5: I think the figures were updated without refining the caption text. The caption seems to focus only on the right hand part of the figure and ignores the larger figure on the left. Also, I do not see any red/blue coloring defining pos/neg values as stated in the caption.
 
-Comments to the Author: See attached.   
+*That was an oversight after the last revision; we have now revised this caption to reflect the revised dashboard. The caption now reads "Screenshot of the 'RV survey' tab from the NCAM dashboard where total observed (dots) and NCAM model predicted values (lines) for the DFO RV survey index are shown in the left panel and standardized log residuals by year, cohort, age, and expected value (dots), with lowess curves (lines), are shown in the right panel."*
 
+Figure 6: Same as above. Left hand figure is abund, bio, and b/blim...recruitment is not shown. Also, it might be worth just stating the basis of Blim (e.g., B30...) in parenthesis, while also noting what the dashed line at 823kt represents.
 
-Reviewer: 1   
+*Done, the caption now reads "Screenshot of the “Trends” tab which displays stock status estimates (abundance, biomass, and biomass relative to Blim [average biomass through the 1980s]) on the left panel, and mortality rates (average F, M, and Z) on the right panel."*
 
-Comments to the Author 
+292: Delete 'along'.
 
-Summary 
+*Deleted.*
 
-This paper states a hard to disagree with proposition that fisheries science can benefit from data visualisation tools that are widely available and applied in other fields. It correctly situates data visualisation within the ambition to move stock assessment towards a model of reproducible research that is now commonly taught in beginner data science courses. The authors describe various efforts they have made in developing visualisation tools, such as interactive dashboards, and contextualise these as steps towards stock assessments meeting the standards of reproducible research. 
+Line 302: Should this read 'to document in a pipeline'?
 
-The paper is clearly written, and is important for its promotion of timely developments within fisheries science. 
+*We have revised the sentence to read "...commonplace for the full data pipeline to be open and accessible."*
 
-*We thank the Reviewer for the kind comments.*
+Line 315: Delete the 'a'.
 
+*Deleted.*
 
-Major problems 
+Lines 316-318: I don't really understand what this sentence is saying. It appears to be somewhat contradictory. I imagine the idea is along the lines of 'developing dashboards that document the full pipeline allow better access to details regarding model development decisions compared to current stock assessment practices that might be fully open but effectively inaccessible'. I'm not sure if this is correct or how exactly to word it, but please clarify the statement.
 
-The main shortcoming of the paper is that the authors don’t have sufficient relevant expertise to discuss matters related to design and lack skills necessary to implement effective visualisations. Yet this is the crux of the paper and visualisations are offered as the main results or innovations being presented. Typography, the use of colour and text, the layout, aesthetics, ergonomic organisation of information and the use of interactivity in the tools presented – all fall below professional standards, preventing these tools from being effective at communication. This is potentially damaging to the author’s cause. What the authors need is to work with a graphic designer and address these shortcomings before the paper can be published. The authors’ aim is to enable ‘a broader audience to conduct detailed exploration of the results’ so that they can arrive at a ‘deeper and collective understanding’ of stock assessments – programming and science knowledge are insufficient for this task, the authors need to work alongside experts on visual communication. 
+*In hindsight we see that this sentence was not clear. We hope this revision does a better job of conveying what we are trying to say: "Although these tools do not reveal the entire data pipeline, a wide range of stakeholders and scientists can easily access and review details of an analysis without running a line of code. For most participants of a stock assessment, even if the entire pipeline was completely open, the details would remain inaccessible simply because most participants are already overcommitted (Banks 2011) and do not have the time to fully review and recreate a particular analysis in its entirety."*
 
-*Please see the response to these comments in the AE section above.*
+Line 325: Delete 'of'.
 
-Another issue, is accessibility to the code which is essential for reproducible research. Only one of the tools was available for review as a website, no source code was provided along with the paper and it seems that the code is not intended for release alongside the paper, e.g. via a link to GitHub. The publication of this paper should be made contingent on the availability of the code. The data provided along with the code can be simulated if there are privacy concerns. 
+*Deleted.*
 
-*Please see the response to these comments in the AE section above.*
+Line 329: I might suggest replacing 'their' with something along the lines of 'extend the utility of data visualizations or graphics by....' 
 
-There is no discussion of data conflicts, or data weighting issues, that plague many integrated stock assessments. 
+*Done.*
 
-*While we have not gone into a detailed discussion of data conflicts, as that has been covered quite nicely by Maunder and Piner (Maunder, M.N. and Piner, K.R., 2017. Dealing with data conflicts in statistical inference of population assessment models that integrate information from multiple diverse data sets. Fisheries Research, 192, pp.16-27), we have noted that NCAM explorer helped us efficiently identify conflicts between two of the surveys included in the model. Data weighting issues, however, are not mentioned in the context of this paper as NCAM is self-weighting.*
+Line 349-351: Just a wording suggestion, could say "...that the upfront time investment needed to develop interactive visualization tools has already improved efficiency in delivering....'
 
-Ability to examine a variety of graphs in pairs would be an important feature enabling the user to examine contribution of individual data sources and detect data conflicts of model misspecifications. Features to examine convergence, boundary behaviour, comparisons with simpler models or external data might be good to consider as additional functionality. 
+*We have rephrased the sentence to read "...that the upfront time investment has been worthwhile considering the improved efficiency of delivering...*
 
-*We agree with these points. These tools are a work in progress and we continue to add functionality to them. We have now added a new section ("From bespoke to general tools") where we discuss some of our experiences with making these tools more general. We acknowledge that these are early days and much work has yet to be done; still, we are hopeful that we have included enough to spur discussions among the broader community and catalyze the development of more features.*
- 
-Minor problems 
+Reviewer: 1
 
-The authors need to be more tentative in some of their conclusions, such as ‘peer review process is more open and accessible’ as a result. Further testing with more and varied stakeholders is necessary to demonstrate that these tools are indeed achieving the aims to make stock assessments more reproducible, easier to critique by a wider range of stakeholders, and as a result some systemic changes in the processes of performing stock assessments are occurring. 
+Comments to the Author
+I agree with the authors that the paper has substantially improved and am now recommending it for publication without further changes. 
 
-*Please see previous comments to the AE.*
+Reviewer: 2
 
-The authors are missing some important references on using visualisation tools in fisheries, e.g. Miller. S.K., Anganuzzi, A., Butterworth, D.S., Davies, C.R., Donovan, G.P., Nickson, A., Rademeyer, R.A., Restrepo, V. 2018. Improving communication: the key to more effective MSE processes. Canadian Journal of Fisheries and Aquatic Sciences, https://doi.org/10.1139/cjfas-2018-0134.
-
-*We thank the Reviewer for alerting us to this paper and have added where appropriate.*
-
-Comments on the NCAM tool It’s great to see more interactive visualisation tools being developed for fisheries science. I greatly enjoyed playing with the tool. Please find below some comments and suggestions for how to improve it, but I would strongly recommend getting professional help from a designer. Please upload the full code to a GitHub directory and provide a link, use simulated data if necessary to protect confidentiality of any of the data that is not publicly available. 
-
-*We thank the Reviewer for the kinds words.  Please see the response to these comments in the AE section above.*
-
-The tool should be made easily transferrable to other case studies otherwise the contribution made by the paper is diminished. 
-
-*The code for the tools are available for other researchers and stock assessment biologists to adapt to their own work flows.  Further, the tutorial that is provided should ensure that biologists can learn this approach in a short period of time.  Finally, these tools are just examples of a more general approach – they are not meant to be the only possible solution.*
-
-*In the comments below, the Reviewer makes a number of good suggestions about the layout of the dashboard.  We will deal with these individually. *
-
-*However, we argue that there may be a misunderstanding that we hope to rectify.  Many of the below suggestions seem to be based on the premise that the dashboard is a stand alone piece of work like a paper or book when, in reality, it is better to think of it as a PowerPoint replacement. There are DFO research papers, stock assessment reports, and primary publications that support the dashboard. Reviewers, stakeholders and participants generally have a working knowledge of this documentation and, as such, excessive texts and guides are not required. Moreover, excessive texts may be a distraction as the presenter actively walks participants through the latest model results (i.e. wordy PowerPoints are generally discouraged). Therefore, although these suggestions are greatly appreciated, not all of them are relevant and we have tried to make this clear in the text by stating that the tool was "built to serve as an interactive alternative to a standard presentation for communicating the latest results to an audience with a working knowledge of the model."  We also state the tool was not built to replace detailed documentation on the model. We refer to this paragraph as the "stand alone comment" below.* 
-
-Background tab: 
-
--NCAM tab needs more information about the tool overall and a better image.
-
-*See "stand alone" comment with regards to the more information suggestion.*
-
-*As for a better picture, we agree that it would be nice to have, however, for the time being, we have opted to focus on changes that improve the functionality of the tool.*
-
--General tab similarly should have more text and an overall guide with images and links to the rest of the tool 
-
-*See "stand alone" comment above.*
-
-Data inputs tab: 
-
--Should have information about the data, how it is collected and processed with links to raw data and a code for processing if any was used
-
-*See "stand alone" comment above.*
-
--Something about data quality, uncertainties, and potential conflicts in data should be mentioned here 
-
-*See "stand alone" comment above.*
-
-Biological inputs tab: 
-
--Confusing graphics perhaps because of a lack of explanatory text – this is a problem for most of the pages, two dimensional graphics should be added for clarity. 
-
-*See "stand alone" comment above.*
-
-Partial catches: 
-
--Need explanation as well as context, the tool overall should be able to tell a story by itself but it feels like a somewhat chaotic assembly of cut out figures from a stock assessment report. 
-
-*See "stand alone" comment above. Nevertheless, we have added equations and an additional figure to provide more context. We have also added more text and equations to subsequent tabs.*
-
-Change in Q: 
-
--Similarly you have an entire page to explain the context related to catchability, but there is insufficient information to be able to critically engage with the visualisation 
-
-*See "stand alone" comment above.*
-
-Tagging: 
-
--Likewise, there is a whole page to explain the issues of using tagging data in stock assessment – it seems this would be beneficial 
-
-*See "stand alone" comment above.*
-
-References: 
-
--Should be more references and they should be linked to the documents. 
-
-*More references have been added (all of the key references for the accepted assessment model).*
-
-Catch tab: 
-
--Everywhere in the tool there is insufficient labelling and cryptic legends, for example it is not clear what is meant by ‘bounds’ or what is represented by the shaded area -the choices of colour and line types are questionable and inconsistent throughout the tool -there are two shaded areas in the bottom graph (absolute landings) without a key 
-
-*Agreed, the colors were not ideal. We have made the colour scheme more consistent throughout the tool.*
-
-On the right side: 
-
--there should be consistency in how observations and estimation are signified, going from a dashed line to solid circles adds unnecessary confusion -the graphs can have better titles such as ‘Age 2’ rather than ‘2’, for instance -other graphs, such as ‘fits by age’ are unwieldly and confusing, this, like a majority of graphs, does not represent a good use of data visualisation principles and betrays the authors’ lack of experience with graphic design. When there is a lot of data in one graph, making sure that interactivity works well is paramount, currently selecting a specific line is not so clear. Use different colour scheme. 
-
-*True, the fits by age plots were confusing and only useful if the user selected a specific age using the legend. These plots have been removed and replaced by plots with a slider for selecting specific ages. Now the facet plot allows a user to assess the fits at a glance with one plot and, if interested in the details, shift to the frame plot to take a closer look at the fits to specific ages.*
-
-Overall there are too many graphs, offered in such a way as it is difficult to prioritise information. The design can be far more ergonomic, with graphs organised more helpfully and with a sense of hierarchy and a narrative, encouraging to explore key results first, while offering extra levels of details as a choice to those who want to pursue a particular matter further. There as an inconsistent and suboptimal from a design point of view use of colour. A data visualisation professional should be able to help with making a good use of colour to encode information and to help the user navigate through results without getting overwhelmed. I would particularly recommend enabling the user to make side by side comparisons of different combination of graphs that are currently in fixed/distinct places in the tool. 
-
-*Undoubtedly, there are many ways to organize this information and, given this comment, we have tried to improve the layout of the tool. Overall, we have done our best to organize it in a way that makes sense to the aforementioned experts at the stock assessment meeting. That is, the pages follow the general order in which our stock assessments tend to flow: 1) assess fits and residuals, 2) assess retrospective plots and derived quantities, 3) if 1 and 2 pass peer review, assess the projections.*
-
-*We know the tool is far from perfect and agree that it would benefit from input from programmers and/or graphic design experts but, unfortunately, we lack funding to pursue such consultations. This is a reality that many biologists face and a key point of our paper is that this limitation should not preclude the use of these tools.*
-
-*See also previous comments to the AE.*
-
-
-Reviewer: 2 
-
-Comments to the Author 
-
-This is a clearly written and organized manuscript that presents an application of novel, open-source tools to disseminate stock assessment inputs and results. The interactive visualization tools were developed by others but modified by the authors to suit their needs; the original developers are credited appropriately. The authors make a strong case for using these tools for visualization of stock assessment results, and in that way, this paper is fitting for a perspective since it promotes a new paradigm for dissemination of stock assessments. There are no new research results, nor is there anything controversial in this piece. An important and laudable message of the paper is that these tools can help the transition to "a culture of open science and reproducible research." 
-
-*We thank the Reviewer for the kind comments.*
-
-The manuscript repeatedly mentions the usefulness of these tools for stakeholders, both for data exploration and data modeling. In the data exploration figures (Figures 1 through 3), the interfaces would be more digestible to stakeholders if they included an annotation of what the user is viewing. For example, the Figure 1 view could include a note specifying that the error bars represent 95% confidence intervals, and species names should be used rather than, or in addition to, codes. Figure 2 could be improved by including units for the length bins, and Figure 3 should have a legend for the kernals. Each could also have a text field that gives an overview of the what the figure is showing and how a user can interact with the figure. 
-
-*All excellent suggestions, which will improve future iterations of the tools. These two tools, unlike the NCAM dashboard, were mainly built for use by the developer themselves. When these tools move to being used by larger communities, further documentation will be essential. Our intent in showing these two ‘in-house’ tools was to demonstrate that interactive visualization tools can be a valuable addition to an analysts tool box.*
-
-More broadly, the NCAM Explorer (Supplement 2) would also be more functional with increased annotation. The background tab provides important context but should be expanded beyond the "terse point-form" to serve as a user guide for each tab. These improvements apply to the tools themselves rather than to the manuscript. 
-
-*We agree with these comments and have added text to the Background tab and added references for background.  See "stand alone" comment above.  We have tried to strike a balance between addressing the spirit of the Reviewers comments and unnecessarily cluttering the dashboard.*
-
-The one area where I think the manuscript should be expanded is in the "Towards open stock-assessment" section. The main reason given for increasing the transparency of stock assessment through tools such as these is to improve peer review. However, as mentioned at several other points in the manuscript, these tools are also valuable for increasing stakeholder engagement in and understanding of stock assessment. That function warrants equal attention to peer review in this section and could present ideas for how to introduce these tools to stakeholders and how to help them sift through the large volume of data to find what is most relevant to them. 
-
-*We have expanded the "Torwards open stock-assessment" section and, in the process, we hope we have clarified how these tools improve accessability and transparency by making it easy for others to access the details.*
-
-Lastly, Supplement 1 (getting_started.html) isn’t referenced anywhere in the paper. It can be removed from the supplementary files. 
-
-*We have now added a reference to Supplement 1 to the introduction and conclusion.*
-
-
-Reviewer: 3 
-
-Comments to the Author 
-
-This manuscript illustrates a novel approach to exploring and communicating data and model results related to fisheries stock assessments. Communication methods for complex patterns in data or stock assessment results is not a frequent topic covered in fisheries science journals but it is an area where new ideas are rapidly developing, much further progress is needed, and greater prominence in the literature is deserved. I highly recommend publishing this manuscript. 
-
-*We thank the Reviewer for the kind comments.*
-
-The availability of the NCAM Explorer file NCAM_dashboard.html (referenced in the manuscript as Supplement 2) is vital for the understanding of the interactive nature of the tools developed. It would be useful to reference the other supplemental file getting_started.html in the text and include as an additional supplement an example of the RStrap Explorer as well in addition to the static figures in the text. 
-
-*We agree with the Reviewers comments and we have included a reference to Supplement 1 in the introduction and conclusion. RStrap Explorer is harder to include as a supplement as it is Shiny based and must be hosted on a server. At the moment, the use of this tool has been limited to local computers; we have yet to host the tool on an online server.*
-
-I raise a few minor specific issues below, but the area where I would suggest the greatest change is adding to the introduction and conclusion further discussion of a few larger questions that this new approach raises. First, the visualization and communication needs are very broad within the stock assessment community, but the example tools presented are specific to analyses used in the region where the authors work: the RStrap analysis of survey data and the NCAM assessment model. I would have like to see some discussion about the trade-offs associated with developing generic dashboards that could be applied to other survey or assessment tools vs. developing separate dashboard applications for each database or stock assessment model. Comparing results from multiple stock assessment models which might be applied to the same stock is another challenge that might be discussed. 
-
-*Please see previous comments to the AE.*
-
-Second, I would have liked more discussion of version control and archiving. The supplemental file NCAM_dashboard.html includes a comparison of two models "NCAM 2018" and "NCAM 2019" but in the assessment process there is typically a proliferation of numerous alternative models being considered in any given year. Exploration of these alternative models would presumably lead to a proliferation of these html dashboard files. Keeping track of which files show the results from which models is a challenge not addressed in the manuscript (and not obvious in the supplemental file). Furthermore, keeping track of the software version for the dashboard software (and R packages on which it depends) and format of the database or assessment model and maintaining compatibility between the two is a challenge not discussed here. 
-
-*This is an excellent point, however, we do discuss this issue as this approach does not offer a novel solution to file organization. The fact is that there is little difference between the file management with this approach versus a more standard approach. Through pre-dashboard days, different model runs were nested within independent folders and within these folders were figure and table folders. The only difference with the dashboard approach is that key figures and tables are held in the html file (i.e. there is no longer figure and table folders). A convention we apply to help keep track of things is to use a consistent name for the folder, the RData file containing all the inputs and outputs, and the html file. Though an interesting and important challenge, we did not cover this as file management and project conventions is a potential tangent that may add little to the paper as potential users are likely going to apply their own personal preferences.*
-
-*Regarding software version, we now note in the conclusion that these files can be traceable and accessible via GitHub.*
-
-Third, the link between this tool and more traditional static reports could be also addressed. The manuscript presents a compelling argument in favor of interactive dashboards as a tool for the rich volume of information needing to be explored in fisheries models, but it is not suggested that static reports will go away. It is noted that "The user also has the ability to hover over the points to compare estimates and export the figure as a png file" (line 110) but this would not be an efficient way to produce figures for a static report. Further discussion of how the same tools used for the dashboard view could used to make the development of static reports more efficient may be worth including in the discussion. 
-
-*We agree, it would not be very efficient to manually export individual plots. We have removed this note and have expanded our introductory text to clarify how synergies can be created between static and interactive documents.*
-
-Specific issues: Line 29: "For well-monitored stocks, the challenge has shifted from having sufficient data and information for providing sound advice on stock status, to presenting large quantities of data and output from increasingly complex statistical models in a meaningful way." I think this is a mischaracterization of the state of the science. Perhaps Northern Cod is an exception, but I believe the challenge of having adequate information to provide sound advice remains as present as ever, even for relatively well-monitored stocks, while the second of meaningfully presenting the resulting information has grown beside it. 
-
-*Fair point. We have rephrased the sentence to read: "While these advances have surely improved the advice provided at stock assessments, it has become more difficult to communicate the basis of this advice in a meaningful way."*
-
-Line 81: the reference to a 1981 report for information on the "locally developed R package called RStrap" seems inadequate. Perhaps "locally developed" means only locally available and thus no citation for the R package is available (in contrast to the other packages cited in the manuscript). 
-
-*This is correct.  We now simply state that it is a local package.*
-
-Line 121: "data base" should be one word for consistency with earlier occurrence on the same line. 
-
-*We have made the suggested change.*
-
-Lines 262: The statement "Although these tools do not reveal the entire data pipeline" may be contradicted by the ICES Transparent Assessment Framework (https://taf.ices.dk/app/about) which archives the full process of data processing to running assessment models in a reproducible way and should be added to Appendix A. 
-
-*We thank the Reviewer for drawing our attention to the TAF. We have now re-structured our "Towards open stock assessment" section to highlight TAF and several other open science initiatives in fisheries research.*
-
-Figure 2: I realize this figure is only for illustrative purposes, but it might be good to add a note about the strange pattern in the length compositions of American plaice in the 1980s. The spiky pattern with peaks in the same bins each year seems like an artifact of rounding error or conversion from some other type of length measurement.
-
-*This is a very astute observation and it is most likely related to changes in how Plaice length frequencies were recorded (3 to 1 cm scale). While this is an important detail to be cognisant of when analyzing these data, we have opted not to get into the minutiae of the sampling as it is outside the scope of this paper.*
-
-Again, I think this manuscript is a valuable contribution to the field, is of broad interest, and I encourage it to be published with or without the refinements proposed above.
-
-*We thank the Reviewer for the kind comments.*
+Comments to the Author
+The changes improve the manuscript and address the issues that I raised in previous review (in which I already only suggested minor changes).
