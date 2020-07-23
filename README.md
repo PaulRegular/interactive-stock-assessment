@@ -1,7 +1,15 @@
 # Improving the communication and accessibility of stock assessment using interactive visualization tools
 
-This is a research compendium for a paper titled "Improving the communication and accessibility of stock assessment using interactive visualization tools". The file structure of this repository follows guidelines presented here: https://github.com/ropensci/rrrpkg. The paper has been published in the Canadian Journal of Fisheries and Aquatic Sciences, https://doi.org/10.1139/cjfas-2019-0424.
+This is a research compendium for a paper titled "Improving the communication and accessibility of stock assessment using interactive visualization tools". The file structure of this repository follows guidelines presented here: https://github.com/ropensci/rrrpkg.
 
 ## Abstract
 
 Scientists across many fields are faced with the challenge of synthesizing and communicating information from large and complex data sets. The field of stock assessment is no exception as the volume and variety of the data has grown alongside the computational methods used to integrate them. While this growth in data and model complexity has improved many stock assessments, the process of communicating key results to colleagues and stakeholders in a meaningful way has become more daunting. The traditional approach of presenting information across a series of static slides often fails to convey the richness of information available and, as such, important patterns and details are easily overlooked. Here we contend that this problem can be mediated through the effective use of new open source tools for building interactive visualizations. These tools allow a broader audience to conduct detailed explorations of the results, leading to a deeper and collective understanding of both the data and models used to inform stock assessments. As a consequence, the peer review process is more open and accessible.
+
+## Documentation
+
+The paper has been published in the Canadian Journal of Fisheries and Aquatic Sciences, https://doi.org/10.1139/cjfas-2019-0424.
+
+See [Supplement 1](https://paulregular.github.io/interactive-stock-assessment/getting_started.html) for a “getting started” tutorial that highlights one approach to constructing a dashboard using R
+
+See [Supplement 2](https://paulregular.github.io/interactive-stock-assessment/NCAM_dashboard.html) for a sample dashboard built to explore the inputs and outputs of an age-structured stock assessment model
