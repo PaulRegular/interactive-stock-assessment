@@ -1,2 +1,2 @@
 *.RData filter=lfs diff=lfs merge=lfs -text
-*.html filter=lfs diff=lfs merge=lfs -text
+analysis/**/*.html filter=lfs diff=lfs merge=lfs -text
