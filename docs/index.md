@@ -1,7 +1,0 @@
-## Abstract
-
-Scientists across many fields are faced with the challenge of synthesizing and communicating information from large and complex data sets. The field of stock assessment is no exception as the volume and variety of the data has grown alongside the computational methods used to integrate them. While this growth in data and model complexity has improved many stock assessments, the process of communicating key results to colleagues and stakeholders in a meaningful way has become more daunting. The traditional approach of presenting information across a series of static slides often fails to convey the richness of information available and, as such, important patterns and details are easily overlooked. Here we contend that this problem can be mediated through the effective use of new open source tools for building interactive visualizations. These tools allow a broader audience to conduct detailed explorations of the results, leading to a deeper and collective understanding of both the data and models used to inform stock assessments. As a consequence, the peer review process is more open and accessible.
-
-[Supplement 1](https://github.com/PaulRegular/interactive-stock-assessment/blob/master/analysis/dashboards/getting_started.html)
-
-[Supplement 2](https://media.githubusercontent.com/media/PaulRegular/interactive-stock-assessment/master/analysis/dashboards/NCAM_dashboard.html)
