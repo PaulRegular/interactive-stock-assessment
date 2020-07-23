@@ -1,0 +1,13 @@
+name: "interactive-stock-assessment"
+navbar:
+  title: "Interactive Stock Assessment"
+  left:
+    - text: "Abstract"
+      href: index.html
+    - text: "Article"
+      href: https://doi.org/10.1139/cjfas-2019-0424
+    - text: "Supplement 1"
+      href: getting_started.html
+    - text: "Supplement 2"
+      href: NCAM_dashboard.html
+output_dir: "../../docs"
